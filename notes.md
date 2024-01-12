@@ -1,6 +1,6 @@
 TODO: link onenote notebook. Somehow. Maybe not since that's not allowed.
 
-##Startup ideas:
+## Startup ideas:
 
 baking/cooking game
 manage a hotel/resturant/store/zoo (tycoon)
