@@ -13,3 +13,9 @@ recipe sharing app
 wix wordpress to maintain
 
 DON'T STORE PICTURES!
+
+
+## Common commands:
+ssh -i [key pair file] ubuntu@52.201.103.13
+
+nano [file name]
