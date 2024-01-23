@@ -19,3 +19,16 @@ DON'T STORE PICTURES!
 ssh -i [key pair file] ubuntu@52.201.103.13
 
 nano [file name]
+
+
+
+
+
+
+
+
+
+
+
+
+Domain name: makenna.click
