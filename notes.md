@@ -20,6 +20,8 @@ ssh -i [key pair file] ubuntu@52.201.103.13
 
 nano [file name]
 
+sudo serivce [service name] restart
+
 
 
 
