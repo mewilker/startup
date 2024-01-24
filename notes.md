@@ -22,8 +22,26 @@ nano [file name]
 
 sudo serivce [service name] restart
 
+grep - regex search
 
+top - view running processes, exit with q
 
+df - disk space -h gives nice labels
+
+less/more is kinda like cat
+
+wc - word count
+
+ps - view process, top dump
+
+history, ping, tracert - trace network
+
+dig - dns record
+
+> overwrite operator
+>> concate
+
+ctrl r recall
 
 
 
