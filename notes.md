@@ -38,12 +38,20 @@ history, ping, tracert - trace network
 
 dig - dns record
 
-> overwrite operator
->> concate
+\> overwrite operator
+\>> concate
 
 ctrl r recall
 
+## HTML:
+Tree Structure
+Tags are in <>
 
+Attributes are specified in the start tag with tag="value"
+
+tags are closed like this: </>
+
+the escape char is &
 
 
 
