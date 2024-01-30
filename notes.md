@@ -50,9 +50,13 @@ Tags are in <>
 Attributes are specified in the start tag with tag="value"
 
 tags are closed like this: </>
+the type of tag you use is important for acessibilty 
 
 the escape char is &
 
+Vanilla html has to create a bunch of pages
+
+index.html is default entry way
 
 
 

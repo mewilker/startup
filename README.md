@@ -47,3 +47,23 @@ Here the users can scroll and see who has the most money.
   * Expand to a country
 * **WebSocket** - notify other players about upgrades or expansions that a player has made
 * **Database** - save login and travel agency
+
+## HTML Deliverable
+
+- **Simon HTML deployed** -- false
+- **Github link in footer** --not there yet
+- **Notes about the deliverable** -- see heading below
+- **10 commits** -- currently at commit 0
+- **HTML pages for each compenent of application** - 0 pages
+- **proper use of HTML tags**
+- **Links between pages**
+- **Application textual content**
+- **Placeholder for 3rd party service calls**
+- **Application images**
+- **Login placeholder w/ username display**
+- **Database placeholder**
+- **Websocket placeholder**
+
+# HTML Additions:
+
+Coming soon:)
