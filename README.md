@@ -50,7 +50,7 @@ Here the users can scroll and see who has the most money.
 
 ## HTML Deliverable
 
-- **Simon HTML deployed** -- false
+- **Simon HTML deployed** -- true
 - **Github link in footer** --not there yet
 - **Notes about the deliverable** -- see heading below
 - **10 commits** -- currently at commit 0
@@ -66,4 +66,4 @@ Here the users can scroll and see who has the most money.
 
 # HTML Additions:
 
-Coming soon:)
+**index.html** - created a header with the name
