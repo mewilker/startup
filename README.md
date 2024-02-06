@@ -51,19 +51,24 @@ Here the users can scroll and see who has the most money.
 ## HTML Deliverable
 
 - **Simon HTML deployed** -- true
-- **Github link in footer** --not there yet
+- **Github link in footer** -- got it
 - **Notes about the deliverable** -- see heading below
-- **10 commits** -- currently at commit 0
-- **HTML pages for each compenent of application** - 0 pages
-- **proper use of HTML tags**
-- **Links between pages**
-- **Application textual content**
-- **Placeholder for 3rd party service calls**
-- **Application images**
-- **Login placeholder w/ username display**
-- **Database placeholder**
-- **Websocket placeholder**
+- **10 commits** -- check
+- **HTML pages for each compenent of application** -- 6 pages
+- **proper use of HTML tags** -- i think so but there are so many dude
+- **Links between pages** -- so far so good
+- **Application textual content** -- eh could be better
+- **Placeholder for 3rd party service calls** -- that palm tree image is gonna change based on location.
+- **Application images** -- part of 3rd party call, also in canvas location element
+- **Login placeholder w/ username display** --yeah theres a login place holder
+- **Database placeholder** --should be obvious with login data, but I also think I'm going to turn the tycoons into jsons or something like that.
+- **Websocket placeholder** --shows where other players are expanding to
 
-# HTML Additions:
+### HTML Additions:
 
-**index.html** - created a header with the name
+**index.html** - has news and information about the game
+**register.html** - has a form including username, password and email. There is also a disclaimer saying I store the data and put the username out there.
+**login.html** - similar to register, but doesn't include the disclaimer or ask for the email
+**leaderboard** - shows ranking, score (which will be in net worth) and username. Available to public as well as players.
+**agency.html** - the main part of where the magic happens. there is a button for each upgrade, an image that will call an external service and get a picture based on the players locations. There is also the stub for websocket notifications that will alert other players when someone has expanded to another location. Also includes the players current bank account
+**locations.html** - the next part of where the magic happens. A canvas element is here that has been stubbed to show a world map. Later, it will be interactable and allow players to click and see where they can expand to.
