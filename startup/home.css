@@ -1,0 +1,83 @@
+body{
+    font-family: Arial;
+    display:flex;
+    flex-direction:column;
+    height: 100vh;
+    margin:0;
+  }
+  
+  header{
+    background-color: #1f2071;
+    flex: 0 50%;
+    flex-direction: column;
+    display: flex;
+    color: #290803;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title{
+    flex: 0 300;
+    font-family:fantasy;
+    color:hsla(129, 72%, 72%, 0.548);
+    font-size: 20vmin;
+    text-align: center;
+    padding: 0;
+    margin:auto;
+
+  }
+  
+  nav{
+    display: flex;
+    width:300px;
+    margin: auto;
+  }
+  
+  menu{
+    flex: 1;
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-auto-row: 300px;
+    padding:0;
+  }
+  
+  li{
+    padding: .5em;
+    margin: .25em;
+    border-style: solid;
+    border-width: 2px;
+    border-color: chocolate;
+    text-align: center;
+    font-weight: 525;
+    background-color:#f7f0be
+  }
+  
+  h1{
+    padding: .25em 1em;
+    margin: 1em;
+    font-size: 16pt;
+    margin-left: auto;
+  }
+  
+  main{
+    flex: 1;
+    background-color: #FAF9F6;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  div{
+    padding: .25em 1em;
+  }
+  
+  footer{
+    flex: 0 45px;
+    background-color: #290803;
+    color: #f7f0be;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+  }
