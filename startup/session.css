@@ -99,7 +99,7 @@
     flex-direction: column;
   }
 
-  #username, #password{
+  #username, #password, #email{
     margin-block-end: 10px;
     display: flex;
     justify-content: start;
@@ -125,6 +125,10 @@
   input{
     height: 18pt;
     margin: auto;
+  }
+
+  div{
+    margin: .5em;
   }
     
   footer{
