@@ -72,3 +72,7 @@ Here the users can scroll and see who has the most money.
 **leaderboard** - shows ranking, score (which will be in net worth) and username. Available to public as well as players.
 **agency.html** - the main part of where the magic happens. there is a button for each upgrade, an image that will call an external service and get a picture based on the players locations. There is also the stub for websocket notifications that will alert other players when someone has expanded to another location. Also includes the players current bank account
 **locations.html** - the next part of where the magic happens. A canvas element is here that has been stubbed to show a world map. Later, it will be interactable and allow players to click and see where they can expand to.
+
+## CSS Deliverable
+
+Coming soon!
