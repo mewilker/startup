@@ -1,0 +1,149 @@
+@font-face {
+    font-family: 'Protest Guerrilla';
+    src: url(ProtestGuerrilla-Regular.ttf);
+}
+  
+@font-face {
+    font-family: 'Alfa Slab One';
+    src: url(AlfaSlabOne-Regular.ttf);
+}
+  
+body{
+    font-family: Arial;
+    display:flex;
+    flex-direction:column;
+    height: 100vh;
+    margin:0;
+    color:#094112;
+}
+    
+header{
+    background-color: #6BA2F5;
+    flex: 0 5vmin;
+    flex-direction: row-reverse;
+    display: flex;
+    color: #290803;
+    align-items: center;
+    justify-content: end;
+}
+  
+.title{
+    flex: 1;
+    padding: 1em;
+    text-align: end;
+    font-family:"Protest Guerrilla", sans-serif;
+    font-size: 5vmin;
+    letter-spacing: 0.0275em;
+    color:#094112;
+    margin-inline-end: 10px;
+    margin:auto;
+    padding: 15px;
+  
+}
+    
+nav{
+    display: flex;
+    flex: 0 40em;
+    align-items: start;
+    justify-self: start;
+    margin-inline-start: 20px;
+}
+    
+menu{
+    flex: 1;
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    padding:0;
+    align-items: start;
+    justify-content: start;
+}
+    
+li{
+    padding: .25em;
+    margin: .5em;
+    font-size: 2vmin;
+    font-family: "Alfa Slab One", serif;
+    font-weight: 500;
+    background-color:#B3FBB1;
+}
+    
+.nav{
+    display:inline-block;
+    text-align: center;
+    border-style: solid;
+    border-color: #094112;
+    border-width: 5px;
+    width: 8em;
+    color: #094112;
+    text-decoration: none;
+}
+    
+main{
+    flex: 1;
+    background-color: #e2eecd;
+    display:flex;
+    flex-direction: column;
+    justify-content: start;
+    font-size: 17pt;
+}
+
+img.agencyhead{
+    display: none;
+}
+
+div.agencyhead{
+    background-image: url("placeholder.jpg");
+}
+    
+h2{
+    padding: 7vmin;
+    font-size: 30pt;
+    margin: 0;
+    background-color: #b3fbb198;
+}
+
+div.agencybod{
+    display: flex;
+}
+
+.wsmg{
+    flex: 0, 400px;
+}
+
+ul.wsmsg{
+    list-style-type: none;
+    padding: 1em;
+}
+
+button{
+    background-color: #B3FBB1;
+    font-size: 16pt;
+    padding: .5em 1em;
+    margin: 0 .5em;
+    border-radius: 3pt;
+    border: solid #094112;
+    color: #094112;
+}
+    
+footer{
+    flex: 0 30px;
+    background-color: #0C0A7B;
+    color: #D1E4F0;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    font-size: 20pt;
+}
+  
+#copyright{
+    margin: 0 auto 0 10px ;
+}
+  
+#github{
+    color: #D1E4F0;
+    border: none;
+    text-decoration: underline;
+    padding: 0 10px;
+    width: auto;
+}

@@ -4,37 +4,46 @@
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="icon" href="placeholder.ico" />
+        <link rel="stylesheet" href = gameplay.css>
         <title>Your Agency</title>
     </head>
     <body>
         <header>
-            <h1>Tourist Tycoon</h1>
+            <h1 class = title>Tourist Tycoon</h1>
             <nav>
                 <menu>
-                    <li><a href = index.html>Home</a></li>
-                    <li><a href = agency.html>Your Agency</a></li>
-                    <li><a href = locations.html>Locations</a></li>
-                    <li><a href = leaderboard.html>Leaderboard</a></li>
+                    <li><a class = nav href = index.html>Home</a></li>
+                    <li><a class = nav href = agency.html>Your Agency</a></li>
+                    <li><a class = nav href = locations.html>Locations</a></li>
+                    <li><a class = nav href = leaderboard.html>Leaderboard</a></li>
                 </menu>
             </nav>
         </header>
         <main>
-            <h2>User's agency in the United States!</h2>
-            <img src="placeholder.jpg" alt="agency location">
-            <ul>
-                <li>user1 has expanded to Antarctica!</li>
-                <li>user2 has expanded to Hong Kong!</li>
-                <li>user3 has expanded to the Carribean!</li>
-            </ul>
-            <h3>Your Account: $300000000</h3>
-            <button>Book Tours</button>
-            <button>Upgrade Hotel $100</button>
-            <button>Upgrade Attractions $100</button>
-            <button>Upgrade Travel $100</button>
+            <div class = agencyhead>
+                <h2 class = agencyhead>Welcome to <span>your agency</span> in <span>the United States</span>!</h2>
+                <img class = agencyhead id = placeholder src="placeholder.jpg" alt="agency location">
+            </div>
+            <div class = agencybod>
+                <div class = wsmsg>
+                    <ul class = wsmsg>
+                        <li class = wsmsg>user1 has expanded to Antarctica!</li>
+                        <li class = wsmsg>user2 has expanded to Hong Kong!</li>
+                        <li class = wsmsg>user3 has expanded to the Carribean!</li>
+                    </ul>
+                </div>
+                <div class = ui>
+                <h3 class = ui>Your Account: $300000000</h3>
+                    <button class = ui>Book Tours</button>
+                    <button class = ui>Upgrade Hotel $100</button>
+                    <button class = ui>Upgrade Attractions $100</button>
+                    <button class = ui>Upgrade Travel $100</button>
+                </div>
+            </div>
         </main>
         <footer>
-            <p>Created by Makenna Wilkerson</p>
-            <a href="https://github.com/mewilker/startup">Github</a>
+            <p id = copyright>Created by Makenna Wilkerson</p>
+            <a id = github href="https://github.com/mewilker/startup">Github</a>
         </footer>
     </body>
 </html>
