@@ -43,6 +43,11 @@ dig - dns record
 
 ctrl r recall
 
+## DNS:
+a is address
+text is a textfile, might be helpful to get your page out there(i. e. google)
+SOA is start of authority, this is some DNS server somewhere 
+
 ## HTML:
 Tree Structure
 Tags are in <>
@@ -54,13 +59,19 @@ the type of tag you use is important for acessibilty
 
 the escape char is &
 
-Vanilla html has to create a bunch of pages
+Vanilla html has to create a bunch of files
 
 index.html is default entry way
 
+## CSS:
 
+display: flex; puts children in flex
+flex-direction 
+align-items:
+justify-content:
 
-
+border-style:
+border-size:
 
 
 Domain name: makenna.click
