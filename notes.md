@@ -66,13 +66,18 @@ Vanilla html has to create a bunch of files
 index.html is default entry way
 
 ## CSS:
-
+# flex
 display: flex; puts children in flex
+
 flex-direction 
+
 align-items:
+
 justify-content:
 
+
 border-style:
+
 border-size:
 
 
