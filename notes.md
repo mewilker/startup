@@ -45,7 +45,9 @@ ctrl r recall
 
 ## DNS:
 a is address
+
 text is a textfile, might be helpful to get your page out there(i. e. google)
+
 SOA is start of authority, this is some DNS server somewhere 
 
 ## HTML:
