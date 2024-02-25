@@ -84,7 +84,8 @@ main{
     background-color: #e2eecd;
     display:flex;
     flex-direction: column;
-    font-size: 18pt;
+    justify-content: start;
+    font-size: 17pt;
 }
     
 h2{
@@ -94,19 +95,41 @@ h2{
 }
 
 table{
-    margin: auto 1em;
+    margin: 0 auto auto ;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-style: solid;
 }
 
 tr{
-    display: flex;
+    margin: auto;
 }
 
 th, td{
-    padding: .25em ;
+    text-align: start;
+    flex: 1 ;
+    padding: .5em ;
+    background-color: #518e4f;
+    border-style: solid;
+}
+
+td{
+    font-size: 16pt;
+    background-color: #B3FBB1;
+}
+
+.score{
+    width: 20vw;
+}
+
+.rank{
+    width: 5vw;
+    text-align: center;
+}
+
+.user{
+    width:20vw;
+    padding: .5em 1em;
 }
     
 footer{
