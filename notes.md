@@ -82,7 +82,7 @@ border-size:
 
 ### Fonts
 to use a font downloaded, use code like this:
->@font-face {
+>>@font-face {
   font-family: 'Alfa Slab One';
   src: url(AlfaSlabOne-Regular.ttf);
 }
