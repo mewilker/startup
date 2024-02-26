@@ -68,9 +68,64 @@ index.html is default entry way
 ## CSS:
 
 ### General
-    P{
-      color: green
+    p{
+      color: green;
     }
+
+"p" is a selector. Multiple selectors can be used with commas. IDs are selected with the # and classes are selected with the . In addition, you can select descenants of a certain element by ommiting the commas, children by using a '>' siblings with a '~' and adjacent siblins with a '+'. Attributes can be selected with '[]'
+
+Pseudo selectors are things like mouse hovers, hyperlink visited states. This is delinated with a colon.
+
+"color:green" is a rule, with color being a property and green being a value.
+
+if a property has multiple values you separate with a space NOT A COMMA!!
+
+To use with html you use something like
+    <p style = "color:green">insert text here</p>
+
+or you link a document by including the line
+    <link rel = "stylesheet" href = "index.css">
+
+There something called the box, which is sized going inwards: margin, border, padding, content. 
+
+By default, height and width change the content size, but box-sizing can be used to change it to the boarder.
+
+### Units
+
+px - pixels
+
+pt - points (1/72 of inch)
+
+in - inches
+
+cm - centimeters
+
+% - percentage of parent element
+
+em - A multiplier of m in parent font
+
+rem - a multiplier of m in the root font
+
+ex - a multiplier of the height of element's font
+
+vw - viewport width
+
+vh - viewport height
+
+vmin - viewport minimum dimension
+
+vmax - viewport maximum dimension
+
+### Color formats:
+
+keyword: rebeccapurple
+
+RGB hex #FF red hex FF blue hex FF green hex FF alpha hex 
+
+RGB function rgb(0, 255, 255, 1) rgbalpha from 0 to 255
+
+hue saturation light hsl(0-255 red to red, 30%, 90%, 0.5)
+
 ### Flex
 display: flex; puts children in flex
 
@@ -94,6 +149,55 @@ to use a font downloaded, use code like this:
 
 online fonts require an @import tag
 
-font-family: order of fonts by
+font-family: order of fonts by priority
 
-Domain name: makenna.click
+generic font families:
+>serif
+>sans-serif
+>fixed - chars are all the same size
+>symbol - wingdings or something
+
+### Animations
+
+    animation-name:insertnamehere;
+    animation-duration: # of seconds;
+
+    @keyframes insertnamehere{ 
+      from{
+        property:value;
+      }
+
+      50%{ /*halfway throught the animation*/
+        property:value;
+      }
+
+      to{
+        property:value;
+      }  
+    }
+
+## Javascript
+Simple code example:
+    function testAll(input, tester) {
+      for (let i=0; i<input.length; i++){
+        if (tester(input[i]) === false){
+          return false
+        }
+      }
+  
+      const result = true
+      return result
+    }
+
+    let par = function (msg) {
+      if (msg.length<=3){
+        return true
+      }
+    return false
+    }
+
+    const result = testAll(["cat","rat", "bat"], par) ;
+
+    console.log(result);
+
+# Domain name: makenna.click
