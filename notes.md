@@ -66,6 +66,11 @@ Vanilla html has to create a bunch of files
 index.html is default entry way
 
 ## CSS:
+
+### General
+  P{
+    color: green
+  }
 ### Flex
 display: flex; puts children in flex
 
