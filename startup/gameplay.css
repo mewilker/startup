@@ -142,8 +142,8 @@ div.basic{
     margin-block: .5em;
 }
 
-h3.basic{
-    flex: 0 300px;
+h3{
+    flex: 0 300px .5em;
     border-radius: 50%;
     background-color: #e2eecd;
     padding: .5em;
@@ -151,6 +151,9 @@ h3.basic{
     font-family: "Alfa Slab One", serif;
     margin-inline-end: auto;
     margin: 1em;
+    width: 300px;
+    /*TODO: fix text not centered  vertically in little bubble*/
+    height: 1.25em;
 }
 
 button{
@@ -190,6 +193,43 @@ button.hospitality, button.attraction, button.travel{
     flex: 0 300px;
     margin-inline-end: .5em;
     margin: auto 0 
+}
+
+div.travelhead{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+}
+
+div.stats{
+    flex: 0 300px;
+    margin-inline-start: 50px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div.confirm{
+    display: flex;
+    align-items: center;
+}
+
+p.confirm{
+    flex: 1;
+    background-color: #e2eecdde;
+    text-align: center;
+    padding: .5em;
+    margin: .5em;
+}
+
+button.confirm{
+    margin: .5em
+}
+
+canvas{
+    flex: 1;
+    height: 66vmin;
 }
     
 footer{

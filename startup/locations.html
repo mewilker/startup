@@ -4,37 +4,46 @@
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="icon" href="placeholder.ico" />
-        <title>Your Agency</title>
+        <link rel="stylesheet" href="gameplay.css">
+        <title>Expand!</title>
     </head>
     <body>
         <header>
-            <h1>Tourist Tycoon</h1>
+            <h1 class = title>Tourist Tycoon</h1>
             <nav>
                 <menu>
-                    <li><a href = index.html>Home</a></li>
-                    <li><a href = agency.html>Your Agency</a></li>
-                    <li><a href = locations.html>Locations</a></li>
-                    <li><a href = leaderboard.html>Leaderboard</a></li>
+                    <li><a class = nav href = index.html>Home</a></li>
+                    <li><a class = nav href = agency.html>Your Agency</a></li>
+                    <li><a class = nav href = locations.html>Locations</a></li>
+                    <li><a class = nav href = leaderboard.html>Leaderboard</a></li>
                 </menu>
             </nav>
         </header>
         <main>
             <h2>Expand your travel agency!</h2>
-            <canvas id="world">You need JavaScript to see the world map</canvas>
-            <!--requries javascripting, and something to fix it's goofy size-->
-            <script>
-                const ctx = document.getElementById("world").getContext('2d');
-                const img = new Image();
-                img.onload = () => {
-                    ctx.drawImage(img,-100,-100);
-                };
-                img.src = "worldplaceholder.png"
-            </script>
-            <h3>Your money: $100000</h3>
+            <div class = travelhead>
+                <div class = stats>
+                    <h3>$100000</h3>
+                    <div class = confirm> 
+                        <p class = confirm>Do you want to expand to Australia for $2000?</p>
+                        <button class = confirm>Expand!</button>
+                    </div>
+                </div>
+                <canvas id="world">You need JavaScript to see the world map</canvas>
+                <!--requries javascripting, and something to fix it's goofy size-->
+                <script>
+                    const ctx = document.getElementById("world").getContext('2d');
+                    const img = new Image();
+                    img.onload = () => {
+                        ctx.drawImage(img,-100,-100);
+                    };
+                    img.src = "worldplaceholder.png"
+                </script>
+            </div>
         </main>
         <footer>
-            <p>Created by Makenna Wilkerson</p>
-            <a href="https://github.com/mewilker/startup">Github</a>
+            <p id = copyright>Created by Makenna Wilkerson</p>
+            <a id = github href="https://github.com/mewilker/startup">Github</a>
         </footer>
     </body>
 </html>
