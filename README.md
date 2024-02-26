@@ -80,6 +80,26 @@ Here the users can scroll and see who has the most money.
 
 ## CSS Deliverable
 
+Prerequisite: Simon CSS deployed to your production environment
+
+Prerequisite: A link to your GitHub startup repository prominently displayed on your application's home page
+
+Prerequisite: Notes in your startup Git repository README.md file
+
+30% Header, footer, and main content body. Yeah I used flex. 💪
+
+20% Navigation elements. Cursor changes on hover, they are in the header
+
+10% Responsive to window resizing. Looks good on desktop, acceptable on smaller sizes.
+
+20% Application elements. Buttons tables and fields custom styled by yours truly, canvas element still displays an image using basic javascript
+
+10% Application text content. Title, navigation and some gameplay elements use downloaded fonts. Everything else is in a sans-serif
+
+10% Application images. Gameplay displays some in the background, next to the buttons, and canvas element from above.
+
+### CSS additions by html page:
+
 **index.html** - uses home.css. Started creation of "branding" by choosing a logo font and making the link buttons resemble dollars. Created a header and footer, althought the header on this page is bigger than all other pages. The footer is consistant throughout the pages. Navigation elements dynamically size. The web page has a flex main body that wraps the news and welcome sections.
 
 **register and login** - use the same css sheet called session.css. This also has the header and footer, however the header has been minimized to be less distracting. The main body is centered, with stacked fields. Login has a register link next to the login button. Register has a disclaimer stacked above the submit button.
