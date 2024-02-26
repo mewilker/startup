@@ -68,9 +68,9 @@ index.html is default entry way
 ## CSS:
 
 ### General
-  P{
-    color: green
-  }
+    P{
+      color: green
+    }
 ### Flex
 display: flex; puts children in flex
 
