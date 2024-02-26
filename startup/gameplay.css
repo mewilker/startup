@@ -62,10 +62,14 @@ menu{
 li{
     padding: .25em;
     margin: .5em;
+    background-color:#B3FBB1;
+}
+
+a.nav{
     font-size: 2vmin;
     font-family: "Alfa Slab One", serif;
     font-weight: 500;
-    background-color:#B3FBB1;
+
 }
     
 .nav{
@@ -86,16 +90,13 @@ main{
     flex-direction: column;
     justify-content: start;
     font-size: 17pt;
+    background-image: url("placeholder.jpg");
 }
 
 img.agencyhead{
     display: none;
 }
 
-div.agencyhead{
-    background-image: url("placeholder.jpg");
-}
-    
 h2{
     padding: 7vmin;
     font-size: 30pt;
@@ -105,10 +106,25 @@ h2{
 
 div.agencybod{
     display: flex;
+    flex-wrap: wrap-reverse;
 }
 
-.wsmg{
-    flex: 0, 400px;
+div.wsmsg{
+    flex: 0 300px;
+    background-color: #e2eecdde;
+}
+
+li.wsmsg{
+    font-size: 12pt;
+    padding: .5em;
+    background-color: #e2eecd00;
+}
+
+.ui{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 ul.wsmsg{
@@ -116,14 +132,64 @@ ul.wsmsg{
     padding: 1em;
 }
 
+div.basic{
+    flex: 1;
+    display:flex;
+    flex-wrap: wrap;
+    width: 50vw;
+    justify-content: center;
+    margin-inline-start: 75px;
+    margin-block: .5em;
+}
+
+h3.basic{
+    flex: 0 300px;
+    border-radius: 50%;
+    background-color: #e2eecd;
+    padding: .5em;
+    text-align: center;
+    font-family: "Alfa Slab One", serif;
+    margin-inline-end: auto;
+    margin: 1em;
+}
+
 button{
     background-color: #B3FBB1;
-    font-size: 16pt;
+    font-size: 14pt;
+    font-family: "Alfa Slab One", serif;
     padding: .5em 1em;
     margin: 0 .5em;
     border-radius: 3pt;
     border: solid #094112;
     color: #094112;
+}
+
+button.basic {
+    flex: 0 300px;
+    margin-inline-end: .5em;
+    margin: auto 0;
+}
+
+div.hospitality, div.attraction, div.travel{
+    flex: 1;
+    display:flex;
+    flex-wrap: wrap;
+    width: 50vw;
+    justify-content: center;
+    margin-inline-start: 75px;
+    margin-block: .5em;
+}
+
+img.hospitality, img.travel, img.attraction{
+    flex: 0 100px;
+    max-width: 85px;
+    margin: 5px 50px;
+}
+
+button.hospitality, button.attraction, button.travel{
+    flex: 0 300px;
+    margin-inline-end: .5em;
+    margin: auto 0 
 }
     
 footer{
