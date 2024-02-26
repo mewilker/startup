@@ -12,7 +12,7 @@ body{
     font-family: Arial;
     display:flex;
     flex-direction:column;
-    height: 100vh;
+    height: 95vh;
     margin:0;
     color:#094112;
   }
@@ -42,7 +42,7 @@ body{
   nav{
     display: flex;
     flex:1;
-    width: 100vw;
+    width: 95vw;
     align-items: center;
     justify-content: center;
     margin: auto;
