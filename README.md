@@ -67,12 +67,25 @@ Here the users can scroll and see who has the most money.
 ### HTML Additions:
 
 **index.html** - has news and information about the game
+
 **register.html** - has a form including username, password and email. There is also a disclaimer saying I store the data and put the username out there.
+
 **login.html** - similar to register, but doesn't include the disclaimer or ask for the email
+
 **leaderboard** - shows ranking, score (which will be in net worth) and username. Available to public as well as players.
+
 **agency.html** - the main part of where the magic happens. there is a button for each upgrade, an image that will call an external service and get a picture based on the players locations. There is also the stub for websocket notifications that will alert other players when someone has expanded to another location. Also includes the players current bank account
+
 **locations.html** - the next part of where the magic happens. A canvas element is here that has been stubbed to show a world map. Later, it will be interactable and allow players to click and see where they can expand to.
 
 ## CSS Deliverable
 
-Coming soon!
+**index.html** - uses home.css. Started creation of "branding" by choosing a logo font and making the link buttons resemble dollars. Created a header and footer, althought the header on this page is bigger than all other pages. The footer is consistant throughout the pages. Navigation elements dynamically size. The web page has a flex main body that wraps the news and welcome sections.
+
+**register and login** - use the same css sheet called session.css. This also has the header and footer, however the header has been minimized to be less distracting. The main body is centered, with stacked fields. Login has a register link next to the login button. Register has a disclaimer stacked above the submit button.
+
+**leaderboard** -  uses leaderboard.css. Implements the minimized header and footer. Simple styling of the page title and the table that stores data. Each user would need to be stored as a row and then sorted based on score.
+
+**agency.html** - uses gameplay.css. Implements the minimized header and footer. The agency name that the user will pick and the location are mentioned in a green subheader. The background image is anticpated to come from a external call to display the location of the agency. For desktops, the websocket messages are in a space reserved on the side. As the window shrinks, flex wraps the content to the bottom. In a further implentation of javascript, I will attempt to put this in a sidebar with push notifications. The player's score is displayed just below the subheader, using stylized font. The main clicker button, "Book Tours" will display either to the side of it or wrap just below, depending on the space. Each facet of the agency has an icon and a button. Multiple buttons may be added in the future to add multiple facets (i.e. hotels, attractions) to the user's agency in a country, in which sense more icons may be added to represent this. Icon's will change as well the user upgrades them. These icon's wrap with the buttons. You'll notice past a certain size, the gameplay is no longer centered. This was a conflict between bigger windows and small windows, as I wanted big windows to have the game play left aligned in it's flex box, but centered when smaller. I anticipate fixing this issue in the javascript phase of this project.
+
+**locations.html** - uses gameplay.css. Implements the minimized header and footer. The same background image idea is implemented here. Here the user will travel from various agencies, as well as upgrade to other locations. The canvas element will be a map with pins of locations where the user can expand, and they will select one of these pins to either travel or upgrade using the message under the side. 
