@@ -230,6 +230,7 @@ button.confirm{
 canvas{
     flex: 1;
     height: 66vmin;
+    width: 95vw;
 }
     
 footer{
