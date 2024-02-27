@@ -178,6 +178,7 @@ generic font families:
 
 ## Javascript
 Simple code example:
+
     function testAll(input, tester) {
       for (let i=0; i<input.length; i++){
         if (tester(input[i]) === false){
@@ -199,5 +200,9 @@ Simple code example:
     const result = testAll(["cat","rat", "bat"], par) ;
 
     console.log(result);
+
+Send to JSON using JSON.stringify(obj)
+
+Get back using JSON.parse(json)
 
 # Domain name: makenna.click
