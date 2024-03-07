@@ -205,4 +205,44 @@ Send to JSON using JSON.stringify(obj)
 
 Get back using JSON.parse(json)
 
+## Design principles
+Identify a problem, design a solution, use a technology
+
+Don't just make the technology work, achieve the goal, be it customer or yours
+
+sequencediagram.org -- sequence diagrams
+
+be intentional about endpoints
+
+Use pre-used libraries well, don't rewrite a technology, use the vocabulary correctly
+
+Encrypt anything over the internet
+
+HTTP Headers to learn - cache, accept, cors
+
+Endpoint design: method should be 
+
+Use a standard file format
+
+Documentation can be used through Open API
+
+Not required for class, but this is important!
+
+### RPC 
+(remote proceedure call) the idea is basically that you call functions on another machine.
+
+### REST 
+Representational state transfer 
+Nobody does it right according to the scholars
+
+What it most people mean is they a method and endpoint that makes sense
+
+### Graph QL
+
+It kinda looks like a json not gonna lie. It's RPCish in the fact that only really queries things, but it seems a bit easier to swap out and modularize than RPC
+
+## CORS
+
+Stop faker attacks
+
 # Domain name: makenna.click
