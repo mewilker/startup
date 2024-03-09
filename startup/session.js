@@ -31,6 +31,8 @@ function setAuth(username){
     document.cookie = `username = ${username}; expires= ${d.toUTCString()}`;
     document.cookie = `authToken = abc; expires= ${d.toUTCString()}`;
 
+    //TODO: CSRF TOKENS
+
     //if the date is valid, the browser can know that the user is authorized
     //this saves the date in local storage
     //it would be better encrypted
