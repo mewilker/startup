@@ -21,7 +21,6 @@ function main(){
 function listItem(href, name){
     let li = document.createElement('li');
     let a = document.createElement('a');
-    li.setAttribute("class", "nav");
     a.setAttribute("class", "nav");
     a.setAttribute("href", href);
     a.textContent = name;
