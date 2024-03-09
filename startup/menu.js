@@ -11,7 +11,9 @@ function main(){
         document.querySelector('menu').remove();
         const menu = document.createElement('menu');
         menu.appendChild(listItem("index.html","Home"));
-        men
+        menu.appendChild(listItem("agency.html", "Your Agency"));
+        menu.appendChild(listItem("locations.html","Locations"));
+        menu.appendChild(listItem("leaderboard.html","Leaderboard"));
         document.querySelector('nav').appendChild(menu);
     }
 }
