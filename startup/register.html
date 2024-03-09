@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="icon" href="placeholder.ico" />
         <link rel = "stylesheet" href="session.css">
+        <script src="session.js"></script>
         <title>Register</title>
     </head>
     <body>
@@ -21,7 +22,7 @@
         </header>
         <main>
             <h2>Register!</h2>
-            <form method = "get" action="agency.html">
+            <form action="javascript:register()">
                 <!--when actually implemented, this should probably be a post method, but we'll see if we do that in html-->
                 <input id = username type = "text" id = "username" name="varText" placeholder="Username*" required/>
                 <input id = password type = "password" id = "password" name = "varPassword" placeholder="Password*" required/>
