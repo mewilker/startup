@@ -6,9 +6,9 @@ document.addEventListener("DOMContentLoaded", main());
 //debugger;
 function main (){
     //if no tycoon, create a new one and store it in memory
-    if (tycoon === null){
+    if (tycoon == null){
         tycoon = new Tycoon(getUserCookie());
-        localStorage.setItem("tycoon",tycoon);
+        //localStorage.setItem("tycoon",tycoon);
     }
     //TODO make sure the database is current
     //render the browser according to the database
@@ -32,7 +32,12 @@ function getUserCookie () {
 
 function renderTycoon(){
     let elem = document.getElementById("user");
-    debugger;
-    elem.textContent(tycoon.user());
-
+    console.log(tycoon);
+    elem.textContent = tycoon.user();
+    elem = document.getElementById("location");
+    const agency = tycoon.currentAgency();
+    elem.textContent = agency.place();
+    elem = document.getElementById("money");
+    elem.textContent = tycoon.money();
+    
 }

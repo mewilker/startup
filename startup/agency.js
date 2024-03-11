@@ -2,12 +2,7 @@ export class Agency{
     //TODO: make property collections of each type of upgrade
 
     constructor(location){
-        Object.defineProperty(this, "place", {
-            value: location,
-            writable: false,
-            configurable: false,
-        });
-
+        this.location = location;
         this.travel = [];
         this.attractions = [];
         this.hospitality = [];
@@ -28,9 +23,10 @@ export class Agency{
         return result;
     }
 
-    location(){
-        return this.place;
+    place(){
+        return this.location.name();
     }
+
 }
 
 class Upgrade{
