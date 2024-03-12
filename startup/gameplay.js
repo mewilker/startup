@@ -1,3 +1,4 @@
+import { Travel } from "./agency.js";
 import { Tycoon } from "./tycoon.js";
 
 //read the tycoon from memory
@@ -43,6 +44,8 @@ function renderTycoon(){
     clearUpgrade("hospitality");
     clearUpgrade("attraction");
     clearUpgrade("travel");
+
+    loadUpgradePics();
 }
 
 function clearUpgrade(upgrade){
@@ -54,14 +57,15 @@ function clearUpgrade(upgrade){
     }
 }
 
-function loadUpgrades(){
+function loadUpgradePics(){
   const agency = tycoon.currentAgency();
   for (let i = 0; i < agency.travel.length; i++){
     let addme = document.createElement('img');
-    upgrade = agency.travel[i];
+    let upgrade = agency.travel[i];
     addme.setAttribute("class", "travel");
     addme.setAttribute("src", upgrade.imgpath());
     addme.setAttribute("alt", upgrade.type());
     let elem = document.querySelector(".travel");
+    elem.appendChild(addme);
   }
 }

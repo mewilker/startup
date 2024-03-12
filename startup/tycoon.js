@@ -11,7 +11,6 @@ export class Tycoon{
         this.#user = user;
         this.#money = 5;
         this.#agencies = [];
-        debugger;
         this.#agencies.push(new Agency(new Location("Grand Canyon")));
         this.#curragency = 0;
         this.#gain = 0;
