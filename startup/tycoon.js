@@ -14,7 +14,6 @@ export class Tycoon{
         debugger;
         this.#agencies.push(new Agency(new Location("Grand Canyon")));
         this.#curragency = 0;
-        this.#agencies[this.#curragency].travel.push(new Travel("Train", 5, "path.svg"));
         this.#gain = 0;
     }
 

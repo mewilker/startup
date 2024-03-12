@@ -40,4 +40,28 @@ function renderTycoon(){
     elem = document.getElementById("money");
     elem.textContent = tycoon.money();
     
+    clearUpgrade("hospitality");
+    clearUpgrade("attraction");
+    clearUpgrade("travel");
+}
+
+function clearUpgrade(upgrade){
+  let elem = document.querySelector("." + upgrade);
+    for (let i = 0; i <= elem.querySelectorAll("." + upgrade).length; i++){
+      let child = elem.querySelector("." + upgrade);
+      console.log(child);
+      child.remove();
+    }
+}
+
+function loadUpgrades(){
+  const agency = tycoon.currentAgency();
+  for (let i = 0; i < agency.travel.length; i++){
+    let addme = document.createElement('img');
+    upgrade = agency.travel[i];
+    addme.setAttribute("class", "travel");
+    addme.setAttribute("src", upgrade.imgpath());
+    addme.setAttribute("alt", upgrade.type());
+    let elem = document.querySelector(".travel");
+  }
 }
