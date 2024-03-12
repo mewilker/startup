@@ -37,7 +37,6 @@ export class Tycoon{
         }
     }
 
-
     currentAgency(){
         return this.#agencies[this.#curragency];
     }
