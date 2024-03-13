@@ -27,6 +27,10 @@ export class Agency{
         return this.location.name();
     }
 
+    countAllUpgrades(){
+        return this.travel.length + this.attractions.length + this.hospitality.length;
+    }
+
 }
 
 class Upgrade{
@@ -80,7 +84,7 @@ export class Attraction extends Upgrade{
                 break;
             case "Dining Experience":
                 break;
-            //case location spectial
+            //TODO case location spectial
             default:
                 throw "That attraction doesn't exist!";
         }
@@ -118,10 +122,41 @@ export class Location{
     constructor(name){
         switch (name){
             case "Grand Canyon":
-                this.#attraction = "Colorado Rapids";
+                this.#attraction = "Colorado Rafting";
                 this.#price = 0;
                 break;
-            //TODO add more locations
+            case "New York":
+                this.#attraction = "Broadway Deals";
+                this.#price = 0;
+                break;
+            case "Banff":
+                this.#attraction = "Ski Pass";
+                this.#price = 0;
+                break;
+            case "Cabo San Lucas":
+                this.#attraction = "Zipline and High Adventure";
+                this.#price = 0;
+                break;
+            case "Hawaii":
+                this.#attraction = "Surf Experience";
+                this.#price = 0;
+                break;
+            case "British Virgin Isles":
+                this.#attraction = "Sailboating Tours";
+                this.#price = 0;
+                break;
+            case "Australia":
+                this.#attraction = "Great Barrier Reef Snorkeling";
+                this.#price = 0;
+                break;
+            case "London":
+                this.#attraction = "Crown Jewel Tour";
+                this.#price = 0;
+                break;
+            case "Japan":
+                this.#attraction = "Shrine and Temple Package";
+                this.#price = 0;
+                break;
             default:
                 throw "That's not a place you can expand!"
             }
