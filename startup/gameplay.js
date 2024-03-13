@@ -48,9 +48,11 @@ function renderTycoon(){
     elem.textContent = agency.place();
     renderMoney();    
     clearUpgrade("hospitality");
+    loadUpgradePics("hospitality");
     clearUpgrade("attraction");
+    loadUpgradePics("attraction");
     clearUpgrade("travel");
-    loadUpgradePics();
+    loadUpgradePics("travel");
 }
 
 function renderMoney(){
@@ -68,35 +70,33 @@ function clearUpgrade(upgrade){
   }
 }
 
-function loadUpgradePics(){
+function loadUpgradePics(upgradeType){
   const agency = tycoon.currentAgency();
-  for (let i = 0; i < agency.travel.length; i++){
+  let upgradeList = undefined;
+  switch (upgradeType) {
+    case "hospitality":
+      upgradeList = agency.hospitality;
+      break;
+    case "travel":
+      upgradeList = agency.travel;
+      break;
+    case "attraction":
+      upgradeList = agency.attractions;
+      break;
+    default:
+      throw new Error("That's not an upgrade");
+  }
+  const selector = "." + upgradeType;
+  for (let i = 0; i < upgradeList.length; i++){
     let addme = document.createElement('img');
-    let upgrade = agency.travel[i];
-    addme.setAttribute("class", "travel");
+    let upgrade = upgradeList[i];
+    addme.setAttribute("class", upgradeType);
     addme.setAttribute("src", upgrade.imgpath());
     addme.setAttribute("alt", upgrade.type());
-    let elem = document.querySelector(".travel");
+    let elem = document.querySelector(selector);
     elem.appendChild(addme);
   }
-  for (let i = 0; i < agency.hospitality.length; i++){
-    let addme = document.createElement('img');
-    let upgrade = agency.travel[i];
-    addme.setAttribute("class", "travel");
-    addme.setAttribute("src", upgrade.imgpath());
-    addme.setAttribute("alt", upgrade.type());
-    let elem = document.querySelector(".travel");
-    elem.appendChild(addme);
-  }
-  for (let i = 0; i < agency.attractions.length; i++){
-    let addme = document.createElement('img');
-    let upgrade = agency.travel[i];
-    addme.setAttribute("class", "travel");
-    addme.setAttribute("src", upgrade.imgpath());
-    addme.setAttribute("alt", upgrade.type());
-    let elem = document.querySelector(".travel");
-    elem.appendChild(addme);
-  }
+  
 }
 
 //TODO: parsing csv needs to be on the server side
@@ -163,15 +163,15 @@ function loadUpgradeButtons(){
 
   function addTravel(upgrade){
     const agency= tycoon.currentAgency();
-    //add the upgrade to the agency
-    agency.travel.push(upgrade);
     //subtract money from tycoon
     try {
-      tycoon.buy(upgrade.price(), agency);
+      tycoon.buy(upgrade.price());
+      //add the upgrade to the agency
+      agency.travel.push(upgrade);
       tycoon.calculateGain();
       renderMoney();
       clearUpgrade("travel");
-      loadUpgradePics();
+      loadUpgradePics("travel");
       loadUpgradeButtons();
     } catch (error){
       //TODO: display not enough money to user
@@ -181,15 +181,15 @@ function loadUpgradeButtons(){
 
   function addHopsitality(){
     const agency= tycoon.currentAgency();
-    //add the upgrade to the agency
-    agency.hospitality.push(upgrade);
     //subtract money from tycoon
     try {
-      tycoon.buy(upgrade.price(), agency);
+      tycoon.buy(upgrade.price());
+      //add the upgrade to the agency
+      agency.hospitality.push(upgrade);
       tycoon.calculateGain();
       renderMoney();
       clearUpgrade("hospitality");
-      loadUpgradePics();
+      loadUpgradePics("hospitality");
       loadUpgradeButtons();
     } catch (error){
       //TODO: display not enough money to user

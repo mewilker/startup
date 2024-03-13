@@ -37,11 +37,10 @@ export class Tycoon{
         }
     }
 
-    buy(price, agency){
+    buy(price){
         if (price > this.#money){
             throw new Error("Not enough money!");
         }
-        this.#agencies[this.#curragency] = agency;
         this.#money -= price;
     }
 
