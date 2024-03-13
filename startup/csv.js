@@ -13,8 +13,7 @@ Tour Guide,2,3,1
 Plane,2,4,1
 Resort,2,5,1
 Jet,3,5,2
-Exp,4,6,2
-`;
+Exp,4,6,2`;
 
 export const NewYork = `Upgrade,Travel,Hospitality,Attraction
 Bus,0,0,0
@@ -30,8 +29,7 @@ Tour Guide,2,3,1
 Plane,2,4,1
 Resort,2,5,1
 Jet,3,5,2
-Exp,4,6,2
-`;
+Exp,4,6,2`;
 
 export const Banff = `Upgrade,Travel,Hospitality,Attraction
 Bus,0,0,0
@@ -47,8 +45,7 @@ Tour Guide,2,3,1
 Plane,2,3,1
 Resort,2,5,1
 Jet,3,5,2
-Exp,4,6,2
-`;
+Exp,4,6,2`;
 
 export const Cabo = `Upgrade,Travel,Hospitality,Attraction
 Bus,0,0,0
@@ -65,8 +62,7 @@ New Location,3,5,2
 Plane,3,5,2
 Resort,3,5,2
 Jet,4,5,2
-Exp,5,6,2
-`;
+Exp,5,6,2`;
 
 export const Hawaii = `Upgrade,Travel,Hospitality,Attraction
 Plane,0,0,0
@@ -81,8 +77,7 @@ Hotel,2,4,1
 Tour Guide,1,3,1
 Resort,1,5,1
 Jet,2,5,1
-Exp,3,6,2
-`;
+Exp,3,6,2`;
 
 export const BVI = `Upgrade,Travel,Hospitality,Attraction
 Plane,0,0,0
@@ -97,7 +92,6 @@ New Location,2,5,1
 Tour Guide,2,5,1
 Resort,2,5,1
 Jet,2,5,1
-Exp,3,6,2
-`;
+Exp,3,6,2`;
 
 //TODO ADD MORE

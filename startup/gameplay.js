@@ -62,7 +62,8 @@ function renderMoney(){
 
 function clearUpgrade(upgrade){
   let elem = document.querySelector("." + upgrade);
-  for (let i = 0; i <= elem.querySelectorAll("." + upgrade).length; i++){
+  let num = elem.querySelectorAll("." + upgrade).length;
+  for (let i = 0; i <= num; i++){
     let child = elem.querySelector("." + upgrade);
     if (child != null){
       child.remove();
@@ -152,6 +153,7 @@ function loadUpgradeButtons(){
         let button = document.createElement('button');
         button.setAttribute("class", "attraction");
         button.textContent = "Buy " + name + " $" + upgrade.price();
+        button.addEventListener('click', function(){addAttraction(upgrade)});
         let parent = document.querySelector(".attraction");
         parent.appendChild(button);
       }
@@ -198,6 +200,20 @@ function loadUpgradeButtons(){
   }
 
   function addAttraction(){
-
+    const agency= tycoon.currentAgency();
+    //subtract money from tycoon
+    try {
+      tycoon.buy(upgrade.price());
+      //add the upgrade to the agency
+      agency.attractions.push(upgrade);
+      tycoon.calculateGain();
+      renderMoney();
+      clearUpgrade("attraction");
+      loadUpgradePics("attraction");
+      loadUpgradeButtons();
+    } catch (error){
+      //TODO: display not enough money to user
+      console.log(error);
+    }
   }
 }
