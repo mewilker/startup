@@ -15,7 +15,7 @@ function main (){
     //TODO make sure the database is current
     //render the browser according to the database
     renderTycoon();
-    loadUpgrades();
+    loadUpgradeButtons();
 }
 
 function getUserCookie () {
@@ -46,16 +46,17 @@ function renderTycoon(){
     clearUpgrade("hospitality");
     clearUpgrade("attraction");
     clearUpgrade("travel");
-
     loadUpgradePics();
 }
 
 function clearUpgrade(upgrade){
   let elem = document.querySelector("." + upgrade);
-    for (let i = 0; i <= elem.querySelectorAll("." + upgrade).length; i++){
-      let child = elem.querySelector("." + upgrade);
+  for (let i = 0; i <= elem.querySelectorAll("." + upgrade).length; i++){
+    let child = elem.querySelector("." + upgrade);
+    if (child != null){
       child.remove();
     }
+  }
 }
 
 function loadUpgradePics(){
@@ -72,7 +73,7 @@ function loadUpgradePics(){
 }
 
 //TODO: parsing csv needs to be on the server side
-function loadUpgrades(){
+function loadUpgradeButtons(){
   //figure out location
   let elem = document.getElementById("location");
   let csv = "";
@@ -105,7 +106,8 @@ function loadUpgrades(){
     upgrade = new Travel(name,5,"plane-departure-solid.svg");
     let button = document.createElement('button');
     button.setAttribute("class", "travel");
-    button.textContent = "Buy " + name;
+    button.textContent = "Buy " + name + " $" + upgrade.price();
+    button.addEventListener('click', function(){addTravel(upgrade)});
     let parent = document.querySelector(".travel");
     parent.appendChild(button);
   } catch (error) {
@@ -113,15 +115,15 @@ function loadUpgrades(){
       upgrade = new Hospitality(name, 5,"hotel-solid.svg");
       let button = document.createElement('button');
       button.setAttribute("class", "hospitality");
-      button.textContent = "Buy " + name;
+      button.textContent = "Buy " + name + " $" + upgrade.price();
       let parent = document.querySelector(".hospitality");
       parent.appendChild(button);
     } catch (error){
       try{
-        upgrade = Attraction(name, 5, "binoculars-solid.svg");
+        upgrade = new Attraction(name, 5, "binoculars-solid.svg");
         let button = document.createElement('button');
         button.setAttribute("class", "attraction");
-        button.textContent = "Buy " + name;
+        button.textContent = "Buy " + name + " $" + upgrade.price();
         let parent = document.querySelector(".attraction");
         parent.appendChild(button);
       }
@@ -129,5 +131,27 @@ function loadUpgrades(){
         console.log(`The upgrade "` + name + `" doesn't exist`);
       }
     }
+  }
+
+  function addTravel(upgrade){
+    const agency= tycoon.currentAgency();
+    //add the upgrade to the agency
+    agency.travel.push(upgrade);
+    //subtract money from tycoon
+    try {
+      tycoon.buy(upgrade.price(), agency);
+      renderTycoon();
+      loadUpgradeButtons();
+    } catch (error){
+      //TODO: display not enough money to user
+      console.log(error);
+    }
+  }
+
+  function addHopsitality(){
+  }
+
+  function addAttraction(){
+
   }
 }
