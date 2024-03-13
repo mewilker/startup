@@ -3,7 +3,7 @@ export const GrandCanyon =
 Bus,0,0,0
 Hostel,1,0,0
 Train,1,0,0
-B&B,1,1,0
+Bed and Breakfast,1,1,0
 Inn,1,2,0
 New Location,2,3,0
 Dining Experience,2,3,0
@@ -20,7 +20,7 @@ export const NewYork = `Upgrade,Travel,Hospitality,Attraction
 Bus,0,0,0
 Hostel,1,0,0
 Train,1,0,0
-B&B,1,1,0
+Bed and Breakfast,1,1,0
 Inn,1,2,0
 New Location,2,3,0
 Dining Experience,2,3,0
@@ -37,7 +37,7 @@ export const Banff = `Upgrade,Travel,Hospitality,Attraction
 Bus,0,0,0
 Hostel,0,0,0
 Train,1,0,0
-B&B,0,1,0
+Bed and Breakfast,0,1,0
 Inn,0,2,0
 New Location,2,3,0
 Dining Experience,2,3,0
@@ -54,7 +54,7 @@ export const Cabo = `Upgrade,Travel,Hospitality,Attraction
 Bus,0,0,0
 Hostel,0,0,0
 Train,1,0,0
-B&B,0,1,0
+Bed and Breakfast,0,1,0
 Inn,0,2,0
 Dining Experience,1,1,0
 Motel,0,3,0
@@ -71,7 +71,7 @@ Exp,5,6,2
 export const Hawaii = `Upgrade,Travel,Hospitality,Attraction
 Plane,0,0,0
 Hostel,1,0,0
-B&B,1,1,0
+Bed and Breakfast,1,1,0
 Inn,1,2,0
 Dining Experience,1,0,0
 Cruise Ship,1,3,1
@@ -87,7 +87,7 @@ Exp,3,6,2
 export const BVI = `Upgrade,Travel,Hospitality,Attraction
 Plane,0,0,0
 Hostel,1,0,0
-B&B,1,1,0
+Bed and Breakfast,1,1,0
 Inn,1,2,0
 Dining Experience,1,0,0
 Cruise Ship,1,3,1

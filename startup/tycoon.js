@@ -11,7 +11,7 @@ export class Tycoon{
         this.#user = user;
         this.#money = 5;
         this.#agencies = [];
-        this.#agencies.push(new Agency(new Location("Grand Canyon")));
+        this.#agencies.push(new Agency(new Location("the Grand Canyon")));
         this.#curragency = 0;
         this.#gain = 0;
     }
@@ -48,5 +48,4 @@ export class Tycoon{
     money(){
         return this.#money;
     }
-
 }

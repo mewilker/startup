@@ -71,7 +71,7 @@ export class Travel extends Upgrade{
             case "Jet":
                 break;
             default:
-                throw "That's not a vehicle you can buy!";
+                throw new Error("That's not a vehicle you can buy!");
         }
         super(type, price, imgpath);
     }
@@ -86,7 +86,7 @@ export class Attraction extends Upgrade{
                 break;
             //TODO case location spectial
             default:
-                throw "That attraction doesn't exist!";
+                throw new Error("That attraction doesn't exist!");
         }
         super(type, price, imgpath);
     }
@@ -97,7 +97,7 @@ export class Hospitality extends Upgrade{
         switch (type) {
             case "Hostel":
                 break;
-            case "Bead and Breakfast":
+            case "Bed and Breakfast":
                 break;
             case "Inn":
                 break;
@@ -108,7 +108,7 @@ export class Hospitality extends Upgrade{
             case "Resort":
                 break;
             default:
-                throw "That's not a vehicle you can buy!";
+                throw new Error("That's not a vehicle you can buy!");
         }
         super(type, price, imgpath);
     }
@@ -121,7 +121,7 @@ export class Location{
 
     constructor(name){
         switch (name){
-            case "Grand Canyon":
+            case "the Grand Canyon":
                 this.#attraction = "Colorado Rafting";
                 this.#price = 0;
                 break;
@@ -141,7 +141,7 @@ export class Location{
                 this.#attraction = "Surf Experience";
                 this.#price = 0;
                 break;
-            case "British Virgin Isles":
+            case "the British Virgin Isles":
                 this.#attraction = "Sailboating Tours";
                 this.#price = 0;
                 break;
@@ -158,7 +158,7 @@ export class Location{
                 this.#price = 0;
                 break;
             default:
-                throw "That's not a place you can expand!"
+                throw new Error ("That's not a place you can expand!");
             }
         this.#name = name;
     }
