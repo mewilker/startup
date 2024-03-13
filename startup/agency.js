@@ -10,16 +10,16 @@ export class Agency{
 
     calculateGain(){
         let result = 0;
-        for (let tindex = 0; i < this.travel.length; tindex++){
+        for (let tindex = 0; tindex < this.travel.length; tindex++){
             result += this.travel[tindex].price() *.1;
         }
-        for (let aindex = 0; i < this.attractions.length; aindex++){
+        for (let aindex = 0; aindex < this.attractions.length; aindex++){
             result += this.attractions[aindex].price();
         }
-        for (let hindex = 0; i < this.hospitality.length; hindex++){
+        for (let hindex = 0; hindex < this.hospitality.length; hindex++){
             result += this.hospitality[hindex].price() *.1;
         }
-        result + this.place.price();
+        result + this.location.price();
         return result;
     }
 

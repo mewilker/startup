@@ -16,6 +16,12 @@ function main (){
     //render the browser according to the database
     renderTycoon();
     loadUpgradeButtons();
+    document.querySelector("button.basic").addEventListener('click', 
+      function(){
+        tycoon.bookTours();
+        renderMoney();
+      });
+
 }
 
 function getUserCookie () {
@@ -40,13 +46,16 @@ function renderTycoon(){
     elem = document.getElementById("location");
     const agency = tycoon.currentAgency();
     elem.textContent = agency.place();
-    elem = document.getElementById("money");
-    elem.textContent = tycoon.money();
-    
+    renderMoney();    
     clearUpgrade("hospitality");
     clearUpgrade("attraction");
     clearUpgrade("travel");
     loadUpgradePics();
+}
+
+function renderMoney(){
+  let elem = document.getElementById("money");
+  elem.textContent = tycoon.money();
 }
 
 function clearUpgrade(upgrade){
@@ -62,6 +71,24 @@ function clearUpgrade(upgrade){
 function loadUpgradePics(){
   const agency = tycoon.currentAgency();
   for (let i = 0; i < agency.travel.length; i++){
+    let addme = document.createElement('img');
+    let upgrade = agency.travel[i];
+    addme.setAttribute("class", "travel");
+    addme.setAttribute("src", upgrade.imgpath());
+    addme.setAttribute("alt", upgrade.type());
+    let elem = document.querySelector(".travel");
+    elem.appendChild(addme);
+  }
+  for (let i = 0; i < agency.hospitality.length; i++){
+    let addme = document.createElement('img');
+    let upgrade = agency.travel[i];
+    addme.setAttribute("class", "travel");
+    addme.setAttribute("src", upgrade.imgpath());
+    addme.setAttribute("alt", upgrade.type());
+    let elem = document.querySelector(".travel");
+    elem.appendChild(addme);
+  }
+  for (let i = 0; i < agency.attractions.length; i++){
     let addme = document.createElement('img');
     let upgrade = agency.travel[i];
     addme.setAttribute("class", "travel");
@@ -116,6 +143,7 @@ function loadUpgradeButtons(){
       let button = document.createElement('button');
       button.setAttribute("class", "hospitality");
       button.textContent = "Buy " + name + " $" + upgrade.price();
+      button.addEventListener('click', function(){addHopsitality(upgrade)});
       let parent = document.querySelector(".hospitality");
       parent.appendChild(button);
     } catch (error){
@@ -140,7 +168,10 @@ function loadUpgradeButtons(){
     //subtract money from tycoon
     try {
       tycoon.buy(upgrade.price(), agency);
-      renderTycoon();
+      tycoon.calculateGain();
+      renderMoney();
+      clearUpgrade("travel");
+      loadUpgradePics();
       loadUpgradeButtons();
     } catch (error){
       //TODO: display not enough money to user
@@ -149,6 +180,21 @@ function loadUpgradeButtons(){
   }
 
   function addHopsitality(){
+    const agency= tycoon.currentAgency();
+    //add the upgrade to the agency
+    agency.hospitality.push(upgrade);
+    //subtract money from tycoon
+    try {
+      tycoon.buy(upgrade.price(), agency);
+      tycoon.calculateGain();
+      renderMoney();
+      clearUpgrade("hospitality");
+      loadUpgradePics();
+      loadUpgradeButtons();
+    } catch (error){
+      //TODO: display not enough money to user
+      console.log(error);
+    }
   }
 
   function addAttraction(){

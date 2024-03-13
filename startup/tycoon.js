@@ -18,7 +18,7 @@ export class Tycoon{
 
     //adds money to account based on the gain
     bookTours(){
-        this.money += this.#gain;
+        this.#money += this.#gain;
     }
 
     moveLocation(index){
@@ -31,9 +31,9 @@ export class Tycoon{
     calculateGain(){
         this.#gain =0;
 
-        for(let agency in this.#agencies){
+        for(let i = 0; i < this.#agencies.length; i++){
 
-            this.#gain+= agency.calculateGain();
+            this.#gain+= this.#agencies[i].calculateGain();
         }
     }
 
