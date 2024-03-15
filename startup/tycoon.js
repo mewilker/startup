@@ -55,4 +55,13 @@ export class Tycoon{
     money(){
         return this.#money;
     }
+
+    tojson(){
+        let json = `{
+            "money": ${this.#money}, 
+            "gain": ${this.#gain}, 
+            "curragency": ${this.#curragency}
+        }`
+        return JSON.stringify(this);
+    }
 }

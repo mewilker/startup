@@ -35,6 +35,48 @@ export class Agency{
         return this.location.attraction();
     }
 
+    tojson(){
+        let json =`{"location":`;
+        let builder = this.location.tojson();
+        json = json + builder + ",";
+        builder = `"travel":[`;
+        json = json + builder;
+        for (let i = 0; i< this.travel.length-1; i++){
+            builder = this.travel[i].tojson();
+            json = json + builder + ",";
+        }
+        if (this.travel.length > 0){
+            builder = this.travel[this.travel.length-1].tojson();
+            json = json + builder;
+        }
+        json = json + "],";
+
+        builder = `"attractions":[`;
+        json = json + builder;
+        for (let i = 0; i< this.attractions.length-1; i++){
+            builder = this.attractions[i].tojson();
+            json = json + builder + ",";
+        }
+        if (this.attractions.length > 0){
+            builder = this.attractions[this.attractions.length-1].tojson();
+            json = json + builder;
+        }
+        json = json + "],";
+
+        builder = `"hospitality":[`;
+        json = json + builder;
+        for (let i = 0; i< this.hospitality.length-1; i++){
+            builder = this.hospitality[i].tojson();
+            json = json + builder + ",";
+        }
+        if (this.hospitality.length > 0){
+            builder = this.hospitality[this.hospitality.length-1].tojson();
+            json = json + builder;
+        }
+        json = json + "]}";
+        return json;
+    }
+
 }
 
 class Upgrade{
@@ -63,6 +105,12 @@ class Upgrade{
 
     clickgain(){
         return this.#clickgain;
+    }
+
+    tojson(){
+        return `{"name": "${this.#name}",` +
+        `"price": ${this.#price},` + 
+        `"clickgain": ${JSON.stringify(this.#clickgain)}}`;
     }
 
 }
@@ -138,7 +186,7 @@ export class Location{
                 break;
             case "New York":
                 this.#attraction = "Broadway";
-                this.#price = 0;
+                this.#price = 1000;
                 break;
             case "Banff":
                 this.#attraction = "Ski Pass";
@@ -184,5 +232,9 @@ export class Location{
 
     price(){
         return this.#price;
+    }
+
+    tojson(){
+        return `{"name": "${this.#name}"}`;
     }
 }

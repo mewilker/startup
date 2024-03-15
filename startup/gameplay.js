@@ -12,7 +12,8 @@ function main (){
     //if no tycoon, create a new one and store it in memory
     if (tycoon == null){
         tycoon = new Tycoon(getUserCookie());
-        //localStorage.setItem("tycoon",tycoon);
+        console.log (tycoon.currentAgency().tojson());
+        //localStorage.setItem("tycoon", tycoon.tojson());
     }
     //TODO make sure the database is current
     //render the browser according to the database
