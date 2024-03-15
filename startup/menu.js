@@ -14,6 +14,7 @@ function main(){
         menu.appendChild(listItem("agency.html", "Your Agency"));
         menu.appendChild(listItem("locations.html","Locations"));
         menu.appendChild(listItem("leaderboard.html","Leaderboard"));
+        menu.appendChild(listItem("index.html", "Logout"));
         document.querySelector('nav').appendChild(menu);
     }
 }
@@ -24,6 +25,20 @@ function listItem(href, name){
     a.setAttribute("class", "nav");
     a.setAttribute("href", href);
     a.textContent = name;
+    if (name == "Logout"){
+        a.addEventListener('click', function(){logout()});
+        a.setAttribute('id','logout');
+    }
     li.appendChild(a);
     return li;
+}
+
+export function logout(){
+    const date = new Date();
+    date.setTime(date.getTime() - (24*60*60*1000));
+    localStorage.removeItem("authorized")
+    document.cookie = "authToken=;expires=" + date.toUTCString + ";path=/startup";
+    document.cookie = "username=;expires=" + date.toUTCString + ";path=/startup";
+    const elem =document.getElementById('logout');
+    elem.removeEventListener('click');
 }

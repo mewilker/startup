@@ -1,10 +1,12 @@
 import { Attraction, Hospitality, Travel } from "./agency.js";
 import { Tycoon } from "./tycoon.js";
 import { GrandCanyon } from "./csv.js";
+import { logout } from "./menu.js";
 
 //read the tycoon from memory
 let tycoon = localStorage.getItem("tycoon")
 document.addEventListener("DOMContentLoaded", main());
+document.getElementById('logout').addEventListener('click', function(){logout()});
 //debugger;
 function main (){
     //if no tycoon, create a new one and store it in memory
