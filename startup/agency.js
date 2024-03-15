@@ -130,7 +130,7 @@ export class Travel extends Upgrade{
             default:
                 throw new Error("That's not a vehicle you can buy!");
         }
-        super(type, price, "plane-departure-solid.svg", clickgain );
+        super(type, price, "assets/plane-departure-solid.svg", clickgain );
     }
 }
 
@@ -146,7 +146,7 @@ export class Attraction extends Upgrade{
             default:
                 throw new Error("That attraction doesn't exist!");
         }
-        super(type, price, "binoculars-solid.svg", clickgain);
+        super(type, price, "assets/binoculars-solid.svg", clickgain);
     }
 }
 
@@ -168,7 +168,7 @@ export class Hospitality extends Upgrade{
             default:
                 throw new Error("That's not hospitality!");
         }
-        super(type, price, "hotel-solid.svg", clickgain);
+        super(type, price, "assets/hotel-solid.svg", clickgain);
     }
 }
 

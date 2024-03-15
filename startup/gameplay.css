@@ -242,6 +242,11 @@ footer{
     justify-content: end;
     font-size: 20pt;
 }
+
+p{
+    margin: 0;
+    padding: 0;
+}
   
 #copyright{
     margin: 0 auto 0 10px ;

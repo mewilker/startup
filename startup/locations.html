@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="icon" href="placeholder.ico" />
         <link rel="stylesheet" href="gameplay.css">
+        <script type = "module" src = locations.js defer></script>
         <title>Expand!</title>
     </head>
     <body>
@@ -24,26 +25,18 @@
             <h2>Expand your travel agency!</h2>
             <div class = travelhead>
                 <div class = stats>
-                    <h3>$100000</h3>
+                    <h3>$<span id = money>100000</span></h3>
                     <div class = confirm> 
-                        <p class = confirm>Do you want to expand to Australia for $2000?</p>
+                        <p class = confirm>Select where you want to upgrade!</p>
                         <button class = confirm>Expand!</button>
                     </div>
                 </div>
                 <canvas id="world">You need JavaScript to see the world map</canvas>
-                <!--requries javascripting, and something to fix it's goofy size-->
-                <script>
-                    const ctx = document.getElementById("world").getContext('2d');
-                    const img = new Image();
-                    img.onload = () => {
-                        ctx.drawImage(img,-100,-100);
-                    };
-                    img.src = "worldplaceholder.png"
-                </script>
             </div>
         </main>
         <footer>
             <p id = copyright>Created by Makenna Wilkerson</p>
+            <p><a href="https://www.freepik.com/free-vector/illustration-global-icon_2687446.htm#query=world%20map&position=0&from_view=keyword&track=ais&uuid=9f52fe4a-ae62-4569-800d-878e7b1949a0">Image by rawpixel.com</a> on Freepik</p>
             <a id = github href="https://github.com/mewilker/startup">Github</a>
         </footer>
     </body>

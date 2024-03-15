@@ -5,7 +5,11 @@ import { logout } from "./menu.js";
 
 //read the tycoon from memory
 let tycoon = localStorage.getItem("tycoon")
-document.addEventListener("DOMContentLoaded", main());
+try{
+  document.addEventListener("DOMContentLoaded", main());
+} catch(error){
+  console.log(error);
+}
 document.getElementById('logout').addEventListener('click', function(){logout()});
 //debugger;
 function main (){
@@ -29,7 +33,7 @@ function main (){
 
 }
 
-function getUserCookie () {
+export function getUserCookie () {
     let allCookies = decodeURIComponent(document.cookie);
     let cookieArray = allCookies.split(';');
     for(let i = 0; i <cookieArray.length; i++) {
@@ -46,7 +50,6 @@ function getUserCookie () {
 
 function renderTycoon(){
     let elem = document.getElementById("user");
-    console.log(tycoon);
     elem.textContent = tycoon.user();
     elem = document.getElementById("location");
     const agency = tycoon.currentAgency();
@@ -61,7 +64,7 @@ function renderTycoon(){
   clearMessages();
 }
 
-function renderMoney(){
+export function renderMoney(){
   let elem = document.getElementById("money");
   elem.textContent = tycoon.money();
 }
@@ -127,7 +130,7 @@ function loadUpgradeButtons(){
   clearUpgrade("travel");
   loadUpgradePics("travel");
   //match up to the csv
-  const lines = GrandCanyon.split('\n');
+  const lines = csv.split('\n');
   for (let lineIndex = 1; lineIndex < lines.length; lineIndex++){
     const line = lines[lineIndex];
     const values = line.split(",");
