@@ -53,6 +53,7 @@ function renderTycoon(){
     loadUpgradePics("attraction");
     clearUpgrade("travel");
     loadUpgradePics("travel");
+  clearMessages();
 }
 
 function renderMoney(){
@@ -114,56 +115,75 @@ function loadUpgradeButtons(){
   }
   //grab lengths of upgrades
   const agency = tycoon.currentAgency();
+  clearUpgrade("hospitality");
+  loadUpgradePics("hospitality");
+  clearUpgrade("attraction");
+  loadUpgradePics("attraction");
+  clearUpgrade("travel");
+  loadUpgradePics("travel");
   //match up to the csv
   const lines = GrandCanyon.split('\n');
   for (let lineIndex = 1; lineIndex < lines.length; lineIndex++){
     const line = lines[lineIndex];
     const values = line.split(",");
-    if (values[1]==agency.travel.length 
-      && values[2]==agency.hospitality.length
-      && values [3]==agency.attractions.length){
-        createUpgradeButton(values[0]);
+    switch(values[1]){
+      case "travel":
+        if (values[2]==agency.travel.length 
+          && values[3]<=agency.hospitality.length
+          && values [4]<=agency.attractions.length){
+            createUpgradeButton(values[0],values[1]);
+        }
+        break;
+      case "hospitality":
+        if (values[2]<=agency.travel.length 
+          && values[3]==agency.hospitality.length
+          && values [4]<=agency.attractions.length){
+            createUpgradeButton(values[0], values[1]);
+        }
+        break;
+      case "attraction":
+        if (values[2]<=agency.travel.length 
+          && values[3]<=agency.hospitality.length
+          && values [4]==agency.attractions.length){
+            createUpgradeButton(values[0], values[1]);
+        }
+        break;
+      case "location":
+        break;
+      default:
+        throw new Error("Bad File");
       } 
     }
-  }
+}
   
-  //FIXME the error handling is attrocious
-  function createUpgradeButton(name){
+//FIXME the error handling is attrocious
+function createUpgradeButton(name, type){
   let upgrade = undefined;
-  try {
-    upgrade = new Travel(name,5,"plane-departure-solid.svg");
-    let button = document.createElement('button');
-    button.setAttribute("class", "travel");
-    button.textContent = "Buy " + name + " $" + upgrade.price();
-    button.addEventListener('click', function(){addTravel(upgrade)});
-    let parent = document.querySelector(".travel");
-    parent.appendChild(button);
-  } catch (error) {
-    try{
-      upgrade = new Hospitality(name, 5,"hotel-solid.svg");
-      let button = document.createElement('button');
-      button.setAttribute("class", "hospitality");
-      button.textContent = "Buy " + name + " $" + upgrade.price();
-      button.addEventListener('click', function(){addHopsitality(upgrade)});
-      let parent = document.querySelector(".hospitality");
-      parent.appendChild(button);
-    } catch (error){
-      try{
-        upgrade = new Attraction(name, 5, "binoculars-solid.svg");
-        let button = document.createElement('button');
-        button.setAttribute("class", "attraction");
-        button.textContent = "Buy " + name + " $" + upgrade.price();
-        button.addEventListener('click', function(){addAttraction(upgrade)});
-        let parent = document.querySelector(".attraction");
-        parent.appendChild(button);
-      }
-      catch (error){
-        console.log(`The upgrade "` + name + `" doesn't exist`);
-      }
-    }
+  let button = document.createElement('button');
+  switch(type){
+    case "travel":
+      upgrade = new Travel(name,5,"plane-departure-solid.svg");
+      button.addEventListener('click', function(){addTravel(upgrade)});
+      break;
+    case "hospitality":
+      upgrade = new Hospitality(name, 5, "hotel-solid.svg");
+      button.addEventListener('click',function(){addHopsitality(upgrade)});
+      break;
+    case "attraction":
+      upgrade = new Attraction(name, 5, "binoculars-solid.svg");
+      button.addEventListener('click', function(){addAttraction(upgrade)});
+      break;
+    default: 
+      throw new Error ("Not a button");
   }
+  button.setAttribute("class", type);
+  button.textContent = "Buy " + name + " $" + upgrade.price();
+  const selector = "." + type;
+  let parent = document.querySelector(selector);
+  parent.appendChild(button);
+}
 
-  function addTravel(upgrade){
+function addTravel(upgrade){
     const agency= tycoon.currentAgency();
     //subtract money from tycoon
     try {
@@ -177,43 +197,57 @@ function loadUpgradeButtons(){
       loadUpgradeButtons();
     } catch (error){
       //TODO: display not enough money to user
-      console.log(error);
+      addMessage(error)
     }
-  }
+}
 
-  function addHopsitality(){
-    const agency= tycoon.currentAgency();
-    //subtract money from tycoon
-    try {
-      tycoon.buy(upgrade.price());
-      //add the upgrade to the agency
-      agency.hospitality.push(upgrade);
-      tycoon.calculateGain();
-      renderMoney();
-      clearUpgrade("hospitality");
-      loadUpgradePics("hospitality");
-      loadUpgradeButtons();
-    } catch (error){
-      //TODO: display not enough money to user
-      console.log(error);
-    }
+function addHopsitality(upgrade){
+  const agency= tycoon.currentAgency();
+  //subtract money from tycoon
+  try {
+    tycoon.buy(upgrade.price());
+    //add the upgrade to the agency
+    agency.hospitality.push(upgrade);
+    tycoon.calculateGain();
+    renderMoney();
+    clearUpgrade("hospitality");
+    loadUpgradePics("hospitality");
+    loadUpgradeButtons();
+  } catch (error){
+    //TODO: display not enough money to user
+    addMessage(error)
   }
+}
 
-  function addAttraction(){
-    const agency= tycoon.currentAgency();
-    //subtract money from tycoon
-    try {
-      tycoon.buy(upgrade.price());
-      //add the upgrade to the agency
-      agency.attractions.push(upgrade);
-      tycoon.calculateGain();
-      renderMoney();
-      clearUpgrade("attraction");
-      loadUpgradePics("attraction");
-      loadUpgradeButtons();
-    } catch (error){
-      //TODO: display not enough money to user
-      console.log(error);
-    }
+function addAttraction(upgrade){
+  const agency= tycoon.currentAgency();
+  //subtract money from tycoon
+  try {
+    tycoon.buy(upgrade.price());
+    //add the upgrade to the agency
+    agency.attractions.push(upgrade);
+    tycoon.calculateGain();
+    renderMoney();
+    clearUpgrade("attraction");
+    loadUpgradePics("attraction");
+    loadUpgradeButtons();
+  } catch (error){
+    addMessage(error);
   }
+}
+
+function clearMessages(){
+  let elem = document.querySelector('li.wsmsg');
+  while (elem != null){
+    elem.remove();
+    elem = document.querySelector('li.wsmsg');
+  }
+}
+
+function addMessage(message){
+  let list = document.querySelector('ul.wsmsg');
+  let addme = document.createElement('li');
+  addme.setAttribute("class", "wsmsg");
+  addme.textContent = message;
+  list.appendChild(addme);
 }
