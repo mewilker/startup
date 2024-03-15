@@ -129,26 +129,27 @@ function loadUpgradeButtons(){
     const line = lines[lineIndex];
     const values = line.split(",");
     const price = parseFloat(values[5])
+    const clickgain = parseFloat(values[6]);
     switch(values[1]){
       case "travel":
         if (values[2]==agency.travel.length 
           && values[3]<=agency.hospitality.length
           && values [4]<=agency.attractions.length){
-            createUpgradeButton(values[0],values[1],price);
+            createUpgradeButton(values[0],values[1],price, clickgain);
         }
         break;
       case "hospitality":
         if (values[2]<=agency.travel.length 
           && values[3]==agency.hospitality.length
           && values [4]<=agency.attractions.length){
-            createUpgradeButton(values[0], values[1],price);
+            createUpgradeButton(values[0], values[1],price, clickgain);
         }
         break;
       case "attraction":
         if (values[2]<=agency.travel.length 
           && values[3]<=agency.hospitality.length
           && values [4]==agency.attractions.length){
-            createUpgradeButton(values[0], values[1],price);
+            createUpgradeButton(values[0], values[1],price, clickgain);
         }
         break;
       case "location":
@@ -165,20 +166,20 @@ function loadUpgradeButtons(){
     }
 }
   
-function createUpgradeButton(name, type, price){
+function createUpgradeButton(name, type, price, clickgain){
   let upgrade = undefined;
   let button = document.createElement('button');
   switch(type){
     case "travel":
-      upgrade = new Travel(name,price,"plane-departure-solid.svg");
+      upgrade = new Travel(name,price,clickgain);
       button.addEventListener('click', function(){addTravel(upgrade)});
       break;
     case "hospitality":
-      upgrade = new Hospitality(name, price, "hotel-solid.svg");
+      upgrade = new Hospitality(name, price, clickgain);
       button.addEventListener('click',function(){addHopsitality(upgrade)});
       break;
     case "attraction":
-      upgrade = new Attraction(name, price, "binoculars-solid.svg");
+      upgrade = new Attraction(name, price,  clickgain);
       button.addEventListener('click', function(){addAttraction(upgrade)});
       if (name == "Exp"){
         const agency = tycoon.currentAgency();

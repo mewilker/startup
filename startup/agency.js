@@ -11,13 +11,13 @@ export class Agency{
     calculateGain(){
         let result = 0;
         for (let tindex = 0; tindex < this.travel.length; tindex++){
-            result += this.travel[tindex].price() *.1;
+            result += this.travel[tindex].clickgain();
         }
         for (let aindex = 0; aindex < this.attractions.length; aindex++){
-            result += this.attractions[aindex].price();
+            result += this.attractions[aindex].clickgain();
         }
         for (let hindex = 0; hindex < this.hospitality.length; hindex++){
-            result += this.hospitality[hindex].price() *.1;
+            result += this.hospitality[hindex].clickgain();
         }
         result + this.location.price();
         return result;
@@ -41,10 +41,12 @@ class Upgrade{
     #name;
     #price;
     #imgpath;
-    constructor(name, price, imgpath){
+    #clickgain;
+    constructor(name, price, imgpath, clickgain){
         this.#name = name;
         this.#price = price;
         this.#imgpath = imgpath;
+        this.#clickgain = clickgain;
     }
 
     type(){
@@ -59,10 +61,14 @@ class Upgrade{
         return this.#imgpath;
     }
 
+    clickgain(){
+        return this.#clickgain;
+    }
+
 }
 
 export class Travel extends Upgrade{
-    constructor(type, price, imgpath){
+    constructor(type, price, clickgain){
         switch (type) {
             case "Train":
                 break;
@@ -77,12 +83,12 @@ export class Travel extends Upgrade{
             default:
                 throw new Error("That's not a vehicle you can buy!");
         }
-        super(type, price, imgpath);
+        super(type, price, "plane-departure-solid.svg", clickgain );
     }
 }
 
 export class Attraction extends Upgrade{
-    constructor(type, price, imgpath){
+    constructor(type, price, clickgain){
         switch (type) {
             case "Tour Guide":
                 break;
@@ -93,12 +99,12 @@ export class Attraction extends Upgrade{
             default:
                 throw new Error("That attraction doesn't exist!");
         }
-        super(type, price, imgpath);
+        super(type, price, "binoculars-solid.svg", clickgain);
     }
 }
 
 export class Hospitality extends Upgrade{
-    constructor(type, price, imgpath){
+    constructor(type, price, clickgain){
         switch (type) {
             case "Hostel":
                 break;
@@ -115,7 +121,7 @@ export class Hospitality extends Upgrade{
             default:
                 throw new Error("That's not hospitality!");
         }
-        super(type, price, imgpath);
+        super(type, price, "hotel-solid.svg", clickgain);
     }
 }
 
