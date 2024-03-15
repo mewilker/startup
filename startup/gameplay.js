@@ -128,26 +128,27 @@ function loadUpgradeButtons(){
   for (let lineIndex = 1; lineIndex < lines.length; lineIndex++){
     const line = lines[lineIndex];
     const values = line.split(",");
+    const price = parseFloat(values[5])
     switch(values[1]){
       case "travel":
         if (values[2]==agency.travel.length 
           && values[3]<=agency.hospitality.length
           && values [4]<=agency.attractions.length){
-            createUpgradeButton(values[0],values[1]);
+            createUpgradeButton(values[0],values[1],price);
         }
         break;
       case "hospitality":
         if (values[2]<=agency.travel.length 
           && values[3]==agency.hospitality.length
           && values [4]<=agency.attractions.length){
-            createUpgradeButton(values[0], values[1]);
+            createUpgradeButton(values[0], values[1],price);
         }
         break;
       case "attraction":
         if (values[2]<=agency.travel.length 
           && values[3]<=agency.hospitality.length
           && values [4]==agency.attractions.length){
-            createUpgradeButton(values[0], values[1]);
+            createUpgradeButton(values[0], values[1],price);
         }
         break;
       case "location":
@@ -164,21 +165,20 @@ function loadUpgradeButtons(){
     }
 }
   
-//FIXME the error handling is attrocious
-function createUpgradeButton(name, type){
+function createUpgradeButton(name, type, price){
   let upgrade = undefined;
   let button = document.createElement('button');
   switch(type){
     case "travel":
-      upgrade = new Travel(name,5,"plane-departure-solid.svg");
+      upgrade = new Travel(name,price,"plane-departure-solid.svg");
       button.addEventListener('click', function(){addTravel(upgrade)});
       break;
     case "hospitality":
-      upgrade = new Hospitality(name, 5, "hotel-solid.svg");
+      upgrade = new Hospitality(name, price, "hotel-solid.svg");
       button.addEventListener('click',function(){addHopsitality(upgrade)});
       break;
     case "attraction":
-      upgrade = new Attraction(name, 5, "binoculars-solid.svg");
+      upgrade = new Attraction(name, price, "binoculars-solid.svg");
       button.addEventListener('click', function(){addAttraction(upgrade)});
       if (name == "Exp"){
         const agency = tycoon.currentAgency();

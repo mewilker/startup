@@ -1,19 +1,19 @@
 export const GrandCanyon = 
-`Upgrade,Type,Travel,Hospitality,Attraction
-Bus,travel,0,0,0
-Hostel,hospitality,1,0,0
-Train,travel,1,0,0
-Bed and Breakfast,hospitality,1,1,0
-Inn,hospitality,1,2,0
-New York,location,2,3,0
-Dining Experience,attraction,2,3,0
-Motel,hospitality,2,3,1
-Hotel,hospitality,2,4,1
-Tour Guide,attraction,2,3,1
-Plane,travel,2,4,1
-Resort,hospitality,2,5,1
-Jet,travel,3,5,2
-Exp,attraction,4,6,2`;
+`Upgrade,Type,Travel,Hospitality,Attraction,Price,ClickGain
+Bus,travel,0,0,0,5,0.5
+Hostel,hospitality,1,0,0,5,0.5
+Train,travel,1,0,0,5,0.5
+Bed and Breakfast,hospitality,1,1,0,25,1
+Inn,hospitality,1,2,0,60,5
+New York,location,2,3,0,1000,null
+Dining Experience,attraction,2,3,0,100,7
+Motel,hospitality,2,3,1,300,12
+Hotel,hospitality,2,4,1,1000,20
+Tour Guide,attraction,2,3,1,1000,22
+Plane,travel,2,4,1,5000,100
+Resort,hospitality,2,5,1,50000,125
+Jet,travel,3,5,2,55000,300
+Exp,attraction,4,6,2,55000,500`;
 
 export const NewYork = `Upgrade,Travel,Hospitality,Attraction
 Bus,0,0,0

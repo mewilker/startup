@@ -113,7 +113,7 @@ export class Hospitality extends Upgrade{
             case "Resort":
                 break;
             default:
-                throw new Error("That's not a vehicle you can buy!");
+                throw new Error("That's not hospitality!");
         }
         super(type, price, imgpath);
     }
