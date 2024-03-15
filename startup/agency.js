@@ -1,5 +1,4 @@
 export class Agency{
-    //TODO: make property collections of each type of upgrade
 
     constructor(location){
         this.location = location;

@@ -12,8 +12,10 @@ function main (){
     //if no tycoon, create a new one and store it in memory
     if (tycoon == null){
         tycoon = new Tycoon(getUserCookie());
-        console.log (tycoon.currentAgency().tojson());
-        //localStorage.setItem("tycoon", tycoon.tojson());
+        localStorage.setItem("tycoon", tycoon.tojson());
+    }
+    else{
+      tycoon = new Tycoon(getUserCookie(), JSON.parse(tycoon));
     }
     //TODO make sure the database is current
     //render the browser according to the database
@@ -205,6 +207,7 @@ function addTravel(upgrade){
       //add the upgrade to the agency
       agency.travel.push(upgrade);
       tycoon.calculateGain();
+      localStorage.setItem("tycoon", tycoon.tojson());
       renderMoney();
       clearUpgrade("travel");
       loadUpgradePics("travel");
@@ -212,6 +215,9 @@ function addTravel(upgrade){
     } catch (error){
       if (error.message == "Not enough money!"){
         addMessage(error.message)
+      }
+      else {
+        console.log(error);
       }
     }
 }
@@ -224,13 +230,18 @@ function addHopsitality(upgrade){
     //add the upgrade to the agency
     agency.hospitality.push(upgrade);
     tycoon.calculateGain();
+    localStorage.setItem("tycoon", tycoon.tojson());
     renderMoney();
     clearUpgrade("hospitality");
     loadUpgradePics("hospitality");
     loadUpgradeButtons();
   } catch (error){
-    //TODO: display not enough money to user
-    addMessage(error.message)
+    if (error.message == "Not enough money!"){
+      addMessage(error.message)
+    }
+    else {
+      console.log(error);
+    }
   }
 }
 
@@ -242,12 +253,18 @@ function addAttraction(upgrade){
     //add the upgrade to the agency
     agency.attractions.push(upgrade);
     tycoon.calculateGain();
+    localStorage.setItem("tycoon", tycoon.tojson());
     renderMoney();
     clearUpgrade("attraction");
     loadUpgradePics("attraction");
     loadUpgradeButtons();
   } catch (error){
-    addMessage(error.message);
+    if (error.message == "Not enough money!"){
+      addMessage(error.message);
+    }
+    else {
+      console.log(error);
+    }
   }
 }
 
