@@ -162,8 +162,17 @@ function loadUpgradeButtons(){
         if (values[2]==agency.travel.length 
           && values[3]==agency.hospitality.length
           && values [4]==agency.attractions.length){
-            let msg = "A new location is available in " + values[0] + "! Check out the locations tab!"
-            addMessage(msg)
+            let bought = agency.findLocation(values[0]);
+            if (bought == null){
+              let msg = "A new location is available in " + values[0] + "! Check out the locations tab!"
+              addMessage(msg);
+              agency.addAvailableLocation(values[0]);
+              localStorage.setItem("tycoon", tycoon.tojson());
+            }
+            else if (!bought){
+              let msg = "A new location is available in " + values[0] + "!"
+              addMessage(msg);
+            }
           }
         break;
       default:

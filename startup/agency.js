@@ -5,6 +5,7 @@ export class Agency{
         this.travel = [];
         this.attractions = [];
         this.hospitality = [];
+        this.availableLocations = [];
     }
 
     calculateGain(){
@@ -32,6 +33,22 @@ export class Agency{
 
     specialAttraction(){
         return this.location.attraction();
+    }
+
+    addAvailableLocation(name){
+        let availlocation = new Object;
+        availlocation.name = name;
+        availlocation.bought = false;
+        this.availableLocations.push(availlocation);
+    }
+
+    findLocation(name){
+        for(let i = 0; i < this.availableLocations.length; i++){
+            if (name == this.availableLocations[i].name){
+                return this.availableLocations[i].bought;
+            }
+        }
+        return null;
     }
 
     tojson(){
@@ -72,7 +89,19 @@ export class Agency{
             builder = this.hospitality[this.hospitality.length-1].tojson();
             json = json + builder;
         }
-        json = json + "]}";
+        json = json + "],";
+
+        builder = `"availableLocations":[`
+        json = json + builder;
+        for (let i = 0; i<this.availableLocations.length-1; i++){
+            builder = JSON.stringify(this.availableLocations[i]);
+            json = json + builder + ",";
+        }
+        if (this.availableLocations.length > 0){
+            builder = JSON.stringify(this.availableLocations[this.availableLocations.length-1]);
+            json = json + builder;
+        }
+        json = json + "]}"
         return json;
     }
 

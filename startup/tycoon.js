@@ -40,6 +40,10 @@ export class Tycoon{
                     let upgrade = new Hospitality(objhosp.name, objhosp.price, objhosp.clickgain);
                     agency.hospitality.push(upgrade);
                 }
+                for (let j = 0; j < toadd.availableLocations.length; j++){
+                    let obj = toadd.availableLocations[j];
+                    agency.hospitality.push(obj);
+                }
                 this.#agencies.push(agency);
             }
             this.calculateGain();
