@@ -31,6 +31,10 @@ export class Agency{
         return this.travel.length + this.attractions.length + this.hospitality.length;
     }
 
+    specialAttraction(){
+        return this.location.attraction();
+    }
+
 }
 
 class Upgrade{
@@ -84,7 +88,8 @@ export class Attraction extends Upgrade{
                 break;
             case "Dining Experience":
                 break;
-            //TODO case location spectial
+            case "Exp":
+                break;
             default:
                 throw new Error("That attraction doesn't exist!");
         }
@@ -126,7 +131,7 @@ export class Location{
                 this.#price = 0;
                 break;
             case "New York":
-                this.#attraction = "Broadway Deals";
+                this.#attraction = "Broadway";
                 this.#price = 0;
                 break;
             case "Banff":
@@ -138,11 +143,11 @@ export class Location{
                 this.#price = 0;
                 break;
             case "Hawaii":
-                this.#attraction = "Surf Experience";
+                this.#attraction = "Surf";
                 this.#price = 0;
                 break;
             case "the British Virgin Isles":
-                this.#attraction = "Sailboating Tours";
+                this.#attraction = "Sailboating";
                 this.#price = 0;
                 break;
             case "Australia":
@@ -154,7 +159,7 @@ export class Location{
                 this.#price = 0;
                 break;
             case "Japan":
-                this.#attraction = "Shrine and Temple Package";
+                this.#attraction = "Shrine and Temple";
                 this.#price = 0;
                 break;
             default:

@@ -5,7 +5,7 @@ Hostel,hospitality,1,0,0
 Train,travel,1,0,0
 Bed and Breakfast,hospitality,1,1,0
 Inn,hospitality,1,2,0
-New Location,location,2,3,0
+New York,location,2,3,0
 Dining Experience,attraction,2,3,0
 Motel,hospitality,2,3,1
 Hotel,hospitality,2,4,1
@@ -21,7 +21,7 @@ Hostel,1,0,0
 Train,1,0,0
 Bed and Breakfast,1,1,0
 Inn,1,2,0
-New Location,2,3,0
+Banff,2,3,0
 Dining Experience,2,3,0
 Motel,2,3,1
 Hotel,2,4,1
@@ -37,7 +37,7 @@ Hostel,0,0,0
 Train,1,0,0
 Bed and Breakfast,0,1,0
 Inn,0,2,0
-New Location,2,3,0
+Cabo,2,3,0
 Dining Experience,2,3,0
 Motel,2,3,1
 Hotel,2,4,1
@@ -58,7 +58,7 @@ Motel,0,3,0
 Hotel,0,4,0
 Cruise Ship,2,0,1
 Tour Guide,1,1,1
-New Location,3,5,2
+Hawaii,3,5,2
 Plane,3,5,2
 Resort,3,5,2
 Jet,4,5,2
@@ -71,7 +71,7 @@ Bed and Breakfast,1,1,0
 Inn,1,2,0
 Dining Experience,1,0,0
 Cruise Ship,1,3,1
-New Location,1,3,1
+the British Virgin Isles,1,3,1
 Motel,1,3,1
 Hotel,2,4,1
 Tour Guide,1,3,1
@@ -88,7 +88,7 @@ Dining Experience,1,0,0
 Cruise Ship,1,3,1
 Motel,1,3,1
 Hotel,2,4,1
-New Location,2,5,1
+Australia,2,5,1
 Tour Guide,2,5,1
 Resort,2,5,1
 Jet,2,5,1

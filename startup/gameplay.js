@@ -149,6 +149,12 @@ function loadUpgradeButtons(){
         }
         break;
       case "location":
+        if (values[2]==agency.travel.length 
+          && values[3]==agency.hospitality.length
+          && values [4]==agency.attractions.length){
+            let msg = "A new location is available in " + values[0] + "! Check out the locations tab!"
+            addMessage(msg)
+          }
         break;
       default:
         throw new Error("Bad File");
@@ -172,6 +178,10 @@ function createUpgradeButton(name, type){
     case "attraction":
       upgrade = new Attraction(name, 5, "binoculars-solid.svg");
       button.addEventListener('click', function(){addAttraction(upgrade)});
+      if (name == "Exp"){
+        const agency = tycoon.currentAgency();
+        name = "the " + agency.specialAttraction() + " package";
+      }
       break;
     default: 
       throw new Error ("Not a button");
@@ -196,8 +206,9 @@ function addTravel(upgrade){
       loadUpgradePics("travel");
       loadUpgradeButtons();
     } catch (error){
-      //TODO: display not enough money to user
-      addMessage(error)
+      if (error.message == "Not enough money!"){
+        addMessage(error.message)
+      }
     }
 }
 
@@ -215,7 +226,7 @@ function addHopsitality(upgrade){
     loadUpgradeButtons();
   } catch (error){
     //TODO: display not enough money to user
-    addMessage(error)
+    addMessage(error.message)
   }
 }
 
@@ -232,7 +243,7 @@ function addAttraction(upgrade){
     loadUpgradePics("attraction");
     loadUpgradeButtons();
   } catch (error){
-    addMessage(error);
+    addMessage(error.message);
   }
 }
 
