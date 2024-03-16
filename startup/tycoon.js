@@ -42,7 +42,7 @@ export class Tycoon{
                 }
                 for (let j = 0; j < toadd.availableLocations.length; j++){
                     let obj = toadd.availableLocations[j];
-                    agency.hospitality.push(obj);
+                    agency.availableLocations.push(obj);
                 }
                 this.#agencies.push(agency);
             }
