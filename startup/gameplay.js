@@ -10,13 +10,18 @@ try{
 } catch(error){
   console.log(error);
 }
-document.getElementById('logout').addEventListener('click', function(){logout()});
+document.getElementById('logout')
+  .addEventListener('click', function(){logout()});
+let list = document.querySelectorAll("a");
+for (let i = 0; i < list.length; i++){
+  list[i].addEventListener('click', function() {saveTycoon()})
+}
 //debugger;
 function main (){
     //if no tycoon, create a new one and store it in memory
     if (tycoon == null){
-        tycoon = new Tycoon(getUserCookie());
-        localStorage.setItem("tycoon", tycoon.tojson());
+      tycoon = new Tycoon(getUserCookie());
+      saveTycoon();
     }
     else{
       tycoon = new Tycoon(getUserCookie(), JSON.parse(tycoon));
@@ -167,7 +172,7 @@ function loadUpgradeButtons(){
               let msg = "A new location is available in " + values[0] + "! Check out the locations tab!"
               addMessage(msg);
               agency.addAvailableLocation(values[0]);
-              localStorage.setItem("tycoon", tycoon.tojson());
+              saveTycoon();
             }
             else if (!bought){
               let msg = "A new location is available in " + values[0] + "!"
@@ -219,7 +224,7 @@ function addTravel(upgrade){
       //add the upgrade to the agency
       agency.travel.push(upgrade);
       tycoon.calculateGain();
-      localStorage.setItem("tycoon", tycoon.tojson());
+      saveTycoon();
       renderMoney();
       clearUpgrade("travel");
       loadUpgradePics("travel");
@@ -242,7 +247,7 @@ function addHopsitality(upgrade){
     //add the upgrade to the agency
     agency.hospitality.push(upgrade);
     tycoon.calculateGain();
-    localStorage.setItem("tycoon", tycoon.tojson());
+    saveTycoon();
     renderMoney();
     clearUpgrade("hospitality");
     loadUpgradePics("hospitality");
@@ -265,7 +270,7 @@ function addAttraction(upgrade){
     //add the upgrade to the agency
     agency.attractions.push(upgrade);
     tycoon.calculateGain();
-    localStorage.setItem("tycoon", tycoon.tojson());
+    saveTycoon();
     renderMoney();
     clearUpgrade("attraction");
     loadUpgradePics("attraction");
@@ -295,3 +300,9 @@ function addMessage(message){
   addme.textContent = message;
   list.appendChild(addme);
 }
+
+function saveTycoon(){
+  localStorage.setItem("tycoon", tycoon.tojson());
+}
+
+window.addEventListener('beforeunload', function(){saveTycoon()});
