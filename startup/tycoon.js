@@ -90,6 +90,26 @@ export class Tycoon{
         return this.#money;
     }
 
+    getPurchasedLocations(){
+        const result = [];
+        for(let i = 0; i < this.#agencies.length; i++){
+            result.push(this.#agencies[i].location);
+        }
+        return result;
+    }
+
+    getPossibleLocations(){
+        const result = [];
+        this.#agencies.forEach((agency) => {
+            agency.availableLocations.forEach((available) => {
+                if (!available.bought){
+                    result.push(new Location(available.name));
+                }
+            })
+        })
+        return result;
+    }
+
     tojson(){
         let json = `{"money": ${this.#money},` +
             `"gain": ${this.#gain},`+ 

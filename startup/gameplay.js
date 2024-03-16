@@ -301,7 +301,7 @@ function addMessage(message){
   list.appendChild(addme);
 }
 
-function saveTycoon(){
+export function saveTycoon(){
   localStorage.setItem("tycoon", tycoon.tojson());
 }
 
