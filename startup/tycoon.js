@@ -109,13 +109,25 @@ export class Tycoon{
 
     getPossibleLocations(){
         const result = [];
+        let currindex = this.#curragency;
         this.#agencies.forEach((agency) => {
             agency.availableLocations.forEach((available) => {
                 if (!available.bought){
-                    result.push(new Location(available.name));
+                    try{
+                        this.moveLocation(available.name);
+                        available.bought = true;
+                    } catch (error){
+                        if (error.message == "You can't go there!"){
+                            result.push(new Location(available.name));
+                        }
+                        else{
+                            console.log(error);
+                        }
+                    }
                 }
             })
         })
+        this.#curragency = currindex;
         return result;
     }
 
