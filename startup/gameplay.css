@@ -227,7 +227,7 @@ button.confirm{
     margin: .5em
 }
 
-canvas{
+#map{
     flex: 1;
     height: 66vmin;
     width: 95vw;
