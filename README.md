@@ -112,4 +112,30 @@ Prerequisite: Notes in your startup Git repository README.md file
 
 ##Javascript deliverable
 
-More details coming soon. Get a sneak peak by requestion permission to view this document: https://docs.google.com/spreadsheets/d/1l7_V36-MijxOzC2QLCyAr1BkeHqVX8THYX7Sc7Z9DM4/edit?usp=sharing
+20% JavaScript support for future login. Auth token and username are saved as cookies, and the expiration date is saved in the local storage.
+
+20% JavaScript support for future database data. Player data is custom serialized and will be saved in the database.
+
+20% JavaScript support for future WebSocket. Messages will appear where notifications for new locations and not enough money are appearing. They will announce when other players have expanded or made significant purchases.
+
+40% JavaScript support for your application's interaction logic. Website functions as a small clicker game.
+
+### JavaScript additions by javascript file:
+
+**menu.js** - used by index.html and leaderboard.html. Changes the menu if in postlogin. Exports the logout function.
+
+**session.js** - used by login.html and register.html. Currently creates the authentication cookies and sets the time it expires in local storage. Later will make API calls to the server to handle this.
+
+**leaderboard.js** - used by leaderboard.html. Deletes dummy data and adds the user to the leaderboard.
+
+**csv.js** - constant strings of csv that controls a lot of the gameplay. 3 locations were included in the deployment. This will later be moved to server-side
+
+The document was created first as a google sheet. Request permission to view this document: https://docs.google.com/spreadsheets/d/1l7_V36-MijxOzC2QLCyAr1BkeHqVX8THYX7Sc7Z9DM4/edit?usp=sharing
+
+**agency.js** - used by agency.html and locations.html. Creates classes for agency, upgrade, travel, attraction, hospitality and location. 
+
+**tycoon.js** - used by agency.html and locations.html. Class that keeps track of money and agency objects.
+
+**gameplay.js**- used by agency.html and locations.html This has the bulk of the playing logic. Renders the page, reads the csv, adds buttons and logic for the available upgrades.
+
+**locations.js** - used by locations.html. Rather than implementing a canvas element, I used a library called "Leaflet to create a map with pins for possible places to upgrade to.
