@@ -17,83 +17,37 @@ Exp,attraction,4,6,2,55000,500`;
 
 export const NewYork = 
 `Upgrade,Type,Travel,Hospitality,Attraction,Price,ClickGain
-Bus,travel,0,0,0,1000,10
+Bus,travel,0,0,0,1000,10.5
 Hostel,hospitality,0,0,0,1500,15
 Train,travel,1,0,0,1600,30
 Bed and Breakfast,hospitality,0,1,0,5000,100
 Inn,hospitality,1,2,0,7000,111
 Banff,location,1,3,0,70000,70000
-Dining Experience,attraction,1,3,0,5,5
-Motel,hospitality,1,3,0,5,5
-Hotel,hospitality,2,4,0,5,5
-Cruise Ship,travel,2,3,1,5,5
-Tour Guide,attraction,3,3,1,5,5
-Plane,travel,3,4,1,5,5
-Resort,hospitality,3,5,1,5,5
-Jet,travel,4,5,2,5,5
-Exp,attraction,5,6,2,5,5`;
+Dining Experience,attraction,1,3,0,7000,112
+Motel,hospitality,1,3,0,10000,113
+Hotel,hospitality,2,4,0,20000,114
+Cruise Ship,travel,2,3,1,12000,115
+Tour Guide,attraction,3,3,1,8000,116
+Plane,travel,3,4,1,20000,117
+Resort,hospitality,3,5,1,80000,118
+Jet,travel,4,5,2,70000,119
+Exp,attraction,5,6,2,100000,110`;
 
-export const Banff = `Upgrade,Travel,Hospitality,Attraction
-Bus,0,0,0
-Hostel,0,0,0
-Train,1,0,0
-Bed and Breakfast,0,1,0
-Inn,0,2,0
-Cabo,2,3,0
-Dining Experience,2,3,0
-Motel,2,3,1
-Hotel,2,4,1
-Tour Guide,2,3,1
-Plane,2,3,1
-Resort,2,5,1
-Jet,3,5,2
-Exp,4,6,2`;
-
-export const Cabo = `Upgrade,Travel,Hospitality,Attraction
-Bus,0,0,0
-Hostel,0,0,0
-Train,1,0,0
-Bed and Breakfast,0,1,0
-Inn,0,2,0
-Dining Experience,1,1,0
-Motel,0,3,0
-Hotel,0,4,0
-Cruise Ship,2,0,1
-Tour Guide,1,1,1
-Hawaii,3,5,2
-Plane,3,5,2
-Resort,3,5,2
-Jet,4,5,2
-Exp,5,6,2`;
-
-export const Hawaii = `Upgrade,Travel,Hospitality,Attraction
-Plane,0,0,0
-Hostel,1,0,0
-Bed and Breakfast,1,1,0
-Inn,1,2,0
-Dining Experience,1,0,0
-Cruise Ship,1,3,1
-the British Virgin Isles,1,3,1
-Motel,1,3,1
-Hotel,2,4,1
-Tour Guide,1,3,1
-Resort,1,5,1
-Jet,2,5,1
-Exp,3,6,2`;
-
-export const BVI = `Upgrade,Travel,Hospitality,Attraction
-Plane,0,0,0
-Hostel,1,0,0
-Bed and Breakfast,1,1,0
-Inn,1,2,0
-Dining Experience,1,0,0
-Cruise Ship,1,3,1
-Motel,1,3,1
-Hotel,2,4,1
-Australia,2,5,1
-Tour Guide,2,5,1
-Resort,2,5,1
-Jet,2,5,1
-Exp,3,6,2`;
+export const Banff = 
+`Upgrade,Type,Travel,Hospitality,Attraction,Price,ClickGain
+Bus,travel,0,0,0,80000,111
+Hostel,hospitality,0,0,0,75000,112
+Train,travel,1,0,0,85000,113
+Bed and Breakfast,hospitality,0,1,0,135000,114
+Inn,hospitality,0,2,0,200000,115
+Cabo San Lucas,location,2,3,0,500000,116
+Dining Experience,attraction,2,3,0,200000,117
+Motel,hospitality,2,3,1,300000,118
+Hotel,hospitality,2,4,1,550000,119
+Tour Guide,attraction,2,3,1,400000,120
+Plane,travel,2,3,1,300000,121
+Resort,hospitality,2,5,1,680000,122
+Jet,travel,3,5,2,100000,123
+Exp,attraction,4,6,2,120000,124`;
 
 //TODO ADD MORE

@@ -1,6 +1,6 @@
 import { Attraction, Hospitality, Travel } from "./agency.js";
 import { Tycoon } from "./tycoon.js";
-import { GrandCanyon, NewYork } from "./csv.js";
+import { Banff, GrandCanyon, NewYork } from "./csv.js";
 import { logout } from "./menu.js";
 
 //read the tycoon from memory
@@ -125,6 +125,9 @@ function loadUpgradeButtons(){
       break;
     case "New York":
       csv = NewYork;
+      break;
+    case "Banff":
+      csv = Banff;
       break;
     default:
       throw new Error("That's not a place you can expand!");
