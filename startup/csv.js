@@ -15,21 +15,23 @@ Resort,hospitality,2,5,1,50000,125
 Jet,travel,3,5,2,55000,300
 Exp,attraction,4,6,2,55000,500`;
 
-export const NewYork = `Upgrade,Travel,Hospitality,Attraction
-Bus,0,0,0
-Hostel,1,0,0
-Train,1,0,0
-Bed and Breakfast,1,1,0
-Inn,1,2,0
-Banff,2,3,0
-Dining Experience,2,3,0
-Motel,2,3,1
-Hotel,2,4,1
-Tour Guide,2,3,1
-Plane,2,4,1
-Resort,2,5,1
-Jet,3,5,2
-Exp,4,6,2`;
+export const NewYork = 
+`Upgrade,Type,Travel,Hospitality,Attraction,Price,ClickGain
+Bus,travel,0,0,0,1000,10
+Hostel,hospitality,0,0,0,1500,15
+Train,travel,1,0,0,1600,30
+Bed and Breakfast,hospitality,0,1,0,5000,100
+Inn,hospitality,1,2,0,7000,111
+Banff,location,1,3,0,70000,70000
+Dining Experience,attraction,1,3,0,5,5
+Motel,hospitality,1,3,0,5,5
+Hotel,hospitality,2,4,0,5,5
+Cruise Ship,travel,2,3,1,5,5
+Tour Guide,attraction,3,3,1,5,5
+Plane,travel,3,4,1,5,5
+Resort,hospitality,3,5,1,5,5
+Jet,travel,4,5,2,5,5
+Exp,attraction,5,6,2,5,5`;
 
 export const Banff = `Upgrade,Travel,Hospitality,Attraction
 Bus,0,0,0

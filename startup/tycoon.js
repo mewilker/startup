@@ -55,11 +55,20 @@ export class Tycoon{
         this.#money += this.#gain;
     }
 
-    moveLocation(index){
-        if (index < 0 || index > this.#agencies.length){
-            throw "You can't go there!";
+    moveLocation(name){
+        for (let i = 0; i < this.#agencies.length; i++){
+            if (this.#agencies[i].location.name() == name){
+                this.#curragency = i;
+                return;
+            }
         }
-        this.#curragency = index;
+        throw new Error("You can't go there!");
+    }
+
+    buyLocation(location){
+        this.buy(location.price());
+        this.#curragency = this.#agencies.length;
+        this.#agencies.push(new Agency(location));
     }
 
     calculateGain(){

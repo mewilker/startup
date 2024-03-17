@@ -205,24 +205,34 @@ export class Location{
     #name;
     #attraction;
     #price
+    #latitude
+    #longitude
 
     constructor(name){
         switch (name){
             case "the Grand Canyon":
                 this.#attraction = "Colorado Rafting";
                 this.#price = 0;
+                this.#latitude = 36.0544;
+                this.#longitude = -112.1401;
                 break;
             case "New York":
                 this.#attraction = "Broadway";
                 this.#price = 1000;
+                this.#latitude = 40.7128;
+                this.#longitude = -74.006;
                 break;
             case "Banff":
                 this.#attraction = "Ski Pass";
                 this.#price = 0;
+                this.#latitude = 51.1784;
+                this.#longitude = -115.5708;
                 break;
             case "Cabo San Lucas":
                 this.#attraction = "Zipline and High Adventure";
                 this.#price = 0;
+                this.#latitude = 22.8948;
+                this.#longitude = -109.9152;
                 break;
             case "Hawaii":
                 this.#attraction = "Surf";
@@ -260,6 +270,10 @@ export class Location{
 
     price(){
         return this.#price;
+    }
+
+    coordinates(){
+        return [this.#latitude, this.#longitude];
     }
 
     tojson(){

@@ -1,12 +1,12 @@
 import { Attraction, Hospitality, Travel } from "./agency.js";
 import { Tycoon } from "./tycoon.js";
-import { GrandCanyon } from "./csv.js";
+import { GrandCanyon, NewYork } from "./csv.js";
 import { logout } from "./menu.js";
 
 //read the tycoon from memory
 let tycoon = localStorage.getItem("tycoon")
 try{
-  document.addEventListener("DOMContentLoaded", main());
+  document.addEventListener("DOMContentLoaded", main);
 } catch(error){
   console.log(error);
 }
@@ -14,14 +14,14 @@ document.getElementById('logout')
   .addEventListener('click', function(){logout()});
 let list = document.querySelectorAll("a");
 for (let i = 0; i < list.length; i++){
-  list[i].addEventListener('click', function() {saveTycoon()})
+  list[i].addEventListener('click', function() {saveTycoon(tycoon.tojson())})
 }
 //debugger;
 function main (){
     //if no tycoon, create a new one and store it in memory
-    if (tycoon == null){
+    if (tycoon == null || tycoon == 'undefined'){
       tycoon = new Tycoon(getUserCookie());
-      saveTycoon();
+      saveTycoon(tycoon.tojson());
     }
     else{
       tycoon = new Tycoon(getUserCookie(), JSON.parse(tycoon));
@@ -123,8 +123,11 @@ function loadUpgradeButtons(){
     case "the Grand Canyon":
       csv = GrandCanyon;
       break;
+    case "New York":
+      csv = NewYork;
+      break;
     default:
-      throw "That's not a place you can expand!"
+      throw new Error("That's not a place you can expand!");
   }
   //grab lengths of upgrades
   const agency = tycoon.currentAgency();
@@ -172,7 +175,7 @@ function loadUpgradeButtons(){
               let msg = "A new location is available in " + values[0] + "! Check out the locations tab!"
               addMessage(msg);
               agency.addAvailableLocation(values[0]);
-              saveTycoon();
+              saveTycoon(tycoon.tojson());
             }
             else if (!bought){
               let msg = "A new location is available in " + values[0] + "!"
@@ -224,7 +227,7 @@ function addTravel(upgrade){
       //add the upgrade to the agency
       agency.travel.push(upgrade);
       tycoon.calculateGain();
-      saveTycoon();
+      saveTycoon(tycoon.tojson());
       renderMoney();
       clearUpgrade("travel");
       loadUpgradePics("travel");
@@ -247,7 +250,7 @@ function addHopsitality(upgrade){
     //add the upgrade to the agency
     agency.hospitality.push(upgrade);
     tycoon.calculateGain();
-    saveTycoon();
+    saveTycoon(tycoon.tojson());
     renderMoney();
     clearUpgrade("hospitality");
     loadUpgradePics("hospitality");
@@ -270,7 +273,7 @@ function addAttraction(upgrade){
     //add the upgrade to the agency
     agency.attractions.push(upgrade);
     tycoon.calculateGain();
-    saveTycoon();
+    saveTycoon(tycoon.tojson());
     renderMoney();
     clearUpgrade("attraction");
     loadUpgradePics("attraction");
@@ -301,8 +304,8 @@ function addMessage(message){
   list.appendChild(addme);
 }
 
-export function saveTycoon(){
-  localStorage.setItem("tycoon", tycoon.tojson());
+export async function saveTycoon(json){
+  localStorage.setItem("tycoon", json);
 }
 
-window.addEventListener('beforeunload', function(){saveTycoon()});
+window.addEventListener('beforeunload', function(){saveTycoon(tycoon.tojson())});
