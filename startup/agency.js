@@ -224,7 +224,7 @@ export class Location{
                 break;
             case "Banff":
                 this.#attraction = "Ski Pass";
-                this.#price = 0;
+                this.#price = 70000;
                 this.#latitude = 51.1784;
                 this.#longitude = -115.5708;
                 break;

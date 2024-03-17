@@ -167,9 +167,9 @@ function loadUpgradeButtons(){
         }
         break;
       case "location":
-        if (values[2]==agency.travel.length 
-          && values[3]==agency.hospitality.length
-          && values [4]==agency.attractions.length){
+        if (values[2]<=agency.travel.length 
+          && values[3]<=agency.hospitality.length
+          && values [4]<=agency.attractions.length){
             let bought = agency.findLocation(values[0]);
             if (bought == null){
               let msg = "A new location is available in " + values[0] + "! Check out the locations tab!"
