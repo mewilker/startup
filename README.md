@@ -110,7 +110,7 @@ Prerequisite: Notes in your startup Git repository README.md file
 
 **locations.html** - uses gameplay.css. Implements the minimized header and footer. The same background image idea is implemented here. Here the user will travel from various agencies, as well as upgrade to other locations. The canvas element will be a map with pins of locations where the user can expand, and they will select one of these pins to either travel or upgrade using the message under the side. 
 
-##Javascript deliverable
+## Javascript deliverable
 
 20% JavaScript support for future login. Auth token and username are saved as cookies, and the expiration date is saved in the local storage.
 
