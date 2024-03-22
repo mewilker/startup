@@ -245,4 +245,45 @@ It kinda looks like a json not gonna lie. It's RPCish in the fact that only real
 
 Stop faker attacks
 
+## UI Testing - Playwright
+
+We are using playwright because it plays nice with vscode :)
+
+data-testid attribute helps playwrite find things
+
+functions:
+>elem = getByRole
+>elem = getByTestId
+>expect(elem).toHaveText()
+
+## Device testing - BrowserStack
+
+We are using BrowserStack 
+
+We run it on a device and send tests over to it
+
+caniuse.com for apis
+
+## Endpoint usage Jest
+
+npm install jest supertest -D
+
+supertest will start the server so the test can run.
+
+change script to "jest" in the json
+
+-D means developement only tag
+
+tag a test: test('test name', testfunction())
+
+module.exports = app
+
+functions:
+>expect
+>toBe
+>request(server)
+>HTTP METHOD
+>end at the end of request
+>send({json body})
+
 # Domain name: makenna.click

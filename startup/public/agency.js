@@ -237,18 +237,26 @@ export class Location{
             case "Hawaii":
                 this.#attraction = "Surf";
                 this.#price = 0;
+                this.#latitude = 19.8987;
+                this.#longitude = -155.6659;
                 break;
             case "the British Virgin Isles":
                 this.#attraction = "Sailboating";
                 this.#price = 0;
+                this.#latitude = 18.4207;
+                this.#longitude = -64.64;
                 break;
             case "Australia":
                 this.#attraction = "Great Barrier Reef Snorkeling";
                 this.#price = 0;
+                this.#latitude = -16.9203;
+                this.#longitude = 145.771;
                 break;
             case "London":
                 this.#attraction = "Crown Jewel Tour";
                 this.#price = 0;
+                this.#latitude = 51.5072;
+                this.#longitude = 0.1276;
                 break;
             case "Japan":
                 this.#attraction = "Shrine and Temple";
