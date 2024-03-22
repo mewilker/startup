@@ -1,1 +1,3 @@
 jsconfig.json
+startup/node_modules/
+startup/dbconfig.json
