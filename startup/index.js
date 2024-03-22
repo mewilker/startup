@@ -12,6 +12,7 @@ try{
     //Register User
     server.post('/user', function(req, res){ //TODO: add a next param to pass the response to login
         console.log("Register");
+        
     })
     
     //Login User
