@@ -1,4 +1,5 @@
 jsconfig.json
 startup/dbconfig.json
 startup/node_modules
+.vscode
 
