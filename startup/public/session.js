@@ -1,40 +1,50 @@
 function login(){
-    //TODO: post http method
+    let user = {
+        username: document.querySelector("#username").value,
+        password: document.querySelector("#password").value
+    }
 
-    const username = document.querySelector("#username").value;
-    const password = document.querySelector("#password").value;
+    fetch(window.location.origin + '/session', {
+        method: 'POST',
+        body: JSON.stringify(user),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8'
+        }
+    }).then((response) => {
+        response.json()
+        if (response.status == 200){
+            //go to agency
+        }
+    })
+    .then((jsonResponse) => {
+      console.log(jsonResponse);
+    });
 
-    setAuth(username);
-
-    window.location.href = "agency.html";
+    //TODO: error handling for
 }
 
 function register(){
-    //TODO: post http method
+    let user = {
+        username: document.querySelector("#username").value,
+        password: document.querySelector("#password").value,
+        email: document.querySelector("#email").value
+    }
 
-    const username = document.querySelector("#username").value;
-    const password = document.querySelector("#password").value;
-    const email = document.querySelector("#email").value;
+    fetch(window.location.origin + '/user', {
+        method: 'POST',
+        body: JSON.stringify(user),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8'
+        }
+    }).then((response) => {
+        response.json()
+        if (response.status == 200){
+            //go to agency
+        }
+    })
+    .then((jsonResponse) => {
+      console.log(jsonResponse);
+    });
 
-    setAuth(username);
-
-    window.location.href = "agency.html";
-}
-
-
-function setAuth(username){
-    const d = new Date();
-    d.setTime(d.getTime() + (24*60*60*1000));
-
-    //http only cookies wouldn't allow this kind of code. 
-    //however that is the best defense against xss
-    document.cookie = `username = ${username}; expires= ${d.toUTCString()}`;
-    document.cookie = `authToken = abc; expires= ${d.toUTCString()}`;
-
-    //TODO: CSRF TOKENS
-
-    //if the date is valid, the browser can know that the user is authorized
-    //this saves the date in local storage
-    //it would be better encrypted
-    localStorage.setItem("authorized", d);
+    //TODO: error handling for 403
 }

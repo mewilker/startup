@@ -5,6 +5,9 @@ try{
 } catch (error){
     console.log(error);
 }
+finally{
+    //stop the server and kill the connections?
+}
 
 async function run (){
     server.listen(4000);
