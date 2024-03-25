@@ -1,5 +1,10 @@
 const { MongoClient, Collection } = require('mongodb');
 const config = require('./dbconfig.json');
+let Tycoon = undefined;
+import ('./public/tycoon.mjs').then((module)=> {
+  Tycoon = module.default;
+  console.log('tycoon package imported')
+});
 
 const url = `mongodb+srv://${config.username}:${config.password}@${config.hostname}`;
 const client = new MongoClient(url);
@@ -32,7 +37,7 @@ async function addUser (user){
 
 async function findUser (user){
   const cursor = users.find({username: user.username});
-  result = await cursor.toArray();
+  let result = await cursor.toArray();
   return result;
 }
 
@@ -45,13 +50,31 @@ function findTokenByName(user){
 }
 
 async function findTokenByAuth(authToken){
+  //TODO: validate authToken to protect against injection attacks
   const cursor = tokens.find({token: authToken});
-  result = await cursor.toArray();
+  let result = await cursor.toArray();
   return result;
 }
 
 function removeToken(authToken) {
   tokens.deleteOne(authToken);
+}
+
+async function findTycoon(user) {
+  const cursor = tycoons.find({user:user});
+  let result = await cursor.toArray();
+  if (result.length > 0){
+    let found = result[0];
+    found._id = undefined
+    //can we change the design so we don't have to do this?
+    found.user = undefined
+    return JSON.stringify(found);
+  }
+  let tycoon = new Tycoon(user);
+  let toinsert = JSON.parse(tycoon.tojson());
+  toinsert.user = user;
+  tycoons.insertOne(toinsert);
+  return tycoon.tojson();
 }
 
 process.on('SIGINT', function() {
@@ -60,4 +83,5 @@ process.on('SIGINT', function() {
   process.exit(0);
 });
 
-module.exports = {addUser, addToken, findUser, pingServer, closeConnection, findTokenByAuth, removeToken}
+module.exports = {addUser, addToken, findUser, pingServer, 
+  closeConnection, findTokenByAuth, removeToken, findTycoon}

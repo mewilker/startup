@@ -11,16 +11,12 @@ function login(){
             'Content-type': 'application/json; charset=UTF-8'
         }
     }).then((response) => {
-        response.json()
         if (response.ok){
             window.location.href = '/agency'
         }
         else{
             throw new Error(response.status);
         }
-    })
-    .then((jsonResponse) => {
-      console.log(jsonResponse);
     }).catch((err) =>{
         let errmsg = document.querySelector('p.error');
         let setme = false;
@@ -57,16 +53,12 @@ function register(){
             'Content-type': 'application/json; charset=UTF-8'
         }
     }).then((response) => {
-        response.json()
         if (response.ok){
             window.location.href = '/agency'
         }
         else {
             throw new Error(response.status)
         }
-    })
-    .then((jsonResponse) => {
-      console.log(jsonResponse);
     }).catch((err) =>{
         let errmsg = document.querySelector('p.error');
         let setme = false;

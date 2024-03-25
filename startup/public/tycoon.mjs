@@ -1,6 +1,6 @@
-import { Agency, Attraction, Hospitality, Location, Travel } from "./agency.js";
+import { Agency, Attraction, Hospitality, Location, Travel } from "./agency.mjs";
 
-export class Tycoon{
+export default class Tycoon{
     #user;
     #money;
     #agencies;

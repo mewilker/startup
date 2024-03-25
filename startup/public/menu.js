@@ -5,8 +5,6 @@ if(new Date(localStorage.getItem("authorized")) < new Date()){
 document.addEventListener("DOMContentLoaded", main());
 
 function main(){
-    //FIXME this needs to be a more robust check
-
     fetch('/session').then((res)=>{
         if (res.ok){
             document.querySelector('menu').remove();

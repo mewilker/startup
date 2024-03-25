@@ -9,10 +9,9 @@ test('successful register', (done) => {
     .send({username: 'username', password: 'password', email: 'email'})
     .expect(response => {
         expect(response.status).toBe(200)
-        console.log(response.header);
+        const headers = response.headers;
+        //expect(headers.set-cookie).toBeDefined()
         //TODO: check for a cookie
-        //front end currently depends on date
-        done();
     })
     .end((err) => (err ? done(err) : done()));
 });
