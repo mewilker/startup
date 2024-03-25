@@ -32,6 +32,14 @@ test('duplicate register', (done)=>{
   .end((err) => (err ? done (err) : done()))
 })
 
+test('register xss attack', (done)=>{
+  request(server)
+  .post('/user')
+  .send({username: '<svg/onload=alert()>', password:'pass'})
+  .expect(400)
+  .end((err) => (err ? done(err): done()))
+})
+
 test('good login', (done) => {
   request(server)
   .post('/session')
@@ -57,7 +65,23 @@ test('bad request login', (done) => {
   .send({bananas: 5})
   .expect(400)
   .end((err) => (err ? done(err) : done()));
-});
+})
+
+test('login xss attack', (done)=>{
+  request(server)
+  .post('/session')
+  .send({username: '<svg/onload=alert()>', password:'pass'})
+  .expect(400)
+  .end((err) => (err ? done(err): done()))
+})
+
+test('bad request logout', (done)=>{
+  request(server)
+  .delete('/session')
+  .send()
+  .expect(400)
+  .end((err) => (err ? done(err): done()))
+})
 
 
 
