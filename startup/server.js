@@ -10,12 +10,35 @@ const path = require('path')
 server.use(express.static(path.join(__dirname, 'public')))
 server.use(cookieParser());
 server.use(express.json())
+const regex = /^[a-zA-Z0-9@!_]*/
+
+server.get("/agency", async function(req, res, next){
+    try{
+        const cookies = req.cookies;
+        if (!cookies.authToken){
+            res.redirect('/login')
+        }
+        let foundarray = await db.findTokenByAuth(cookies.authToken);
+        if (foundarray.length != 1){
+            res.redirect('/login');
+        }
+        res.sendFile(path.join(__dirname, '/public/agency.html'))
+    }
+    catch(err){
+        next(err);
+    }
+})
+
+server.get("/login", async function(req, res, next){
+    res.sendFile(path.join(__dirname, 'public/login.html'))
+})
     
 //Register User
 server.post('/user', async function(req, res, next){ //TODO: add a next param to pass the response to login
-    const user = req.body;
     try{
-        if (user.username == undefined || user.password == undefined){
+        const user = req.body;
+        const match = user.username.match(regex) //this might throw if username null
+        if (user.username == undefined || user.password == undefined || user.username.length > 20 || match == null){
             throw new Error("bad request");
         }
         let found = await db.findUser(user);
@@ -38,7 +61,8 @@ server.post('/user', async function(req, res, next){ //TODO: add a next param to
 server.post('/session', async function (req, res, next){
     try{    
         const user = req.body;
-        if (user.username == undefined || user.password == undefined){
+        const match = user.username.match(regex) //this might throw if username null
+        if (user.username == undefined || user.password == undefined || user.username.length > 20 || match == null){
             throw new Error("bad request");
         }
         let foundarray = await db.findUser(user);
@@ -80,11 +104,15 @@ async function setAuthCookie (res, username){
 server.get('/session', async function (req, res, next){
     try{
         const cookies = req.cookies
-        if (cookies.authToken){
+        //TODO: validate authtoken
+        if (!cookies.authToken){
             throw new Error('bad request')
         }
         let foundarray = await db.findTokenByAuth(cookies.authToken);
-        if (foundarray)
+        if (foundarray.length == 0){
+            throw new Error('unauthorized');
+        }
+        res.send(JSON.stringify(foundarray[0].username));
     }
     catch(err){
         next(err);
@@ -93,8 +121,27 @@ server.get('/session', async function (req, res, next){
 })
 
 //Logout User
-server.delete('/session', function (req, res, next){
-    console.log('Logout');
+server.delete('/session', async function (req, res, next){
+    try{
+        const cookies = req.cookies
+        if (!cookies.authToken){
+            throw new Error('bad request')
+        }
+        let foundarray = await db.findTokenByAuth(cookies.authToken);
+        if (foundarray.length == 0){
+            throw new Error('unauthorized');
+        }
+        db.removeToken(foundarray[0]);
+        res.cookie('authToken', '', {maxAge: -1, 
+            httpOnly: true, 
+            //secure: true, 
+            sameSite: 'strict'
+        })
+        res.send();
+    }
+    catch(err){
+        next(err);
+    }
 })
     
 //Get tycoon or agency

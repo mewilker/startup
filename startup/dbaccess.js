@@ -45,13 +45,13 @@ function findTokenByName(user){
 }
 
 async function findTokenByAuth(authToken){
-  const cursor = users.find({token: authToken});
+  const cursor = tokens.find({token: authToken});
   result = await cursor.toArray();
   return result;
 }
 
 function removeToken(authToken) {
-  console.log('function')
+  tokens.deleteOne(authToken);
 }
 
 process.on('SIGINT', function() {
@@ -60,4 +60,4 @@ process.on('SIGINT', function() {
   process.exit(0);
 });
 
-module.exports = {addUser, addToken, findUser, pingServer, closeConnection, findTokenByAuth}
+module.exports = {addUser, addToken, findUser, pingServer, closeConnection, findTokenByAuth, removeToken}

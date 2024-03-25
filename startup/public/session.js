@@ -13,14 +13,34 @@ function login(){
     }).then((response) => {
         response.json()
         if (response.status == 200){
-            //go to agency
+            window.location.href= window.location.origin + '/agency'
+        }
+        else{
+            throw new Error(response.status);
         }
     })
     .then((jsonResponse) => {
       console.log(jsonResponse);
+    }).catch((err) =>{
+        let errmsg = document.querySelector('p.error');
+        let setme = false;
+        let div = document.getElementById('submit');
+        if (!errmsg){
+            errmsg = document.createElement('p');
+            errmsg.setAttribute('class', 'error');
+            setme = true;
+        }
+        if (err.message == 401){
+            errmsg.textContent = 'Your username or password was incorrect.'
+        }
+        else{
+            errmsg.textContent = 'Something went wrong, please try again later.'
+        }
+        if (setme){
+            div.prepend(errmsg);
+        }
     });
 
-    //TODO: error handling for
 }
 
 function register(){
@@ -39,12 +59,33 @@ function register(){
     }).then((response) => {
         response.json()
         if (response.status == 200){
-            //go to agency
+            window.location.href= window.location.origin + '/agency'
+        }
+        else {
+            throw new Error(response.status)
         }
     })
     .then((jsonResponse) => {
       console.log(jsonResponse);
+    }).catch((err) =>{
+        let errmsg = document.querySelector('p.error');
+        let setme = false;
+        let div = document.getElementById('submit');
+        if (!errmsg){
+            errmsg = document.createElement('p');
+            errmsg.setAttribute('class', 'error');
+            setme = true;
+        }
+        if (err.message == 403){
+            errmsg.textContent = 'Please choose a different username.'
+        }
+        else{
+            errmsg.textContent = 'Something went wrong, please try again later.'
+        }
+        if (setme){
+            div.prepend(errmsg);
+        }
     });
-
-    //TODO: error handling for 403
 }
+
+//TODO: give feedback when contacting the server

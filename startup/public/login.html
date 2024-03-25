@@ -23,9 +23,9 @@
         <main>
             <h2>Welcome back!</h2>
             <form action = "javascript:login()">
-                <input id = username type = "text" id = "username" name="varText" placeholder="Username" required/>
+                <input id = username type = "text" id = "username" name="varText" placeholder="Username" maxlength="20" required pattern="^[a-zA-Z0-9@!_]*"/>
                 <input id = password type = "password" id = "password" name = "varPassword" placeholder="Password" required/>
-                <div>
+                <div id = submit>
                     <button type="submit">Login</button>
                     <a id= reg href = register.html>Not registered? Click here!</a>
                 </div>
