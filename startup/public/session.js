@@ -4,7 +4,7 @@ function login(){
         password: document.querySelector("#password").value
     }
 
-    fetch(window.location.origin + '/session', {
+    fetch('/session', {
         method: 'POST',
         body: JSON.stringify(user),
         headers: {
@@ -12,8 +12,8 @@ function login(){
         }
     }).then((response) => {
         response.json()
-        if (response.status == 200){
-            window.location.href= window.location.origin + '/agency'
+        if (response.ok){
+            window.location.href = '/agency'
         }
         else{
             throw new Error(response.status);
@@ -50,7 +50,7 @@ function register(){
         email: document.querySelector("#email").value
     }
 
-    fetch(window.location.origin + '/user', {
+    fetch('/user', {
         method: 'POST',
         body: JSON.stringify(user),
         headers: {
@@ -58,8 +58,8 @@ function register(){
         }
     }).then((response) => {
         response.json()
-        if (response.status == 200){
-            window.location.href= window.location.origin + '/agency'
+        if (response.ok){
+            window.location.href = '/agency'
         }
         else {
             throw new Error(response.status)

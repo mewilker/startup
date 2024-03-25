@@ -124,6 +124,7 @@ server.get('/session', async function (req, res, next){
 server.delete('/session', async function (req, res, next){
     try{
         const cookies = req.cookies
+        //TODO: validate authToken
         if (!cookies.authToken){
             throw new Error('bad request')
         }
