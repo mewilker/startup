@@ -107,6 +107,11 @@ form{
   padding: .25em;
 }
 
+p.error{
+  color:#f12424;
+  text-align: center;
+}
+
 button{
   background-color: #B3FBB1;
   font-size: 16pt;
@@ -115,6 +120,8 @@ button{
   border-radius: 3pt;
   border: solid #094112;
   color: #094112;
+  width: 300px;
+  align-self: center;
 }
 
 #reg{
@@ -129,6 +136,14 @@ input{
 
 div{
   margin: .5em;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+#reg{
+  padding: 10px
 }
   
 footer{
