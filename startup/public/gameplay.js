@@ -252,7 +252,7 @@ function addTravel(upgrade){
       loadUpgradeButtons();
     } catch (error){
       if (error.message == "Not enough money!"){
-        addMessage(error.message)
+        addErrorMessage(error.message)
       }
       else {
         console.log(error);
@@ -275,7 +275,7 @@ function addHopsitality(upgrade){
     loadUpgradeButtons();
   } catch (error){
     if (error.message == "Not enough money!"){
-      addMessage(error.message)
+      addErrorMessage(error.message)
     }
     else {
       console.log(error);
@@ -298,7 +298,7 @@ function addAttraction(upgrade){
     loadUpgradeButtons();
   } catch (error){
     if (error.message == "Not enough money!"){
-      addMessage(error.message);
+      addErrorMessage(error.message);
     }
     else {
       console.log(error);
@@ -318,6 +318,14 @@ function addMessage(message){
   let list = document.querySelector('ul.wsmsg');
   let addme = document.createElement('li');
   addme.setAttribute("class", "wsmsg");
+  addme.textContent = message;
+  list.appendChild(addme);
+}
+
+function addErrorMessage(message){
+  let list = document.querySelector('ul.wsmsg');
+  let addme = document.createElement('li');
+  addme.setAttribute("class", "error");
   addme.textContent = message;
   list.appendChild(addme);
 }

@@ -43,7 +43,7 @@ header{
     
 nav{
     display: flex;
-    flex: 0 40em;
+    flex: 0 46em;
     align-items: start;
     justify-self: start;
     margin-inline-start: 20px;
@@ -116,8 +116,14 @@ div.wsmsg{
 
 li.wsmsg{
     font-size: 12pt;
-    padding: .5em;
+    padding: .5 em;
     background-color: #e2eecd00;
+}
+li.error{
+    font-size:12pt;
+    padding: .5 em;
+    background-color: #e2eecd00;
+    color: #f12424
 }
 
 .ui{
