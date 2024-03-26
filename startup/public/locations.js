@@ -1,13 +1,13 @@
-import { getUserCookie, renderMoney, saveTycoon } from "./gameplay.js";
-import { Tycoon } from "./tycoon.js";
+import { getUser, renderMoney, saveTycoon } from "./gameplay.js";
+import Tycoon from "./tycoon.mjs";
 
 let tycoon = JSON.parse(localStorage.getItem("tycoon"));
 let locations = [];
 document.addEventListener("DOMContentLoaded", main);
 
-function main(){
-    tycoon = new Tycoon(getUserCookie(), tycoon);
-    renderMoney();
+async function main(){
+    tycoon = new Tycoon(await getUser(), tycoon);
+    renderMoney(tycoon.money());
     locations = tycoon.getPurchasedLocations().concat(tycoon.getPossibleLocations());
     var map = L.map('map').setView([36.0544, -112.1401], 2);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

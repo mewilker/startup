@@ -30,7 +30,7 @@ async function main (){
         document.querySelector("button.basic").addEventListener('click', 
           function(){
             tycoon.bookTours();
-            renderMoney();
+            renderMoney(tycoon.money());
         });
       })
     }).catch((err)=>{
@@ -63,7 +63,7 @@ function renderTycoon(){
   elem = document.getElementById("location");
   const agency = tycoon.currentAgency();
   elem.textContent = agency.place();
-  renderMoney();    
+  renderMoney(tycoon.money());    
   clearUpgrade("hospitality");
   loadUpgradePics("hospitality");
   clearUpgrade("attraction");
@@ -73,9 +73,9 @@ function renderTycoon(){
   clearMessages();
 }
 
-export function renderMoney(){
+export function renderMoney(money){
   let elem = document.getElementById("money");
-  elem.textContent = tycoon.money();
+  elem.textContent = money;
 }
 
 function clearUpgrade(upgrade){
@@ -235,7 +235,7 @@ function addTravel(upgrade){
       agency.travel.push(upgrade);
       tycoon.calculateGain();
       saveTycoon(tycoon.tojson());
-      renderMoney();
+      renderMoney(tycoon.money());
       clearUpgrade("travel");
       loadUpgradePics("travel");
       loadUpgradeButtons();
@@ -258,7 +258,7 @@ function addHopsitality(upgrade){
     agency.hospitality.push(upgrade);
     tycoon.calculateGain();
     saveTycoon(tycoon.tojson());
-    renderMoney();
+    renderMoney(tycoon.money());
     clearUpgrade("hospitality");
     loadUpgradePics("hospitality");
     loadUpgradeButtons();
@@ -281,7 +281,7 @@ function addAttraction(upgrade){
     agency.attractions.push(upgrade);
     tycoon.calculateGain();
     saveTycoon(tycoon.tojson());
-    renderMoney();
+    renderMoney(tycoon.money());
     clearUpgrade("attraction");
     loadUpgradePics("attraction");
     loadUpgradeButtons();
