@@ -207,6 +207,7 @@ export class Location{
     #price
     #latitude
     #longitude
+    #picsumid
 
     constructor(name){
         switch (name){
@@ -215,24 +216,28 @@ export class Location{
                 this.#price = 0;
                 this.#latitude = 36.0544;
                 this.#longitude = -112.1401;
+                this.#picsumid = 564;
                 break;
             case "New York":
                 this.#attraction = "Broadway";
                 this.#price = 1000;
                 this.#latitude = 40.7128;
                 this.#longitude = -74.006;
+                this.#picsumid = 411;
                 break;
             case "Banff":
                 this.#attraction = "Ski Pass";
                 this.#price = 70000;
                 this.#latitude = 51.1784;
                 this.#longitude = -115.5708;
+                this.#picsumid = 450;
                 break;
             case "Cabo San Lucas":
                 this.#attraction = "Zipline and High Adventure";
                 this.#price = 0;
                 this.#latitude = 22.8948;
                 this.#longitude = -109.9152;
+                this.#picsumid = 244;
                 break;
             case "Hawaii":
                 this.#attraction = "Surf";
@@ -282,6 +287,10 @@ export class Location{
 
     coordinates(){
         return [this.#latitude, this.#longitude];
+    }
+
+    picsumid(){
+        return this.#picsumid;
     }
 
     tojson(){

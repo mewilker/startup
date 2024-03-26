@@ -25,7 +25,7 @@ async function main (){
       }
       response.json().then( async (json)=>{
         tycoon = new Tycoon(await getUser(), json);
-        renderTycoon();
+        await renderTycoon();
         loadUpgradeButtons();
         document.querySelector("button.basic").addEventListener('click', 
           function(){
@@ -57,12 +57,23 @@ export async function getUser () {
   }
 }
 
-function renderTycoon(){
+async function renderTycoon(){
   let elem = document.getElementById("user");
   elem.textContent = tycoon.user();
   elem = document.getElementById("location");
   const agency = tycoon.currentAgency();
   elem.textContent = agency.place();
+  const id = tycoon.currentAgency().location.picsumid();
+  elem = document.querySelector('main');
+  try{
+    const res = await fetch('https://picsum.photos/id/'+id + '/'+ elem.offsetWidth+'/'+elem.offsetHeight);
+    if (res.ok){
+      elem.style.backgroundImage= `url('${res.url}')`;
+    }
+  }
+  catch(err){
+    console.log(err);
+  }
   renderMoney(tycoon.money());    
   clearUpgrade("hospitality");
   loadUpgradePics("hospitality");
