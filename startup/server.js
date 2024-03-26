@@ -49,7 +49,7 @@ server.post('/user', async function(req, res, next){
             throw new Error("bad request");
         }
         const match = user.username.match(regex)
-        if (match == null){
+        if (match[0] == ''){
             throw new Error("bad request")
         }
         let found = await db.findUser(user);
@@ -76,7 +76,7 @@ server.post('/session', async function (req, res, next){
             throw new Error("bad request");
         }
         const match = user.username.match(regex)
-        if (match == null){
+        if (match[0] == ''){
             throw new Error('bad request')
         }
         let foundarray = await db.findUser(user);
