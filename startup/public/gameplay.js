@@ -16,15 +16,15 @@ for (let i = 0; i < list.length; i++){
   list[i].addEventListener('click', function() {saveTycoon(tycoon.tojson())})
 }
 
-function main (){
+async function main (){
     //if no tycoon, create a new one and store it in memory
   if (tycoon == null || tycoon == 'undefined'){
     fetch('/tycoon').then((response) => {
       if (!response.ok){
         window.location.href = '/login'
       }
-      response.json().then((json)=>{
-        tycoon = new Tycoon(getUser(), json);
+      response.json().then( async (json)=>{
+        tycoon = new Tycoon(await getUser(), json);
         renderTycoon();
         loadUpgradeButtons();
         document.querySelector("button.basic").addEventListener('click', 
@@ -43,17 +43,18 @@ function main (){
   }
 }
 
-export function getUser () {
-  fetch('/session').then((res) =>{
+export async function getUser () {
+  try{
+    const res = await fetch('/session')
     if (!res.ok){
       window.location.href = '/login'
     }
-    res.json().then((json)=>{
-      return json.user;
-    })
-  }).catch((err)=>{
-    addMessage(err.message)
-  })
+    const json = await res.json();
+    return json.user;
+  }
+  catch(err){
+    addMessage(err.message);
+  }
 }
 
 function renderTycoon(){
@@ -312,6 +313,13 @@ function addMessage(message){
 
 export async function saveTycoon(json){
   localStorage.setItem("tycoon", json);
+  const res = await fetch('/tycoon', {
+    method: 'PUT',
+    body: json,
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8'
+    }
+  })
 }
 
 window.addEventListener('beforeunload', function(){saveTycoon(tycoon.tojson())});

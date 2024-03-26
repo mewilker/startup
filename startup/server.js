@@ -12,15 +12,23 @@ server.use(cookieParser());
 server.use(express.json())
 const regex = /^[a-zA-Z0-9@!_]*/
 
+server.use((req, res, next)=>{
+    res.on("finish", function() {
+    console.log(req.method, decodeURI(req.url), res.statusCode, res.statusMessage);
+  });
+  //TODO more logging
+  next();
+})
+
 server.get("/agency", async function(req, res, next){
     try{
         const cookies = req.cookies;
         if (!cookies.authToken){
-            res.redirect('/login')
+            res.redirect(304, '/login')
         }
         let foundarray = await db.findTokenByAuth(cookies.authToken);
         if (foundarray.length != 1){
-            res.redirect('/login');
+            res.redirect(304, '/login');
         }
         res.sendFile(path.join(__dirname, '/public/agency.html'))
     }
@@ -34,7 +42,7 @@ server.get("/login", async function(req, res, next){
 })
     
 //Register User
-server.post('/user', async function(req, res, next){ //TODO: add a next param to pass the response to login
+server.post('/user', async function(req, res, next){
     try{
         const user = req.body;
         if (user.username == undefined || user.password == undefined || user.username.length > 20){
@@ -160,7 +168,6 @@ server.get('/tycoon', async function (req, res, next){
         if (foundarray.length == 0){
             throw new Error('unauthorized');
         }
-        let seeme =db.findTycoon(foundarray[0].username);
         res.send(await db.findTycoon(foundarray[0].username));
     }
     catch(err){
@@ -169,8 +176,23 @@ server.get('/tycoon', async function (req, res, next){
 })
 
 //Save tycoon or agency
-server.put('/tycoon', function (req, res, next){
-    console.log('saved');
+server.put('/tycoon', async function (req, res, next){
+    try{
+        const tycoon = req.body;
+        const cookies = req.cookies
+        if (!cookies.authToken){
+            throw new Error('bad request')
+        }
+        let foundarray = await db.findTokenByAuth(cookies.authToken);
+        if (foundarray.length == 0){
+            throw new Error('unauthorized');
+        }
+        await db.updateTycoon(foundarray[0].username, tycoon)
+        res.send({});
+    }
+    catch(err){
+        next(err);
+    }
 })
 
     

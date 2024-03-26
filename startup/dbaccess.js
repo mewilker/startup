@@ -31,7 +31,6 @@ function closeConnection(){
 }
 
 async function addUser (user){
-  //TODO: encrypt password
   await users.insertOne(user);
 }
 
@@ -46,6 +45,7 @@ async function addToken (authToken){
 }
 
 function findTokenByName(user){
+  //TODO: impl?
   console.log('function')
 }
 
@@ -77,6 +77,20 @@ async function findTycoon(user) {
   return tycoon.tojson();
 }
 
+async function updateTycoon(user, tycoon){
+  const cursor = tycoons.find({user:user});
+  let result = await cursor.toArray();
+  if (result.length > 0){
+    let found = result[0];
+    //can we change the design so we don't have to do this?
+    tycoons.updateOne({user:user},{$set: tycoon})
+    return JSON.stringify(found);
+  }
+  else {
+    throw new Error('unauthorized')
+  }
+}
+
 process.on('SIGINT', function() {
   client.close(true);
   console.log('Mongo disconnected on app termination');
@@ -84,4 +98,4 @@ process.on('SIGINT', function() {
 });
 
 module.exports = {addUser, addToken, findUser, pingServer, 
-  closeConnection, findTokenByAuth, removeToken, findTycoon}
+  closeConnection, findTokenByAuth, removeToken, findTycoon, updateTycoon}
