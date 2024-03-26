@@ -91,6 +91,11 @@ async function updateTycoon(user, tycoon){
   }
 }
 
+async function getScores(){
+  const cursor = tycoons.find({}, {sort:{money:-1},projection:{user:1, money:1, _id:0}});
+  return await cursor.toArray();
+}
+
 process.on('SIGINT', function() {
   client.close(true);
   console.log('Mongo disconnected on app termination');
@@ -98,4 +103,5 @@ process.on('SIGINT', function() {
 });
 
 module.exports = {addUser, addToken, findUser, pingServer, 
-  closeConnection, findTokenByAuth, removeToken, findTycoon, updateTycoon}
+  closeConnection, findTokenByAuth, removeToken, findTycoon, 
+  updateTycoon, getScores}

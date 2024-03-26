@@ -195,6 +195,16 @@ server.put('/tycoon', async function (req, res, next){
     }
 })
 
+//Get scores
+server.get('/scores', async function (req, res, next){
+    try{
+        res.send(await db.getScores());
+    }
+    catch(err){
+        next(err);
+    }
+})
+
     
 //Get location?
 
