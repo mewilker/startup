@@ -102,7 +102,7 @@ server.post('/session', async function (req, res, next){
 async function setAuthCookie (res, username){
     let d = new Date();
     d.setTime(d.getTime() + 86400000)
-    let authToken = {token: uuid.v4(), username: username, expires: d.getMilliseconds()};
+    let authToken = {token: uuid.v4(), username: username, expires: d.valueOf()};
     await db.addToken(authToken);
     res.cookie('authToken', authToken.token, 
         {maxAge: 86400000, 
