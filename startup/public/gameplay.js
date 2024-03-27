@@ -74,10 +74,11 @@ async function renderTycoon(){
   clearMessages();
   const id = tycoon.currentAgency().location.picsumid();
   try{
-    const res = await fetch('https://picsum.photos/id/'+id + '/'+ elem.offsetWidth+'/'+elem.offsetHeight);
-    if (res.ok){
-      elem.style.backgroundImage= `url('${res.url}')`;
-    }
+    fetch('https://picsum.photos/id/'+id + '/'+ elem.offsetWidth+'/'+elem.offsetHeight).then((res)=>{
+      if (res.ok){
+        elem.style.backgroundImage= `url('${res.url}')`;
+      }
+    })
     fetch('https://picsum.photos/id/'+id+'/info').then((res)=>{
       res.json().then((json)=>{
         let elem = document.getElementById('copyright')
