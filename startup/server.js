@@ -10,7 +10,8 @@ const path = require('path')
 server.use(express.static(path.join(__dirname, 'public')))
 server.use(cookieParser());
 server.use(express.json())
-const regex = /^[a-zA-Z0-9@!_]*/
+const userRegex = /^[a-zA-Z0-9@!_]*/
+const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 server.use((req, res, next)=>{
     res.on("finish", function() {
@@ -23,9 +24,7 @@ server.use((req, res, next)=>{
 server.get("/agency", async function(req, res, next){
     try{
         const cookies = req.cookies;
-        if (!cookies.authToken){
-            res.redirect(304, '/login')
-        }
+        validateAuth(cookies.authToken, res);
         let foundarray = await db.findTokenByAuth(cookies.authToken);
         if (foundarray.length != 1){
             res.redirect(304, '/login');
@@ -48,8 +47,8 @@ server.post('/user', async function(req, res, next){
         if (user.username == undefined || user.password == undefined || user.username.length > 20){
             throw new Error("bad request");
         }
-        const match = user.username.match(regex)
-        if (match[0] == ''){
+        const match = user.username.match(userRegex)
+        if (match.length != 1 || match[0] == ''){
             throw new Error("bad request")
         }
         let found = await db.findUser(user);
@@ -75,8 +74,8 @@ server.post('/session', async function (req, res, next){
         if (user.username == undefined || user.password == undefined || user.username.length > 20){
             throw new Error("bad request");
         }
-        const match = user.username.match(regex)
-        if (match[0] == ''){
+        const match = user.username.match(userRegex)
+        if (match.length != 1 || match[0] == ''){
             throw new Error('bad request')
         }
         let foundarray = await db.findUser(user);
@@ -113,14 +112,22 @@ async function setAuthCookie (res, username){
         });
     res.send({});
 }
+
+function validateAuth(authToken, res){
+    if (!authToken){
+        throw new Error('bad request')
+    }
+    const match =authToken.match(uuidRegex);
+    if (match.length != 1 || match[0] == ''){
+        res.redirect(304, '/login');
+    }
+}
     
 //Get User
 server.get('/session', async function (req, res, next){
     try{
         const cookies = req.cookies
-        if (!cookies.authToken){
-            throw new Error('bad request')
-        }
+        validateAuth(cookies.authToken, res);
         let foundarray = await db.findTokenByAuth(cookies.authToken);
         if (foundarray.length == 0){
             throw new Error('unauthorized');
@@ -137,9 +144,7 @@ server.get('/session', async function (req, res, next){
 server.delete('/session', async function (req, res, next){
     try{
         const cookies = req.cookies
-        if (!cookies.authToken){
-            throw new Error('bad request')
-        }
+        validateAuth(cookies.authToken, res);
         let foundarray = await db.findTokenByAuth(cookies.authToken);
         if (foundarray.length == 0){
             throw new Error('unauthorized');
@@ -161,9 +166,7 @@ server.delete('/session', async function (req, res, next){
 server.get('/tycoon', async function (req, res, next){
     try{
         const cookies = req.cookies
-        if (!cookies.authToken){
-            throw new Error('bad request')
-        }
+        validateAuth(cookies.authToken, res);
         let foundarray = await db.findTokenByAuth(cookies.authToken);
         if (foundarray.length == 0){
             throw new Error('unauthorized');
@@ -180,9 +183,7 @@ server.put('/tycoon', async function (req, res, next){
     try{
         const tycoon = req.body;
         const cookies = req.cookies
-        if (!cookies.authToken){
-            throw new Error('bad request')
-        }
+        validateAuth(cookies.authToken, res);
         let foundarray = await db.findTokenByAuth(cookies.authToken);
         if (foundarray.length == 0){
             throw new Error('unauthorized');
