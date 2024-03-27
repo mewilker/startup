@@ -142,7 +142,7 @@ The document was created first as a google sheet. Request permission to view thi
 
 ## Service Deliverable
 
-Prerequisite: Simon Service deployed to your production environment
+~~Prerequisite: Simon Service deployed to your production environment~~ Login is currently deployed
 
 Prerequisite: A link to your GitHub startup repository 
 prominently displayed on your application's home page
@@ -184,7 +184,7 @@ Backend web service support and interaction
 
 ## Login Deliverable
 
-**SIMON LOGIN NOT DEPLOYED YET**
+Prerequisite: Simon Login deployed to your production environment with your dbConfig.json credentials
 
 Prerequisite: A link to your GitHub startup repository prominently displayed on your application's home page
 
