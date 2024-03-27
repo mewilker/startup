@@ -37,6 +37,7 @@ function listItem(href, name){
 export function logout(){
     fetch('/session',{method:'DELETE'}).then((res)=>{
         if(res.ok){
+            localStorage.clear();
             window.location.href = window.location.origin;
         }
     })
