@@ -24,11 +24,7 @@ server.use((req, res, next)=>{
 server.get("/agency", async function(req, res, next){
     try{
         const cookies = req.cookies;
-        validateAuth(cookies.authToken, res);
-        let foundarray = await db.findTokenByAuth(cookies.authToken);
-        if (foundarray.length != 1){
-            res.redirect(304, '/login');
-        }
+        await validateAuth(cookies.authToken, res);
         res.sendFile(path.join(__dirname, '/public/agency.html'))
     }
     catch(err){
@@ -107,13 +103,13 @@ async function setAuthCookie (res, username){
     res.cookie('authToken', authToken.token, 
         {maxAge: 86400000, 
             httpOnly: true, 
-            secure: true, 
+            //secure: true, 
             sameSite: 'strict'
         });
     res.send({});
 }
 
-function validateAuth(authToken, res){
+async function validateAuth(authToken, res){
     if (!authToken){
         throw new Error('bad request')
     }
@@ -121,17 +117,23 @@ function validateAuth(authToken, res){
     if (match.length != 1 || match[0] == ''){
         res.redirect(304, '/login');
     }
+    let foundarray = await db.findTokenByAuth(authToken);
+    if (foundarray.length == 0){
+        throw new Error('unauthorized');
+    }
+    let d = new Date();
+    if (foundarray[0].expires <= d.valueOf()){
+        db.removeToken(foundarray[0]);
+        throw new Error('unauthorized');
+    }
+    return foundarray;
 }
     
 //Get User
 server.get('/session', async function (req, res, next){
     try{
         const cookies = req.cookies
-        validateAuth(cookies.authToken, res);
-        let foundarray = await db.findTokenByAuth(cookies.authToken);
-        if (foundarray.length == 0){
-            throw new Error('unauthorized');
-        }
+        let foundarray = await validateAuth(cookies.authToken, res);
         res.send(JSON.stringify({user:foundarray[0].username}));
     }
     catch(err){
@@ -144,15 +146,11 @@ server.get('/session', async function (req, res, next){
 server.delete('/session', async function (req, res, next){
     try{
         const cookies = req.cookies
-        validateAuth(cookies.authToken, res);
-        let foundarray = await db.findTokenByAuth(cookies.authToken);
-        if (foundarray.length == 0){
-            throw new Error('unauthorized');
-        }
+        let foundarray = await validateAuth(cookies.authToken, res);
         db.removeToken(foundarray[0]);
         res.cookie('authToken', '', {maxAge: -1, 
             httpOnly: true, 
-            secure: true, 
+            //secure: true, 
             sameSite: 'strict'
         })
         res.send();
@@ -166,11 +164,7 @@ server.delete('/session', async function (req, res, next){
 server.get('/tycoon', async function (req, res, next){
     try{
         const cookies = req.cookies
-        validateAuth(cookies.authToken, res);
-        let foundarray = await db.findTokenByAuth(cookies.authToken);
-        if (foundarray.length == 0){
-            throw new Error('unauthorized');
-        }
+        let foundarray = await validateAuth(cookies.authToken, res);
         res.send(await db.findTycoon(foundarray[0].username));
     }
     catch(err){
@@ -179,15 +173,13 @@ server.get('/tycoon', async function (req, res, next){
 })
 
 //Save tycoon or agency
+//TODO: CHANGE SO IT ONLY SAVES MONEY
+//this todo is still not a great fix
 server.put('/tycoon', async function (req, res, next){
     try{
         const tycoon = req.body;
         const cookies = req.cookies
-        validateAuth(cookies.authToken, res);
-        let foundarray = await db.findTokenByAuth(cookies.authToken);
-        if (foundarray.length == 0){
-            throw new Error('unauthorized');
-        }
+        let foundarray = await validateAuth(cookies.authToken, res);
         await db.updateTycoon(foundarray[0].username, tycoon)
         res.send({});
     }
@@ -232,5 +224,7 @@ server.use((err, req, res, next) => {
     }
     res.send({message: err.message})
 })
+
+//TODO: make a function that cleans out the auth tokens every 24 hours or something like that
 
 module.exports = server;
