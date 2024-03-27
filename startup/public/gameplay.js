@@ -63,17 +63,7 @@ async function renderTycoon(){
   elem = document.getElementById("location");
   const agency = tycoon.currentAgency();
   elem.textContent = agency.place();
-  const id = tycoon.currentAgency().location.picsumid();
   elem = document.querySelector('main');
-  try{
-    const res = await fetch('https://picsum.photos/id/'+id + '/'+ elem.offsetWidth+'/'+elem.offsetHeight);
-    if (res.ok){
-      elem.style.backgroundImage= `url('${res.url}')`;
-    }
-  }
-  catch(err){
-    console.log(err);
-  }
   renderMoney(tycoon.money());    
   clearUpgrade("hospitality");
   loadUpgradePics("hospitality");
@@ -82,6 +72,22 @@ async function renderTycoon(){
   clearUpgrade("travel");
   loadUpgradePics("travel");
   clearMessages();
+  const id = tycoon.currentAgency().location.picsumid();
+  try{
+    const res = await fetch('https://picsum.photos/id/'+id + '/'+ elem.offsetWidth+'/'+elem.offsetHeight);
+    if (res.ok){
+      elem.style.backgroundImage= `url('${res.url}')`;
+    }
+    fetch('https://picsum.photos/id/'+id+'/info').then((res)=>{
+      res.json().then((json)=>{
+        let elem = document.getElementById('copyright')
+        elem.textContent = elem.textContent + ` Photo by ${json.author}`
+      })
+    })
+  }
+  catch(err){
+    console.log(err);
+  }
 }
 
 export function renderMoney(money){
@@ -341,4 +347,4 @@ export async function saveTycoon(json){
   })
 }
 
-window.addEventListener('beforeunload', function(){saveTycoon(tycoon.tojson())});
+window.addEventListener('beforeunload', async function(){await saveTycoon(tycoon.tojson())});
