@@ -139,3 +139,68 @@ The document was created first as a google sheet. Request permission to view thi
 **gameplay.js**- used by agency.html and locations.html This has the bulk of the playing logic. Renders the page, reads the csv, adds buttons and logic for the available upgrades.
 
 **locations.js** - used by locations.html. Rather than implementing a canvas element, I used a library called "Leaflet to create a map with pins for possible places to upgrade to.
+
+## Service Deliverable
+
+Prerequisite: Simon Service deployed to your production environment
+
+Prerequisite: A link to your GitHub startup repository 
+prominently displayed on your application's home page
+
+Prerequisite: Notes in your startup Git repository README.md file documenting what you modified and added with this deliverable. The TAs will only grade things that have been clearly described as being completed. Review the voter app as an example.
+
+Prerequisite: At least 10 git commits spread consistently throughout the assignment period.
+
+Backend web service support and interaction
+
+40% - Create an HTTP service using Node.js and Express - yes
+
+10% - Frontend served up using Express static middleware - yes, plus a few extra endpoints
+
+10% - Your frontend calls third party service endpoints - yes, agency.html or /agency the frontend calls picsum 1. to get the image and 2. to display the photographer in the footer
+
+20% - Your backend provides service endpoints
+**Endpoints:**
+
+  -/agency GET returns agency.html provided you have a valid authoken
+
+  -/login GET returns login.html
+
+  -/user POST registers a user using json, returns authCookie
+
+  -/session POST logins in a user using json, returns authCookie
+
+  -/session GET gets the username of the provided authtoken
+
+  -/session DELETE logout user, deleting authtoken
+
+  -/tycoon GET gets the users tycoon, or creates one if doesn't exist
+
+  -/tycoon PUT updates the users tycoon
+
+  -/scores GET returns a json of users and money in descending order
+
+20% - Your frontend calls your service endpoints - calls them all
+
+## Login Deliverable
+
+**SIMON LOGIN NOT DEPLOYED YET**
+
+Prerequisite: A link to your GitHub startup repository prominently displayed on your application's home page
+
+Prerequisite: Notes in your startup Git repository README.md file documenting what you modified and added with this deliverable. The TAs will only grade things that have been clearly described as being completed. Review the voter app as an example.
+
+Prerequisite: At least 10 git commits spread consistently throughout the assignment period.
+*NOTE: I worked on this deliverable and the service deliverable simultaneously. However, I'm fairly certian there is at least 20 commits since my last deliverable*
+
+Application authentication and authorization
+
+20% - Supports new user registration - indeed it does. Easiest to verify with the leaderboard page
+
+20% - Supports existing user authentication - login supported from wherever whenever
+
+20% - Stores application data in MongoDB - tycoon objects stored there
+
+20% - Stores and retrieves credentials in MongoDB - indeed with hashed passwords
+
+20% - Restricts application functionality based upon authentication - you cannot start clicking for (fake) money unless you have an account
