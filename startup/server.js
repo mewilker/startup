@@ -5,6 +5,11 @@ const db = require('./dbaccess.js');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const path = require('path')
+let Tycoon = undefined;
+import ('./public/tycoon.mjs').then((module)=> {
+    Tycoon = module.default;
+    console.log('tycoon package imported')
+  });
 //Static Home page call
 //TODO: refactor project so gameplay is not public
 server.use(express.static(path.join(__dirname, 'public')))
@@ -198,16 +203,80 @@ server.get('/scores', async function (req, res, next){
     }
 })
 
-    
-//Get location?
+server.get('/available', async function(req, res, next){
+    try{
+        const cookies = req.cookies;
+        let foundarray = await validateAuth(cookies.authToken, res);
+        const user = foundarray[0].username;
+        const tycoon = new Tycoon(user, await db.findTycoon(user));
+        const agency = tycoon.currentAgency();
+        //read csv
+        const reader = new FileReader();
+        const csv = reader.readAsText(path.join(__dirname, '/csv/GrandCanyon.csv'))
+        switch (agency.location.name()) {
+            case 'the Grand Canyon':    
+                break;
+        
+            default:
+                throw new Error('not a valid agency');
+        }
 
-//Update Gain?
-
-//Get money?
-
-//Get Purchased Locations?
-
-//Get Possible Locations?
+        const lines = csv.split('\n');
+        for (let lineIndex = 1; lineIndex < lines.length; lineIndex++){
+        const line = lines[lineIndex];
+        const values = line.split(",");
+        const price = parseFloat(values[5])
+        const clickgain = parseFloat(values[6]);
+        switch(values[1]){
+            case "travel":
+                if (values[2]==agency.travel.length 
+                  && values[3]<=agency.hospitality.length
+                  && values [4]<=agency.attractions.length){
+                    let obj = {name:values[0], type:values[1],price:price,clickgain:clickgain}
+                    res.send(obj)
+                    //createUpgradeButton(values[0],values[1],price, clickgain);
+                }
+                break;
+            case "hospitality":
+                if (values[2]<=agency.travel.length 
+                  && values[3]==agency.hospitality.length
+                  && values [4]<=agency.attractions.length){
+                    //createUpgradeButton(values[0], values[1],price, clickgain);
+                }
+                break;
+            case "attraction":
+                if (values[2]<=agency.travel.length 
+                  && values[3]<=agency.hospitality.length
+                  && values [4]==agency.attractions.length){
+                    //createUpgradeButton(values[0], values[1],price, clickgain);
+                }
+            break;
+            case "location":
+                if (values[2]<=agency.travel.length 
+                  && values[3]<=agency.hospitality.length
+                  && values [4]<=agency.attractions.length){
+                    let bought = agency.findLocation(values[0]);
+                    if (bought == null){
+                        let msg = "A new location is available in " + values[0] + "! Check out the locations tab!"
+                        addMessage(msg);
+                        agency.addAvailableLocation(values[0]);
+                        saveTycoon(tycoon.tojson());
+                    }
+                    else if (!bought){
+                        let msg = "A new location is available in " + values[0] + "!"
+                        addMessage(msg);
+                    }
+                }
+                break;
+            default:
+                throw new Error("Bad File");
+            } 
+        }
+    }
+    catch(err){
+        next(err);
+    }
+})
 
 server.use((err, req, res, next) => {
     if (err.message == "bad request"){
