@@ -82,7 +82,6 @@ async function updateTycoon(user, tycoon){
   let result = await cursor.toArray();
   if (result.length > 0){
     let found = result[0];
-    //can we change the design so we don't have to do this?
     tycoons.updateOne({user:user},{$set: tycoon})
     return JSON.stringify(found);
   }

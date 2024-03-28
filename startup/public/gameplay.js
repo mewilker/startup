@@ -1,6 +1,5 @@
 import { Attraction, Hospitality, Travel } from "./agency.mjs";
 import Tycoon from "./tycoon.mjs";
-import { Banff, GrandCanyon, NewYork } from "./csv.js";
 import { logout } from "./menu.js";
 
 let tycoon = null;
@@ -136,25 +135,7 @@ function loadUpgradePics(upgradeType){
   
 }
 
-//TODO: parsing csv needs to be on the server side
-function loadUpgradeButtons(){
-  //figure out location
-  let elem = document.getElementById("location");
-  let csv = "";
-  switch (elem.textContent) {
-    case "the Grand Canyon":
-      csv = GrandCanyon;
-      break;
-    case "New York":
-      csv = NewYork;
-      break;
-    case "Banff":
-      csv = Banff;
-      break;
-    default:
-      throw new Error("That's not a place you can expand!");
-  }
-  //grab lengths of upgrades
+async function loadUpgradeButtons(){
   const agency = tycoon.currentAgency();
   clearUpgrade("hospitality");
   loadUpgradePics("hospitality");
@@ -162,56 +143,26 @@ function loadUpgradeButtons(){
   loadUpgradePics("attraction");
   clearUpgrade("travel");
   loadUpgradePics("travel");
-  //match up to the csv
-  const lines = csv.split('\n');
-  for (let lineIndex = 1; lineIndex < lines.length; lineIndex++){
-    const line = lines[lineIndex];
-    const values = line.split(",");
-    const price = parseFloat(values[5])
-    const clickgain = parseFloat(values[6]);
-    switch(values[1]){
-      case "travel":
-        if (values[2]==agency.travel.length 
-          && values[3]<=agency.hospitality.length
-          && values [4]<=agency.attractions.length){
-            createUpgradeButton(values[0],values[1],price, clickgain);
-        }
-        break;
-      case "hospitality":
-        if (values[2]<=agency.travel.length 
-          && values[3]==agency.hospitality.length
-          && values [4]<=agency.attractions.length){
-            createUpgradeButton(values[0], values[1],price, clickgain);
-        }
-        break;
-      case "attraction":
-        if (values[2]<=agency.travel.length 
-          && values[3]<=agency.hospitality.length
-          && values [4]==agency.attractions.length){
-            createUpgradeButton(values[0], values[1],price, clickgain);
-        }
-        break;
-      case "location":
-        if (values[2]<=agency.travel.length 
-          && values[3]<=agency.hospitality.length
-          && values [4]<=agency.attractions.length){
-            let bought = agency.findLocation(values[0]);
-            if (bought == null){
-              let msg = "A new location is available in " + values[0] + "! Check out the locations tab!"
-              addMessage(msg);
-              agency.addAvailableLocation(values[0]);
-              saveTycoon(tycoon.tojson());
-            }
-            else if (!bought){
-              let msg = "A new location is available in " + values[0] + "!"
-              addMessage(msg);
-            }
-          }
-        break;
-      default:
-        throw new Error("Bad File");
-      } 
+
+  const res = await fetch('/available');
+  const json = await res.json();
+  json.forEach(upgrade => {
+    if (upgrade.type == 'location'){
+      if (upgrade.notified == undefined){
+        let msg = "A new location is available in " + upgrade.name + "! Check out the locations tab!"
+        addMessage(msg);
+        agency.addAvailableLocation(upgrade.name);
+        saveTycoon(tycoon.tojson());
+      }
+      else{
+        let msg = "A new location is available in " + upgrade.name + "!"
+        addMessage(msg);
+      }
     }
+    else{
+      createUpgradeButton(upgrade.name, upgrade.type, upgrade.price, upgrade.clickgain);
+    }
+  });
 }
   
 function createUpgradeButton(name, type, price, clickgain){
@@ -270,6 +221,7 @@ function addTravel(upgrade){
 function addHopsitality(upgrade){
   const agency= tycoon.currentAgency();
   //subtract money from tycoon
+  console.log(upgrade)
   try {
     tycoon.buy(upgrade.price());
     //add the upgrade to the agency

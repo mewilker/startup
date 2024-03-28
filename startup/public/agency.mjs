@@ -31,6 +31,36 @@ export class Agency{
         return this.travel.length + this.attractions.length + this.hospitality.length;
     }
 
+    addTravel(obj){
+        if(obj.name != undefined && obj.price != undefined && obj.clickgain != undefined){
+            const travel = new Travel(obj.name, obj.price, obj.clickgain)
+            this.travel.push(travel);
+        }
+        else{
+            throw new Error("couldn't add travel")
+        }
+    }
+
+    addAttraction(obj){
+        if(obj.name != undefined && obj.price != undefined && obj.clickgain != undefined){
+            const attraction = new Attraction(obj.name, obj.price, obj.clickgain)
+            this.attractions.push(attraction);
+        }
+        else{
+            throw new Error("couldn't add attraction")
+        }
+    }
+
+    addHospitality(obj){
+        if(obj.name != undefined && obj.price != undefined && obj.clickgain != undefined){
+            const hospitality = new Hospitality(obj.name, obj.price, obj.clickgain)
+            this.hospitality.push(hospitality);
+        }
+        else{
+            throw new Error("couldn't add hospitality")
+        }
+    }
+
     specialAttraction(){
         return this.location.attraction();
     }
@@ -234,7 +264,7 @@ export class Location{
                 break;
             case "Cabo San Lucas":
                 this.#attraction = "Zipline and High Adventure";
-                this.#price = 0;
+                this.#price = 500000;
                 this.#latitude = 22.8948;
                 this.#longitude = -109.9152;
                 this.#picsumid = 244;
