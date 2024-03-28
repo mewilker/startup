@@ -208,11 +208,11 @@ server.get('/available', async function(req, res, next){
         const cookies = req.cookies;
         let foundarray = await validateAuth(cookies.authToken, res);
         const user = foundarray[0].username;
-        const tycoon = new Tycoon(user, await db.findTycoon(user));
+        const json =await db.findTycoon(user);
+        const tycoon = new Tycoon(user, JSON.parse(json));
         const agency = tycoon.currentAgency();
         //read csv
-        const reader = new FileReader();
-        const csv = reader.readAsText(path.join(__dirname, '/csv/GrandCanyon.csv'))
+        const csv = require('./csv.js')
         switch (agency.location.name()) {
             case 'the Grand Canyon':    
                 break;
