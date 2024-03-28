@@ -1,15 +1,16 @@
 const express = require('express');
 const server = express();
 const uuid = require('uuid');
-const db = require('./dbaccess.js');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const path = require('path')
+const db = require('./dbaccess.js');
 let Tycoon = undefined;
 import ('./public/tycoon.mjs').then((module)=> {
     Tycoon = module.default;
     console.log('tycoon package imported')
-  });
+});
+const csv = require('./csv.js')
 //Static Home page call
 //TODO: refactor project so gameplay is not public
 server.use(express.static(path.join(__dirname, 'public')))
@@ -211,67 +212,70 @@ server.get('/available', async function(req, res, next){
         const json =await db.findTycoon(user);
         const tycoon = new Tycoon(user, JSON.parse(json));
         const agency = tycoon.currentAgency();
-        //read csv
-        const csv = require('./csv.js')
+        let upgrades = undefined;
         switch (agency.location.name()) {
             case 'the Grand Canyon':    
+                upgrades = csv.GrandCanyon;
                 break;
-        
+            case 'New York':
+                upgrades = csv.NewYork;
+                break;
+            case 'Banff':
+                upgrades = csv.Banff;
             default:
-                throw new Error('not a valid agency');
+                throw new Error('bad request');
         }
 
-        const lines = csv.split('\n');
+        const lines = upgrades.split('\n');
+        upgrades = []
         for (let lineIndex = 1; lineIndex < lines.length; lineIndex++){
-        const line = lines[lineIndex];
-        const values = line.split(",");
-        const price = parseFloat(values[5])
-        const clickgain = parseFloat(values[6]);
-        switch(values[1]){
-            case "travel":
-                if (values[2]==agency.travel.length 
-                  && values[3]<=agency.hospitality.length
-                  && values [4]<=agency.attractions.length){
-                    let obj = {name:values[0], type:values[1],price:price,clickgain:clickgain}
-                    res.send(obj)
-                    //createUpgradeButton(values[0],values[1],price, clickgain);
-                }
+            const line = lines[lineIndex];
+            const values = line.split(",");
+            const price = parseFloat(values[5])
+            const clickgain = parseFloat(values[6]);
+            let obj = {name:values[0], type:values[1],price:price,clickgain:clickgain}
+            switch(values[1]){
+                case "travel":
+                    if (values[2]==agency.travel.length 
+                      && values[3]<=agency.hospitality.length
+                      && values [4]<=agency.attractions.length){
+                        upgrades.push(obj)
+                    }
                 break;
-            case "hospitality":
-                if (values[2]<=agency.travel.length 
-                  && values[3]==agency.hospitality.length
-                  && values [4]<=agency.attractions.length){
-                    //createUpgradeButton(values[0], values[1],price, clickgain);
-                }
+                case "hospitality":
+                    if (values[2]<=agency.travel.length 
+                      && values[3]==agency.hospitality.length
+                      && values [4]<=agency.attractions.length){
+                        upgrades.push(obj)
+                    }
                 break;
-            case "attraction":
-                if (values[2]<=agency.travel.length 
-                  && values[3]<=agency.hospitality.length
-                  && values [4]==agency.attractions.length){
-                    //createUpgradeButton(values[0], values[1],price, clickgain);
-                }
-            break;
-            case "location":
-                if (values[2]<=agency.travel.length 
-                  && values[3]<=agency.hospitality.length
-                  && values [4]<=agency.attractions.length){
-                    let bought = agency.findLocation(values[0]);
+                case "attraction":
+                    if (values[2]<=agency.travel.length 
+                      && values[3]<=agency.hospitality.length
+                      && values [4]==agency.attractions.length){
+                        upgrades.push(obj)
+                    }
+                break;
+                case "location":
+                    if (values[2]<=agency.travel.length 
+                      && values[3]<=agency.hospitality.length
+                      && values [4]<=agency.attractions.length){
+                        let bought = agency.findLocation(values[0]);
                     if (bought == null){
-                        let msg = "A new location is available in " + values[0] + "! Check out the locations tab!"
-                        addMessage(msg);
-                        agency.addAvailableLocation(values[0]);
-                        saveTycoon(tycoon.tojson());
+                        upgrades.push(obj)
                     }
                     else if (!bought){
-                        let msg = "A new location is available in " + values[0] + "!"
-                        addMessage(msg);
+                        obj.notified = true;
+                        upgrades.push(obj)
                     }
                 }
                 break;
             default:
-                throw new Error("Bad File");
+                throw new Error("bad csv");
             } 
         }
+
+        res.send(upgrades);
     }
     catch(err){
         next(err);
