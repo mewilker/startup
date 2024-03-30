@@ -12,7 +12,7 @@ document.getElementById('logout')
   .addEventListener('click', function(){logout()});
 let list = document.querySelectorAll("a");
 for (let i = 0; i < list.length; i++){
-  list[i].addEventListener('click', function() {saveTycoon(tycoon.tojson())})
+  list[i].addEventListener('click', function() {/*TODO: SAVE MONEY*/})
 }
 
 async function main (){
@@ -195,19 +195,25 @@ function createUpgradeButton(name, type, price, clickgain){
   parent.appendChild(button);
 }
 
-function addTravel(upgrade){
+async function addTravel(upgrade){
     const agency= tycoon.currentAgency();
-    //subtract money from tycoon
     try {
       tycoon.buy(upgrade.price());
-      //add the upgrade to the agency
+      const tosend = {name: upgrade.type(), type: 'travel', price: upgrade.price(), clickgain: upgrade.clickgain()}
+      fetch('/upgrade', {
+        method:'PUT',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify(tosend)
+      }).then((res)=>{
+        clearUpgrade("travel");
+        loadUpgradePics("travel");
+        loadUpgradeButtons();
+      })
       agency.travel.push(upgrade);
       tycoon.calculateGain();
-      saveTycoon(tycoon.tojson());
       renderMoney(tycoon.money());
-      clearUpgrade("travel");
-      loadUpgradePics("travel");
-      loadUpgradeButtons();
     } catch (error){
       if (error.message == "Not enough money!"){
         addErrorMessage(error.message)
@@ -218,16 +224,21 @@ function addTravel(upgrade){
     }
 }
 
-function addHopsitality(upgrade){
+async function addHopsitality(upgrade){
   const agency= tycoon.currentAgency();
   //subtract money from tycoon
-  console.log(upgrade)
   try {
     tycoon.buy(upgrade.price());
-    //add the upgrade to the agency
+    const tosend = {name: upgrade.type(), type: 'hospitality', price: upgrade.price(), clickgain: upgrade.clickgain()}
+    await fetch('/upgrade', {
+      method:'PUT',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      },
+      body: JSON.stringify(tosend)
+    })
     agency.hospitality.push(upgrade);
     tycoon.calculateGain();
-    saveTycoon(tycoon.tojson());
     renderMoney(tycoon.money());
     clearUpgrade("hospitality");
     loadUpgradePics("hospitality");
@@ -242,19 +253,26 @@ function addHopsitality(upgrade){
   }
 }
 
-function addAttraction(upgrade){
+async function addAttraction(upgrade){
   const agency= tycoon.currentAgency();
-  //subtract money from tycoon
   try {
     tycoon.buy(upgrade.price());
-    //add the upgrade to the agency
+    const tosend = {name: upgrade.type(), type: 'attraction', price: upgrade.price(), clickgain: upgrade.clickgain()}
+    fetch('/upgrade', {
+      method:'PUT',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      },
+      body: JSON.stringify(tosend)
+    }).then((res)=>{
+      clearUpgrade("attraction");
+      loadUpgradePics("attraction");
+      loadUpgradeButtons();
+    })
     agency.attractions.push(upgrade);
     tycoon.calculateGain();
-    saveTycoon(tycoon.tojson());
     renderMoney(tycoon.money());
-    clearUpgrade("attraction");
-    loadUpgradePics("attraction");
-    loadUpgradeButtons();
+
   } catch (error){
     if (error.message == "Not enough money!"){
       addErrorMessage(error.message);
@@ -300,4 +318,4 @@ export async function saveTycoon(json){
   })
 }
 
-window.addEventListener('beforeunload', async function(){await saveTycoon(tycoon.tojson())});
+window.addEventListener('beforeunload', async function(){/*TODO: save moneys before leaving*/});

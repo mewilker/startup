@@ -181,6 +181,7 @@ server.get('/tycoon', async function (req, res, next){
 //Save tycoon or agency
 //TODO: CHANGE SO IT ONLY SAVES MONEY
 //this todo is still not a great fix
+//a better fix is to use websockets to count clicks, and limit it to 20 clicks per second (well above average)
 server.put('/tycoon', async function (req, res, next){
     try{
         const tycoon = req.body;
@@ -274,7 +275,7 @@ server.get('/available', async function(req, res, next){
         const cookies = req.cookies;
         let foundarray = await validateAuth(cookies.authToken, res);
         const user = foundarray[0].username;
-        const json =await db.findTycoon(user);
+        const json = await db.findTycoon(user);
         const tycoon = new Tycoon(user, JSON.parse(json));
         const agency = tycoon.currentAgency();
         let upgrades = findCSV(agency.location.name())
@@ -297,8 +298,9 @@ server.put('/upgrade', async function (req, res, next){
         let upgrades = findCSV(agency.location.name());
         upgrades = parseCSV(upgrades, agency);
         const upgrade = req.body;
-        upgrades.array.forEach(element => {
-            if (deepEquals(upgrade, element)){
+        let responsesent = false;
+        for (let i = 0; i < upgrades.length; i++) {
+            if (deepEquals(upgrade, upgrades[i])){
                 if (upgrade.type == 'location'){
 
                 }
@@ -319,10 +321,15 @@ server.put('/upgrade', async function (req, res, next){
                     }
                     tycoon.calculateGain();
                 }
-                db.updateTycoon(user, tycoon);
+                let obj = JSON.parse(tycoon.tojson())
+                await db.updateTycoon(user, obj);
                 res.send(tycoon.tojson())
+                responsesent = true;
             }
-        });
+        }
+        if (!responsesent){
+            throw new Error('bad request');
+        }
     } catch (err){
         next(err);
     }
