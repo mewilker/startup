@@ -342,6 +342,23 @@ server.put('/upgrade', async function (req, res, next){
     }
 })
 
+server.put('/move', async function (req, res, next){
+    try{
+        const cookies = req.cookies;
+        let foundarray = await validateAuth(cookies.authToken, res);
+        const user = foundarray[0].username;
+        const json = await db.findTycoon(user);
+        const tycoon = new Tycoon(user, JSON.parse(json));
+        const whereTo = req.body;
+        tycoon.moveLocation(whereTo.name);
+        let obj = JSON.parse(tycoon.tojson())
+        await db.updateTycoon(user, obj);
+        res.send(tycoon.tojson());
+    } catch (err){
+        next (err)
+    }
+})
+
 server.use((err, req, res, next) => {
     if (err.message == "bad request"){
         res.status(400)
