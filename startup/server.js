@@ -10,6 +10,11 @@ import ('./public/tycoon.mjs').then((module)=> {
     Tycoon = module.default;
     console.log('tycoon package imported')
 });
+let Location = undefined;
+import ('./public/location.mjs').then((module)=>{
+    Location = module.default;
+    console.log('location package imported');
+})
 const csv = require('./csv.js');
 //Static Home page call
 //TODO: refactor project so gameplay is not public
@@ -302,7 +307,8 @@ server.put('/upgrade', async function (req, res, next){
         for (let i = 0; i < upgrades.length; i++) {
             if (deepEquals(upgrade, upgrades[i])){
                 if (upgrade.type == 'location'){
-
+                    let addme = new Location(upgrade.name);
+                    tycoon.buyLocation(addme);
                 }
                 else{
                     tycoon.buy(upgrade.price)
@@ -322,6 +328,7 @@ server.put('/upgrade', async function (req, res, next){
                     tycoon.calculateGain();
                 }
                 let obj = JSON.parse(tycoon.tojson())
+                //for some reason mongo doesn't like having the straight tycoon passed to it
                 await db.updateTycoon(user, obj);
                 res.send(tycoon.tojson())
                 responsesent = true;

@@ -12,7 +12,7 @@ document.getElementById('logout')
   .addEventListener('click', function(){logout()});
 let list = document.querySelectorAll("a");
 for (let i = 0; i < list.length; i++){
-  list[i].addEventListener('click', function() {/*TODO: SAVE MONEY*/})
+  list[i].addEventListener('click', function() {localStorage.setItem("tycoon", tycoon.tojson());})
 }
 
 async function main (){
@@ -31,6 +31,7 @@ async function main (){
             tycoon.bookTours();
             renderMoney(tycoon.money());
         });
+        localStorage.setItem('tycoon', tycoon.tojson())
       })
     }).catch((err)=>{
       addMessage(err.message);

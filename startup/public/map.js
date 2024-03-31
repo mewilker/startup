@@ -92,7 +92,14 @@ function moveAgency(location){
 async function buyAgency(location){
     try{
         tycoon.buyLocation(location);
-        await saveTycoon(tycoon.tojson());
+        let tosend =  {name: location.name(), type: 'location', price: location.price(), clickgain: location.price()}
+        await fetch('/upgrade', {
+            method:'PUT',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify(tosend)
+        })        
         window.location.href = "agency.html";
     }
     catch (error){

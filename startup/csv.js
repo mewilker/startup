@@ -5,7 +5,7 @@ Hostel,hospitality,1,0,0,5,0.5
 Train,travel,1,0,0,5,0.5
 Bed and Breakfast,hospitality,1,1,0,25,1
 Inn,hospitality,1,2,0,60,5
-New York,location,2,3,0,1000,null
+New York,location,2,3,0,1000,1000
 Dining Experience,attraction,2,3,0,100,7
 Motel,hospitality,2,3,1,300,12
 Hotel,hospitality,2,4,1,1000,20
@@ -40,7 +40,7 @@ Hostel,hospitality,0,0,0,75000,112
 Train,travel,1,0,0,85000,113
 Bed and Breakfast,hospitality,0,1,0,135000,114
 Inn,hospitality,0,2,0,200000,115
-Cabo San Lucas,location,2,3,0,500000,116
+Cabo San Lucas,location,2,3,0,500000,500000
 Dining Experience,attraction,2,3,0,200000,117
 Motel,hospitality,2,3,1,300000,118
 Hotel,hospitality,2,4,1,550000,119
