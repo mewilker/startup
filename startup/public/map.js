@@ -82,7 +82,13 @@ function askBuyAgency(location){
 function moveAgency(location){
     try{
         tycoon.moveLocation(location.name());
-        saveTycoon(tycoon.tojson());
+        fetch('/move', {
+            method:'PUT',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({name:location.name()})
+        })
     } catch (error){
         console.log(error);
     }
