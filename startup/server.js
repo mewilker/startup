@@ -16,11 +16,19 @@ import ('./public/location.mjs').then((module)=>{
     console.log('location package imported');
 })
 const csv = require('./csv.js');
+const {WebSocketServer} = require ('ws');
 //Static Home page call
 //TODO: refactor project so gameplay is not public
 server.use(express.static(path.join(__dirname, 'public')))
 server.use(cookieParser());
 server.use(express.json())
+const wsserver = new WebSocketServer({noServer: true}) //TODO change port han
+server.on('upgrade', (request, socket, head) => {
+    wsserver.handleUpgrade(request, socket, head, function done(ws) {
+      wsserver.emit('connection', ws, request);
+    });
+});
+let sessions = [];
 const userRegex = /^[a-zA-Z0-9@!_]*/
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
@@ -358,6 +366,38 @@ server.put('/move', async function (req, res, next){
         next (err)
     }
 })
+
+ws.on('connection', (ws)=>{
+    const session = { id: sessions.length + 1, alive: true, ws: ws };
+    sessions.push(session);
+    //TODO: would be nice if session id was the auth token
+    
+    ws.on('pong', ()=>{
+        session.alive = true;
+    });
+    
+    ws.on('close', () => {
+        sessions.findIndex((o, i) => {
+            if (o.id === session.id) {
+                sessions.splice(i, 1);
+                return true;
+                //i think what this function is doing is removing the connection from the session array
+            }
+        });
+    });
+})
+
+setInterval(() => {
+    sessions.forEach((c) => {
+      // Kill any connection that didn't respond to the ping last time
+      if (!c.alive) {
+        c.ws.terminate();
+      } else {
+        c.alive = false;
+        c.ws.ping();
+      }
+    });
+  }, 10000);
 
 server.use((err, req, res, next) => {
     if (err.message == "bad request"){
