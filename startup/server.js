@@ -367,14 +367,27 @@ server.put('/move', async function (req, res, next){
     }
 })
 
-ws.on('connection', (ws)=>{
+wsserver.on('connection', (ws)=>{
     const session = { id: sessions.length + 1, alive: true, ws: ws };
     sessions.push(session);
     //TODO: would be nice if session id was the auth token
-    
+
     ws.on('pong', ()=>{
         session.alive = true;
     });
+
+    ws.on('message',(data)=>{
+        if (data.type == 'clicks'){
+            //update money logic
+        }
+        if (data.type == 'location'){
+            sessions.forEach((sess) =>{
+                if (sess.id !== session.id){
+                    sess.ws.send(data);
+                }
+            })
+        }
+    })
     
     ws.on('close', () => {
         sessions.findIndex((o, i) => {
@@ -388,13 +401,13 @@ ws.on('connection', (ws)=>{
 })
 
 setInterval(() => {
-    sessions.forEach((c) => {
+    sessions.forEach((session) => {
       // Kill any connection that didn't respond to the ping last time
-      if (!c.alive) {
-        c.ws.terminate();
+      if (!session.alive) {
+        session.ws.terminate();
       } else {
-        c.alive = false;
-        c.ws.ping();
+        session.alive = false;
+        session.ws.ping();
       }
     });
   }, 10000);
