@@ -56,6 +56,17 @@ async function findTokenByAuth(authToken){
   return result;
 }
 
+setInterval(async ()=>{
+  const cursor = tokens.find({});
+  let result = await cursor.toArray();
+  let d = new Date();
+  result.forEach((token)=>{
+    if (token.expires <= d.valueOf()){
+      tokens.deleteOne(token);
+    }
+  })
+}, 172800000)
+
 function removeToken(authToken) {
   tokens.deleteOne(authToken);
 }
