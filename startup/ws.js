@@ -41,6 +41,7 @@ setInterval(() => {
 }, 10000);
 
 function sendToAll(message){
+    console.log(message);
     sessions.forEach((session)=>{
         session.ws.send(message);
     })

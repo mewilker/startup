@@ -296,7 +296,7 @@ server.put('/upgrade', async function (req, res, next){
                 if (upgrade.type == 'location'){
                     let addme = new Location(upgrade.name);
                     tycoon.buyLocation(addme);
-                    websocket.sendToAll(`{type:'location', message:'${user} has bought an agency in ${upgrade.name}!'}`)
+                    websocket.sendToAll(`{"type":"location", "message":"${user} has bought an agency in ${upgrade.name}!"}`)
                 }
                 else{
                     tycoon.buy(upgrade.price)
