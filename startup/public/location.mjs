@@ -38,31 +38,38 @@ export default class Location{
                 break;
             case "Hawaii":
                 this.#attraction = "Surf";
-                this.#price = 0;
+                this.#price = 10000000;
                 this.#latitude = 19.8987;
                 this.#longitude = -155.6659;
+                this.#picsumid = 360;
                 break;
             case "the British Virgin Isles":
                 this.#attraction = "Sailboating";
-                this.#price = 0;
+                this.#price = 83200000;
                 this.#latitude = 18.4207;
                 this.#longitude = -64.64;
+                this.#picsumid = 700
                 break;
             case "Australia":
                 this.#attraction = "Great Barrier Reef Snorkeling";
                 this.#price = 0;
                 this.#latitude = -16.9203;
                 this.#longitude = 145.771;
+                this.#picsumid = 615;
                 break;
             case "London":
                 this.#attraction = "Crown Jewel Tour";
                 this.#price = 0;
                 this.#latitude = 51.5072;
                 this.#longitude = 0.1276;
+                this.#picsumid = 618;
                 break;
             case "Japan":
                 this.#attraction = "Shrine and Temple";
                 this.#price = 0;
+                this.#latitude = 35.0116
+                this.#longitude = 135.7681
+                this.#picsumid = 371
                 break;
             default:
                 throw new Error ("That's not a place you can expand!");

@@ -185,8 +185,6 @@ server.get('/tycoon', async function (req, res, next){
     }
 })
 
-//a better fix is to use websockets to count clicks, and limit it to 20 clicks per second (well above average)
-
 //Get scores
 server.get('/scores', async function (req, res, next){
     try{
@@ -205,6 +203,10 @@ function findCSV (name){
             return csv.NewYork;
         case 'Banff':
             return csv.Banff;
+        case 'Cabo San Lucas':
+            return csv.Cabo;
+        case 'Hawaii':
+            return csv.Hawaii;
         default:
             throw new Error('bad request');
     }
