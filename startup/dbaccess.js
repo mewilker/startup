@@ -79,9 +79,8 @@ async function findTycoon(user) {
 
 async function updateTycoon(user, tycoon){
   const cursor = await tycoons.findOneAndUpdate({user:user},{$set: tycoon});
-  if (cursor.modifiedCount ===1){
-    let result = await cursor.toArray();
-    return result[0];
+  if (cursor._id){
+    return cursor
   }
   else {
     throw new Error('unauthorized')

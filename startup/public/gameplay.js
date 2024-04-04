@@ -4,7 +4,7 @@ import { logout } from "./menu.js";
 
 const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
 const socket = new WebSocket(`${protocol}://${window.location.host}/ws`)
-
+let clicks = 0;
 socket.onopen = (event) => {
   console.log('connected to websocket')
 }
@@ -14,8 +14,13 @@ socket.onclose = (event) =>{
 }
 
 socket.onmessage = async (event) => {
-  const location = JSON.parse(event.data);
-  addMessage(location.message);
+  const wsmsg = JSON.parse(event.data);
+  if (wsmsg.type == 'location'){
+    addMessage(wsmsg.message);
+  }
+  else if (wsmsg.type == 'error'){
+    addErrorMessage(wsmsg.message);
+  }
 };
 
 let tycoon = null;
@@ -44,6 +49,7 @@ async function main (){
         loadUpgradeButtons();
         document.querySelector("button.basic").addEventListener('click', 
           function(){
+            clicks++;
             tycoon.bookTours();
             renderMoney(tycoon.money());
         });
@@ -188,15 +194,24 @@ function createUpgradeButton(name, type, price, clickgain){
   switch(type){
     case "travel":
       upgrade = new Travel(name,price,clickgain);
-      button.addEventListener('click', function(){addTravel(upgrade)});
+      button.addEventListener('click', function(){
+        sendClicks();
+        addTravel(upgrade)
+      });
       break;
     case "hospitality":
       upgrade = new Hospitality(name, price, clickgain);
-      button.addEventListener('click',function(){addHopsitality(upgrade)});
+      button.addEventListener('click',function(){
+        sendClicks();
+        addHopsitality(upgrade)
+      });
       break;
     case "attraction":
       upgrade = new Attraction(name, price,  clickgain);
-      button.addEventListener('click', function(){addAttraction(upgrade)});
+      button.addEventListener('click', function(){
+        sendClicks();
+        addAttraction(upgrade)
+      });
       if (name == "Exp"){
         const agency = tycoon.currentAgency();
         name = "the " + agency.specialAttraction() + " package";
@@ -335,6 +350,18 @@ export async function saveTycoon(json){
   })
 }
 
+setInterval(()=>{
+  sendClicks()
+}, 10000)
 
+function sendClicks(){
+  try{
+    socket.send(`{"type":"clicks", "clicks":${clicks}}`)
+    clicks = 0;
+  }
+  catch(err){
+    addErrorMessage("Problem! Money was not saved!")
+  }
+}
 
 window.addEventListener('beforeunload', async function(){/*TODO: save moneys before leaving*/});

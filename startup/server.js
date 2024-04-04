@@ -128,7 +128,7 @@ async function validateAuth(authToken, res){
     }
     const match =authToken.match(uuidRegex);
     if (match.length != 1 || match[0] == ''){
-        res.redirect(304, '/login');
+        throw new Error('bad request');
     }
     let foundarray = await db.findTokenByAuth(authToken);
     if (foundarray.length == 0){
@@ -371,4 +371,4 @@ function deepEquals(obj1, obj2){
 }
 //TODO: make a function that cleans out the auth tokens every 24 hours or something like that
 
-module.exports = {server, websocket};
+module.exports = {server, websocket, validateAuth};
