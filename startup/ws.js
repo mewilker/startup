@@ -32,16 +32,20 @@ wsserver.on('connection', async (ws, req)=>{
 
     ws.on('message',(data)=>{
         try{
-            const text = JSON.parse(data.toString())
+            const msg = data.toString()
+            console.log(msg);
+            const text = JSON.parse(msg)
             if (text.type == 'clicks'){
                 let timerecieved = new Date();
                 let elapsetime = (timerecieved.getTime() - lastmessage.getTime())/1000
                 if (elapsetime < 0){
                     let tosend = {type:'error', message: 'The server is recieving too many websockets'}
+                    console.log(tosend);
                     session.ws.send(JSON.stringify(tosend))
                 }
                 if(text.clicks > elapsetime * 20 || text.clicks < 0){
                     let tosend = {type:'error', message: 'The server has detected an unsual number of clicks. Please refresh the page.'}
+                    console.log(tosend);
                     session.ws.send(JSON.stringify(tosend));
                 }
                 else if (text.clicks == 0){
@@ -92,7 +96,6 @@ setInterval(() => {
 }, 10000);
 
 function sendToAll(message){
-    console.log(message);
     sessions.forEach((session)=>{
         session.ws.send(message);
     })
