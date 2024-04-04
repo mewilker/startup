@@ -15,20 +15,14 @@ import ('./public/location.mjs').then((module)=>{
     Location = module.default;
     console.log('location package imported');
 })
+
+const websocket = require('./ws.js')
 const csv = require('./csv.js');
-const {WebSocketServer} = require ('ws');
 //Static Home page call
 //TODO: refactor project so gameplay is not public
 server.use(express.static(path.join(__dirname, 'public')))
 server.use(cookieParser());
 server.use(express.json())
-const wsserver = new WebSocketServer({noServer: true}) //TODO change port han
-server.on('upgrade', (request, socket, head) => {
-    wsserver.handleUpgrade(request, socket, head, function done(ws) {
-      wsserver.emit('connection', ws, request);
-    });
-});
-let sessions = [];
 const userRegex = /^[a-zA-Z0-9@!_]*/
 const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
@@ -191,22 +185,7 @@ server.get('/tycoon', async function (req, res, next){
     }
 })
 
-//Save tycoon or agency
-//TODO: CHANGE SO IT ONLY SAVES MONEY
-//this todo is still not a great fix
 //a better fix is to use websockets to count clicks, and limit it to 20 clicks per second (well above average)
-server.put('/tycoon', async function (req, res, next){
-    try{
-        const tycoon = req.body;
-        const cookies = req.cookies
-        let foundarray = await validateAuth(cookies.authToken, res);
-        await db.updateTycoon(foundarray[0].username, tycoon)
-        res.send({});
-    }
-    catch(err){
-        next(err);
-    }
-})
 
 //Get scores
 server.get('/scores', async function (req, res, next){
@@ -317,6 +296,7 @@ server.put('/upgrade', async function (req, res, next){
                 if (upgrade.type == 'location'){
                     let addme = new Location(upgrade.name);
                     tycoon.buyLocation(addme);
+                    websocket.sendToAll(`{type:'location', message:'${user} has bought an agency in ${upgrade.name}!'}`)
                 }
                 else{
                     tycoon.buy(upgrade.price)
@@ -367,51 +347,6 @@ server.put('/move', async function (req, res, next){
     }
 })
 
-wsserver.on('connection', (ws)=>{
-    const session = { id: sessions.length + 1, alive: true, ws: ws };
-    sessions.push(session);
-    //TODO: would be nice if session id was the auth token
-
-    ws.on('pong', ()=>{
-        session.alive = true;
-    });
-
-    ws.on('message',(data)=>{
-        if (data.type == 'clicks'){
-            //update money logic
-        }
-        if (data.type == 'location'){
-            sessions.forEach((sess) =>{
-                if (sess.id !== session.id){
-                    sess.ws.send(data);
-                }
-            })
-        }
-    })
-    
-    ws.on('close', () => {
-        sessions.findIndex((o, i) => {
-            if (o.id === session.id) {
-                sessions.splice(i, 1);
-                return true;
-                //i think what this function is doing is removing the connection from the session array
-            }
-        });
-    });
-})
-
-setInterval(() => {
-    sessions.forEach((session) => {
-      // Kill any connection that didn't respond to the ping last time
-      if (!session.alive) {
-        session.ws.terminate();
-      } else {
-        session.alive = false;
-        session.ws.ping();
-      }
-    });
-  }, 10000);
-
 server.use((err, req, res, next) => {
     if (err.message == "bad request"){
         res.status(400)
@@ -436,4 +371,4 @@ function deepEquals(obj1, obj2){
 }
 //TODO: make a function that cleans out the auth tokens every 24 hours or something like that
 
-module.exports = server;
+module.exports = {server, websocket};

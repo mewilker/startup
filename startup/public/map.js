@@ -106,7 +106,7 @@ async function buyAgency(location){
             },
             body: JSON.stringify(tosend)
         })        
-        window.location.href = "agency.html";
+        window.location.href = "/agency";
     }
     catch (error){
         if (error.message == "Not enough money!"){

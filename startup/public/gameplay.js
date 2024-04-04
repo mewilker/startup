@@ -2,6 +2,22 @@ import { Attraction, Hospitality, Travel } from "./agency.mjs";
 import Tycoon from "./tycoon.mjs";
 import { logout } from "./menu.js";
 
+const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+const socket = new WebSocket(`${protocol}://${window.location.host}/ws`)
+
+socket.onopen = (event) => {
+  console.log('connected to websocket')
+}
+
+socket.onclose = (event) =>{
+  console.log('disconnected from websocket')
+}
+
+socket.onmessage = async (event) => {
+  const location = JSON.parse(event.data);
+  addMessage(location.message);
+};
+
 let tycoon = null;
 try{
   document.addEventListener("DOMContentLoaded", main);
@@ -318,5 +334,7 @@ export async function saveTycoon(json){
     }
   })
 }
+
+
 
 window.addEventListener('beforeunload', async function(){/*TODO: save moneys before leaving*/});
