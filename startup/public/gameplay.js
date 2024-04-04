@@ -339,7 +339,7 @@ function addErrorMessage(message){
   list.appendChild(addme);
 }
 
-export async function saveTycoon(json){
+export function saveTycoon(json){
   localStorage.setItem("tycoon", json);
   sendClicks();
 }
@@ -360,4 +360,7 @@ function sendClicks(){
   }
 }
 
-window.addEventListener('beforeunload', async function(){/*TODO: save moneys before leaving*/});
+window.addEventListener('beforeunload', function(){
+  saveTycoon(tycoon.tojson());
+  socket.close();
+});
