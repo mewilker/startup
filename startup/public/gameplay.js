@@ -341,13 +341,7 @@ function addErrorMessage(message){
 
 export async function saveTycoon(json){
   localStorage.setItem("tycoon", json);
-  const res = await fetch('/tycoon', {
-    method: 'PUT',
-    body: json,
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8'
-    }
-  })
+  sendClicks();
 }
 
 setInterval(()=>{
@@ -356,8 +350,10 @@ setInterval(()=>{
 
 function sendClicks(){
   try{
-    socket.send(`{"type":"clicks", "clicks":${clicks}}`)
-    clicks = 0;
+    if (socket.readyState != WebSocket.CLOSED){
+      socket.send(`{"type":"clicks", "clicks":${clicks}}`)
+      clicks = 0;
+    }
   }
   catch(err){
     addErrorMessage("Problem! Money was not saved!")
