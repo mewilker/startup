@@ -98,7 +98,7 @@ function moveAgency(location){
 async function buyAgency(location){
     try{
         tycoon.buyLocation(location);
-        let tosend =  {name: location.name(), type: 'location', price: location.price(), clickgain: location.price()}
+        let tosend =  {name: location.name(), type: 'location', price: location.price(), clickgain: location.price(), notified:true}
         await fetch('/upgrade', {
             method:'PUT',
             headers: {

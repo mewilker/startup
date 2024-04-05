@@ -250,6 +250,7 @@ function parseCSV(csv, agency){
                     let bought = agency.findLocation(values[0]);
                 if (bought == null){
                     upgrades.push(obj)
+                    agency.addAvailableLocation(values[0])
                 }
                 else if (!bought){
                     obj.notified = true;
@@ -273,7 +274,10 @@ server.get('/available', async function(req, res, next){
         const tycoon = new Tycoon(user, JSON.parse(json));
         const agency = tycoon.currentAgency();
         let upgrades = findCSV(agency.location.name())
+        tycoon.getPossibleLocations();
         upgrades = parseCSV(upgrades, agency)
+        let obj = JSON.parse(tycoon.tojson())
+        db.updateTycoon(user, obj);
         res.send(upgrades);
     }
     catch(err){
