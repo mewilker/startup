@@ -1,10 +1,23 @@
 const express = require('express');
 const server = express();
 const uuid = require('uuid');
-const db = require('./dbaccess.js');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const path = require('path')
+const db = require('./dbaccess.js');
+let Tycoon = undefined;
+import ('./public/tycoon.mjs').then((module)=> {
+    Tycoon = module.default;
+    console.log('tycoon package imported')
+});
+let Location = undefined;
+import ('./public/location.mjs').then((module)=>{
+    Location = module.default;
+    console.log('location package imported');
+})
+
+const websocket = require('./ws.js')
+const csv = require('./csv.js');
 //Static Home page call
 //TODO: refactor project so gameplay is not public
 server.use(express.static(path.join(__dirname, 'public')))
@@ -24,11 +37,7 @@ server.use((req, res, next)=>{
 server.get("/agency", async function(req, res, next){
     try{
         const cookies = req.cookies;
-        validateAuth(cookies.authToken, res);
-        let foundarray = await db.findTokenByAuth(cookies.authToken);
-        if (foundarray.length != 1){
-            res.redirect(304, '/login');
-        }
+        await validateAuth(cookies.authToken, res);
         res.sendFile(path.join(__dirname, '/public/agency.html'))
     }
     catch(err){
@@ -102,36 +111,42 @@ server.post('/session', async function (req, res, next){
 async function setAuthCookie (res, username){
     let d = new Date();
     d.setTime(d.getTime() + 86400000)
-    let authToken = {token: uuid.v4(), username: username, expires: d.getMilliseconds()};
+    let authToken = {token: uuid.v4(), username: username, expires: d.valueOf()};
     await db.addToken(authToken);
     res.cookie('authToken', authToken.token, 
         {maxAge: 86400000, 
             httpOnly: true, 
-            secure: true, 
+            //secure: true, 
             sameSite: 'strict'
         });
     res.send({});
 }
 
-function validateAuth(authToken, res){
+async function validateAuth(authToken, res){
     if (!authToken){
         throw new Error('bad request')
     }
     const match =authToken.match(uuidRegex);
     if (match.length != 1 || match[0] == ''){
-        res.redirect(304, '/login');
+        throw new Error('bad request');
     }
+    let foundarray = await db.findTokenByAuth(authToken);
+    if (foundarray.length == 0){
+        throw new Error('unauthorized');
+    }
+    let d = new Date();
+    if (foundarray[0].expires <= d.valueOf()){
+        db.removeToken(foundarray[0]);
+        throw new Error('unauthorized');
+    }
+    return foundarray;
 }
     
 //Get User
 server.get('/session', async function (req, res, next){
     try{
         const cookies = req.cookies
-        validateAuth(cookies.authToken, res);
-        let foundarray = await db.findTokenByAuth(cookies.authToken);
-        if (foundarray.length == 0){
-            throw new Error('unauthorized');
-        }
+        let foundarray = await validateAuth(cookies.authToken, res);
         res.send(JSON.stringify({user:foundarray[0].username}));
     }
     catch(err){
@@ -144,15 +159,11 @@ server.get('/session', async function (req, res, next){
 server.delete('/session', async function (req, res, next){
     try{
         const cookies = req.cookies
-        validateAuth(cookies.authToken, res);
-        let foundarray = await db.findTokenByAuth(cookies.authToken);
-        if (foundarray.length == 0){
-            throw new Error('unauthorized');
-        }
+        let foundarray = await validateAuth(cookies.authToken, res);
         db.removeToken(foundarray[0]);
         res.cookie('authToken', '', {maxAge: -1, 
             httpOnly: true, 
-            secure: true, 
+            //secure: true, 
             sameSite: 'strict'
         })
         res.send();
@@ -166,30 +177,8 @@ server.delete('/session', async function (req, res, next){
 server.get('/tycoon', async function (req, res, next){
     try{
         const cookies = req.cookies
-        validateAuth(cookies.authToken, res);
-        let foundarray = await db.findTokenByAuth(cookies.authToken);
-        if (foundarray.length == 0){
-            throw new Error('unauthorized');
-        }
+        let foundarray = await validateAuth(cookies.authToken, res);
         res.send(await db.findTycoon(foundarray[0].username));
-    }
-    catch(err){
-        next(err);
-    }
-})
-
-//Save tycoon or agency
-server.put('/tycoon', async function (req, res, next){
-    try{
-        const tycoon = req.body;
-        const cookies = req.cookies
-        validateAuth(cookies.authToken, res);
-        let foundarray = await db.findTokenByAuth(cookies.authToken);
-        if (foundarray.length == 0){
-            throw new Error('unauthorized');
-        }
-        await db.updateTycoon(foundarray[0].username, tycoon)
-        res.send({});
     }
     catch(err){
         next(err);
@@ -206,16 +195,163 @@ server.get('/scores', async function (req, res, next){
     }
 })
 
-    
-//Get location?
+function findCSV (name){
+    switch (name) {
+        case 'the Grand Canyon':
+            return csv.GrandCanyon;
+        case 'New York':
+            return csv.NewYork;
+        case 'Banff':
+            return csv.Banff;
+        case 'Cabo San Lucas':
+            return csv.Cabo;
+        case 'Hawaii':
+            return csv.Hawaii;
+        default:
+            throw new Error('bad request');
+    }
+}
 
-//Update Gain?
+function parseCSV(csv, agency){
+    const lines = csv.split('\n');
+    const upgrades = []
+    for (let lineIndex = 1; lineIndex < lines.length; lineIndex++){
+        const line = lines[lineIndex];
+        const values = line.split(",");
+        const price = parseFloat(values[5])
+        const clickgain = parseFloat(values[6]);
+        let obj = {name:values[0], type:values[1],price:price,clickgain:clickgain}
+        switch(values[1]){
+            case "travel":
+                if (values[2]==agency.travel.length 
+                    && values[3]<=agency.hospitality.length
+                    && values[4]<=agency.attractions.length){
+                    upgrades.push(obj)
+                }
+            break;
+            case "hospitality":
+                if (values[2]<=agency.travel.length 
+                    && values[3]==agency.hospitality.length
+                    && values[4]<=agency.attractions.length){
+                    upgrades.push(obj)
+                }
+            break;
+            case "attraction":
+                if (values[2]<=agency.travel.length 
+                    && values[3]<=agency.hospitality.length
+                    && values[4]==agency.attractions.length){
+                    upgrades.push(obj)
+                }
+            break;
+            case "location":
+                if (values[2]<=agency.travel.length 
+                    && values[3]<=agency.hospitality.length
+                    && values[4]<=agency.attractions.length){
+                    let bought = agency.findLocation(values[0]);
+                if (bought == null){
+                    upgrades.push(obj)
+                    agency.addAvailableLocation(values[0])
+                }
+                else if (!bought){
+                    obj.notified = true;
+                    upgrades.push(obj)
+                }
+            }
+            break;
+        default:
+            throw new Error("bad csv");
+        } 
+    }
+    return upgrades;
+}
 
-//Get money?
+server.get('/available', async function(req, res, next){
+    try{
+        const cookies = req.cookies;
+        let foundarray = await validateAuth(cookies.authToken, res);
+        const user = foundarray[0].username;
+        const json = await db.findTycoon(user);
+        const tycoon = new Tycoon(user, JSON.parse(json));
+        const agency = tycoon.currentAgency();
+        let upgrades = findCSV(agency.location.name())
+        tycoon.getPossibleLocations();
+        upgrades = parseCSV(upgrades, agency)
+        let obj = JSON.parse(tycoon.tojson())
+        db.updateTycoon(user, obj);
+        res.send(upgrades);
+    }
+    catch(err){
+        next(err);
+    }
+})
 
-//Get Purchased Locations?
+server.put('/upgrade', async function (req, res, next){
+    try{
+        const cookies = req.cookies;
+        let foundarray = await validateAuth(cookies.authToken, res);
+        const user = foundarray[0].username;
+        const json = await db.findTycoon(user);
+        const tycoon = new Tycoon(user, JSON.parse(json));
+        const agency = tycoon.currentAgency();
+        let upgrades = findCSV(agency.location.name());
+        upgrades = parseCSV(upgrades, agency);
+        const upgrade = req.body;
+        let responsesent = false;
+        for (let i = 0; i < upgrades.length; i++) {
+            if (deepEquals(upgrade, upgrades[i])){
+                if (upgrade.type == 'location'){
+                    let addme = new Location(upgrade.name);
+                    tycoon.buyLocation(addme);
+                    websocket.sendToAll(`{"type":"location", "message":"${user} has bought an agency in ${upgrade.name}!"}`)
+                }
+                else{
+                    tycoon.buy(upgrade.price)
+                    switch (upgrade.type) {
+                        case 'travel':
+                            agency.addTravel(upgrade)
+                        break;
+                        case 'hospitality':
+                            agency.addHospitality(upgrade)
+                        break;
+                        case 'attraction':
+                            agency.addAttraction(upgrade)
+                        break;                    
+                        default:
+                            throw new Error('bad request');
+                    }
+                    tycoon.calculateGain();
+                }
+                let obj = JSON.parse(tycoon.tojson())
+                //for some reason mongo doesn't like having the straight tycoon passed to it
+                await db.updateTycoon(user, obj);
+                res.send(tycoon.tojson())
+                responsesent = true;
+            }
+        }
+        if (!responsesent){
+            throw new Error('bad request');
+        }
+    } catch (err){
+        next(err);
+    }
+})
 
-//Get Possible Locations?
+server.put('/move', async function (req, res, next){
+    try{
+        const cookies = req.cookies;
+        let foundarray = await validateAuth(cookies.authToken, res);
+        const user = foundarray[0].username;
+        const json = await db.findTycoon(user);
+        const tycoon = new Tycoon(user, JSON.parse(json));
+        const whereTo = req.body;
+        tycoon.moveLocation(whereTo.name);
+        let obj = JSON.parse(tycoon.tojson())
+        await db.updateTycoon(user, obj);
+        res.send(tycoon.tojson());
+    } catch (err){
+        next (err)
+    }
+})
 
 server.use((err, req, res, next) => {
     if (err.message == "bad request"){
@@ -227,10 +363,18 @@ server.use((err, req, res, next) => {
     else if (err.message == "unauthorized"){
         res.status(401)
     }
+    else if (err.message == "Not enough money!"){
+        res.status(400)
+    }
     else{
         res.status(500)
     }
     res.send({message: err.message})
 })
 
-module.exports = server;
+function deepEquals(obj1, obj2){
+    return JSON.stringify(obj1) == JSON.stringify(obj2);
+}
+//TODO: make a function that cleans out the auth tokens every 24 hours or something like that
+
+module.exports = {server, websocket, validateAuth};

@@ -1,4 +1,5 @@
-import { Agency, Attraction, Hospitality, Location, Travel } from "./agency.mjs";
+import { Agency, Attraction, Hospitality, Travel } from "./agency.mjs";
+import Location from "./location.mjs";
 
 export default class Tycoon{
     #user;

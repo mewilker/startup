@@ -56,6 +56,17 @@ async function findTokenByAuth(authToken){
   return result;
 }
 
+setInterval(async ()=>{
+  const cursor = tokens.find({});
+  let result = await cursor.toArray();
+  let d = new Date();
+  result.forEach((token)=>{
+    if (token.expires <= d.valueOf()){
+      tokens.deleteOne(token);
+    }
+  })
+}, 172800000)
+
 function removeToken(authToken) {
   tokens.deleteOne(authToken);
 }
@@ -78,13 +89,9 @@ async function findTycoon(user) {
 }
 
 async function updateTycoon(user, tycoon){
-  const cursor = tycoons.find({user:user});
-  let result = await cursor.toArray();
-  if (result.length > 0){
-    let found = result[0];
-    //can we change the design so we don't have to do this?
-    tycoons.updateOne({user:user},{$set: tycoon})
-    return JSON.stringify(found);
+  const cursor = await tycoons.findOneAndUpdate({user:user},{$set: tycoon});
+  if (cursor._id){
+    return cursor
   }
   else {
     throw new Error('unauthorized')

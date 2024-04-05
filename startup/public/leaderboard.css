@@ -43,7 +43,7 @@ header{
     
 nav{
     display: flex;
-    flex: 0 46em;
+    flex: 0 50em;
     align-items: start;
     justify-self: start;
     margin-inline-start: 20px;

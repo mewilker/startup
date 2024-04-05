@@ -1,7 +1,27 @@
 import { Attraction, Hospitality, Travel } from "./agency.mjs";
 import Tycoon from "./tycoon.mjs";
-import { Banff, GrandCanyon, NewYork } from "./csv.js";
 import { logout } from "./menu.js";
+
+const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+const socket = new WebSocket(`${protocol}://${window.location.host}/ws`)
+let clicks = 0;
+socket.onopen = (event) => {
+  console.log('connected to websocket')
+}
+
+socket.onclose = (event) =>{
+  console.log('disconnected from websocket')
+}
+
+socket.onmessage = async (event) => {
+  const wsmsg = JSON.parse(event.data);
+  if (wsmsg.type == 'location'){
+    addMessage(wsmsg.message);
+  }
+  else if (wsmsg.type == 'error'){
+    addErrorMessage(wsmsg.message);
+  }
+};
 
 let tycoon = null;
 try{
@@ -13,7 +33,7 @@ document.getElementById('logout')
   .addEventListener('click', function(){logout()});
 let list = document.querySelectorAll("a");
 for (let i = 0; i < list.length; i++){
-  list[i].addEventListener('click', function() {saveTycoon(tycoon.tojson())})
+  list[i].addEventListener('click', function() {localStorage.setItem("tycoon", tycoon.tojson());})
 }
 
 async function main (){
@@ -29,9 +49,11 @@ async function main (){
         loadUpgradeButtons();
         document.querySelector("button.basic").addEventListener('click', 
           function(){
+            clicks++;
             tycoon.bookTours();
             renderMoney(tycoon.money());
         });
+        localStorage.setItem('tycoon', tycoon.tojson())
       })
     }).catch((err)=>{
       addMessage(err.message);
@@ -136,25 +158,7 @@ function loadUpgradePics(upgradeType){
   
 }
 
-//TODO: parsing csv needs to be on the server side
-function loadUpgradeButtons(){
-  //figure out location
-  let elem = document.getElementById("location");
-  let csv = "";
-  switch (elem.textContent) {
-    case "the Grand Canyon":
-      csv = GrandCanyon;
-      break;
-    case "New York":
-      csv = NewYork;
-      break;
-    case "Banff":
-      csv = Banff;
-      break;
-    default:
-      throw new Error("That's not a place you can expand!");
-  }
-  //grab lengths of upgrades
+async function loadUpgradeButtons(){
   const agency = tycoon.currentAgency();
   clearUpgrade("hospitality");
   loadUpgradePics("hospitality");
@@ -162,56 +166,26 @@ function loadUpgradeButtons(){
   loadUpgradePics("attraction");
   clearUpgrade("travel");
   loadUpgradePics("travel");
-  //match up to the csv
-  const lines = csv.split('\n');
-  for (let lineIndex = 1; lineIndex < lines.length; lineIndex++){
-    const line = lines[lineIndex];
-    const values = line.split(",");
-    const price = parseFloat(values[5])
-    const clickgain = parseFloat(values[6]);
-    switch(values[1]){
-      case "travel":
-        if (values[2]==agency.travel.length 
-          && values[3]<=agency.hospitality.length
-          && values [4]<=agency.attractions.length){
-            createUpgradeButton(values[0],values[1],price, clickgain);
-        }
-        break;
-      case "hospitality":
-        if (values[2]<=agency.travel.length 
-          && values[3]==agency.hospitality.length
-          && values [4]<=agency.attractions.length){
-            createUpgradeButton(values[0], values[1],price, clickgain);
-        }
-        break;
-      case "attraction":
-        if (values[2]<=agency.travel.length 
-          && values[3]<=agency.hospitality.length
-          && values [4]==agency.attractions.length){
-            createUpgradeButton(values[0], values[1],price, clickgain);
-        }
-        break;
-      case "location":
-        if (values[2]<=agency.travel.length 
-          && values[3]<=agency.hospitality.length
-          && values [4]<=agency.attractions.length){
-            let bought = agency.findLocation(values[0]);
-            if (bought == null){
-              let msg = "A new location is available in " + values[0] + "! Check out the locations tab!"
-              addMessage(msg);
-              agency.addAvailableLocation(values[0]);
-              saveTycoon(tycoon.tojson());
-            }
-            else if (!bought){
-              let msg = "A new location is available in " + values[0] + "!"
-              addMessage(msg);
-            }
-          }
-        break;
-      default:
-        throw new Error("Bad File");
-      } 
+
+  const res = await fetch('/available');
+  const json = await res.json();
+  json.forEach(upgrade => {
+    if (upgrade.type == 'location'){
+      if (upgrade.notified == undefined){
+        let msg = "A new location is available in " + upgrade.name + "! Check out the locations tab!"
+        addMessage(msg);
+        agency.addAvailableLocation(upgrade.name);
+        saveTycoon(tycoon.tojson());
+      }
+      else{
+        let msg = "A new location is available in " + upgrade.name + "!"
+        addMessage(msg);
+      }
     }
+    else{
+      createUpgradeButton(upgrade.name, upgrade.type, upgrade.price, upgrade.clickgain);
+    }
+  });
 }
   
 function createUpgradeButton(name, type, price, clickgain){
@@ -220,15 +194,24 @@ function createUpgradeButton(name, type, price, clickgain){
   switch(type){
     case "travel":
       upgrade = new Travel(name,price,clickgain);
-      button.addEventListener('click', function(){addTravel(upgrade)});
+      button.addEventListener('click', function(){
+        sendClicks();
+        addTravel(upgrade)
+      });
       break;
     case "hospitality":
       upgrade = new Hospitality(name, price, clickgain);
-      button.addEventListener('click',function(){addHopsitality(upgrade)});
+      button.addEventListener('click',function(){
+        sendClicks();
+        addHopsitality(upgrade)
+      });
       break;
     case "attraction":
       upgrade = new Attraction(name, price,  clickgain);
-      button.addEventListener('click', function(){addAttraction(upgrade)});
+      button.addEventListener('click', function(){
+        sendClicks();
+        addAttraction(upgrade)
+      });
       if (name == "Exp"){
         const agency = tycoon.currentAgency();
         name = "the " + agency.specialAttraction() + " package";
@@ -244,19 +227,25 @@ function createUpgradeButton(name, type, price, clickgain){
   parent.appendChild(button);
 }
 
-function addTravel(upgrade){
+async function addTravel(upgrade){
     const agency= tycoon.currentAgency();
-    //subtract money from tycoon
     try {
       tycoon.buy(upgrade.price());
-      //add the upgrade to the agency
+      const tosend = {name: upgrade.type(), type: 'travel', price: upgrade.price(), clickgain: upgrade.clickgain()}
+      fetch('/upgrade', {
+        method:'PUT',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        },
+        body: JSON.stringify(tosend)
+      }).then((res)=>{
+        clearUpgrade("travel");
+        loadUpgradePics("travel");
+        loadUpgradeButtons();
+      })
       agency.travel.push(upgrade);
       tycoon.calculateGain();
-      saveTycoon(tycoon.tojson());
       renderMoney(tycoon.money());
-      clearUpgrade("travel");
-      loadUpgradePics("travel");
-      loadUpgradeButtons();
     } catch (error){
       if (error.message == "Not enough money!"){
         addErrorMessage(error.message)
@@ -267,15 +256,21 @@ function addTravel(upgrade){
     }
 }
 
-function addHopsitality(upgrade){
+async function addHopsitality(upgrade){
   const agency= tycoon.currentAgency();
   //subtract money from tycoon
   try {
     tycoon.buy(upgrade.price());
-    //add the upgrade to the agency
+    const tosend = {name: upgrade.type(), type: 'hospitality', price: upgrade.price(), clickgain: upgrade.clickgain()}
+    await fetch('/upgrade', {
+      method:'PUT',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      },
+      body: JSON.stringify(tosend)
+    })
     agency.hospitality.push(upgrade);
     tycoon.calculateGain();
-    saveTycoon(tycoon.tojson());
     renderMoney(tycoon.money());
     clearUpgrade("hospitality");
     loadUpgradePics("hospitality");
@@ -290,19 +285,26 @@ function addHopsitality(upgrade){
   }
 }
 
-function addAttraction(upgrade){
+async function addAttraction(upgrade){
   const agency= tycoon.currentAgency();
-  //subtract money from tycoon
   try {
     tycoon.buy(upgrade.price());
-    //add the upgrade to the agency
+    const tosend = {name: upgrade.type(), type: 'attraction', price: upgrade.price(), clickgain: upgrade.clickgain()}
+    fetch('/upgrade', {
+      method:'PUT',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      },
+      body: JSON.stringify(tosend)
+    }).then((res)=>{
+      clearUpgrade("attraction");
+      loadUpgradePics("attraction");
+      loadUpgradeButtons();
+    })
     agency.attractions.push(upgrade);
     tycoon.calculateGain();
-    saveTycoon(tycoon.tojson());
     renderMoney(tycoon.money());
-    clearUpgrade("attraction");
-    loadUpgradePics("attraction");
-    loadUpgradeButtons();
+
   } catch (error){
     if (error.message == "Not enough money!"){
       addErrorMessage(error.message);
@@ -337,15 +339,28 @@ function addErrorMessage(message){
   list.appendChild(addme);
 }
 
-export async function saveTycoon(json){
+export function saveTycoon(json){
   localStorage.setItem("tycoon", json);
-  const res = await fetch('/tycoon', {
-    method: 'PUT',
-    body: json,
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8'
-    }
-  })
+  sendClicks();
 }
 
-window.addEventListener('beforeunload', async function(){await saveTycoon(tycoon.tojson())});
+setInterval(()=>{
+  sendClicks()
+}, 10000)
+
+function sendClicks(){
+  try{
+    if (socket.readyState != WebSocket.CLOSED){
+      socket.send(`{"type":"clicks", "clicks":${clicks}}`)
+      clicks = 0;
+    }
+  }
+  catch(err){
+    addErrorMessage("Problem! Money was not saved!")
+  }
+}
+
+window.addEventListener('beforeunload', function(){
+  saveTycoon(tycoon.tojson());
+  socket.close();
+});

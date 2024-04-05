@@ -82,7 +82,13 @@ function askBuyAgency(location){
 function moveAgency(location){
     try{
         tycoon.moveLocation(location.name());
-        saveTycoon(tycoon.tojson());
+        fetch('/move', {
+            method:'PUT',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify({name:location.name()})
+        })
     } catch (error){
         console.log(error);
     }
@@ -92,8 +98,15 @@ function moveAgency(location){
 async function buyAgency(location){
     try{
         tycoon.buyLocation(location);
-        await saveTycoon(tycoon.tojson());
-        window.location.href = "agency.html";
+        let tosend =  {name: location.name(), type: 'location', price: location.price(), clickgain: location.price(), notified:true}
+        await fetch('/upgrade', {
+            method:'PUT',
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify(tosend)
+        })        
+        window.location.href = "/agency";
     }
     catch (error){
         if (error.message == "Not enough money!"){
