@@ -116,7 +116,7 @@ async function setAuthCookie (res, username){
     res.cookie('authToken', authToken.token, 
         {maxAge: 86400000, 
             httpOnly: true, 
-            //secure: true, 
+            secure: true, 
             sameSite: 'strict'
         });
     res.send({});
@@ -163,7 +163,7 @@ server.delete('/session', async function (req, res, next){
         db.removeToken(foundarray[0]);
         res.cookie('authToken', '', {maxAge: -1, 
             httpOnly: true, 
-            //secure: true, 
+            secure: true, 
             sameSite: 'strict'
         })
         res.send();
