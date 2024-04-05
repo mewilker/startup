@@ -204,3 +204,23 @@ Application authentication and authorization
 20% - Stores and retrieves credentials in MongoDB - indeed with hashed passwords
 
 20% - Restricts application functionality based upon authentication - you cannot start clicking for (fake) money unless you have an account
+
+## Websocket Deliverable
+
+*Note, some endpoint changes were made. The put tycoon endpoint is no longer supported. In its place are available, move, upgrade endpoints, tranfering the logic of gameplay to the server side*
+
+Prerequisite: Simon WebSocket deployed to your production environment
+
+Prerequisite: A link to your GitHub startup repository prominently displayed on your application's home page
+
+Prerequisite: Notes in your startup Git repository README.md file documenting what you modified and added with this deliverable. The TAs will only grade things that have been clearly described as being completed. Review the voter app as an example.
+
+Prerequisite: At least 10 git commits spread consistently throughout the assignment period.
+
+**20% - Backend listens for WebSocket connection** - every 10 seconds the front end sends the users 'clicks'. The backend compares how many clicks were made in the last interval of communication and if it's more than about 20 clicks per second the server sends a message asking the user to refresh the page. This was done to prevent someone from simply giving themself money. At present, someone could still use an autoclicker, however since there is no passive gain at the moment, this will be allowed.
+
+**20% - Frontend makes WebSocket connection** - front end recieves messages when the server has determined that someone has bought a new location. This is broadcast to all connected users
+
+**30% - Data sent over WebSocket connection** - errors, locations and clicks
+
+**30% - WebSocket data displayed in the application interface** - sidebar will now display websocket notification and errors
