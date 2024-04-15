@@ -5,13 +5,34 @@ import { Login } from "./session/Login";
 import { Register } from "./session/Register";
 import { Leaderboard } from "./leaderboard/Leaderboard";
 
+
 export default function App(){
+    const [isAuthenticated, setAuthState] = React.useState(false)
+    const [username, changeUser] = React.useState(undefined)
+
+
+    React.useEffect(()=>{
+        fetch('/api/session').then((res)=>res.json())
+        .then((jres)=>{
+            if (jres.user==undefined){
+                setAuthState(false);
+            }
+            else{
+                changeUser(jres.user);
+                setAuthState(true);
+            }
+        }).catch((err)=>{
+            setAuthState(false);
+            console.log(err);
+        })
+    },[isAuthenticated]);
+
     return (
         <BrowserRouter>
             <div className="body">
                 <Routes>
-                    <Route exact path='/' element={<HomePageHeader />} />
-                    <Route path = '*' element={<MinimizedHeader />} />
+                    <Route exact path='/' element={<HomePageHeader isAuthenticated={isAuthenticated}/>} />
+                    <Route path = '*' element={<MinimizedHeader isAuthenticated={isAuthenticated}/>} />
                 </Routes>
                 <Routes>
                     <Route exact path='/' element={<HomPageMain />} />
@@ -29,7 +50,17 @@ export default function App(){
     )
 }
 
-function HomePageHeader(){
+function HomePageHeader({isAuthenticated}){
+    if(isAuthenticated){
+        return (
+            <header id = 'titlepage'>
+                <h1 className = 'title' id="home">Tourist Tycoon</h1>
+                <nav className="home">
+                    <AuthedNavHome />
+                </nav>
+            </header>
+        )
+    }
     return (
         <header id = 'titlepage'>
             <h1 className = 'title' id="home">Tourist Tycoon</h1>
@@ -39,7 +70,18 @@ function HomePageHeader(){
         </header>)
 }
 
-function MinimizedHeader(){
+function MinimizedHeader({isAuthenticated}){
+    if (isAuthenticated){
+        return(
+            <header>
+                <h1 className = 'title'>Tourist Tycoon</h1>
+                <nav>
+                    <AuthedNav />
+            </nav>
+            </header>  
+        )
+    }
+    
     return(
         <header>
             <h1 className = 'title'>Tourist Tycoon</h1>
@@ -80,6 +122,19 @@ function AuthedNav(){
             <li><NavLink className = 'nav' to = 'locations'>Locations</NavLink></li>
             <li><NavLink className = 'nav' to = 'leaderboard'>Leaderboard</NavLink></li>
             <li><NavLink className = 'nav' to = 'login'>Logout</NavLink></li>
+        </menu>
+    )
+}
+
+function AuthedNavHome(){
+    return(
+        <menu className="home">
+            <li className="home"><NavLink className = 'navhome' to = ''>Home</NavLink></li>
+            <li className="home"><NavLink className='navhome' to='agency'>Your Agency</NavLink></li>
+            <li className="home"><NavLink className = 'navhome' to = 'locations'>Locations</NavLink></li>
+            <li className="home"><NavLink className = 'navhome' to = 'leaderboard'>Leaderboard</NavLink></li>
+            <li className="home"><NavLink className = 'navhome' to = 'login'>Logout</NavLink></li>
+
         </menu>
     )
 }
