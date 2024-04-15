@@ -13,8 +13,34 @@ export function Leaderboard(){
                         <th className="score">Score</th>
                     </tr>
                 </thead>
+                <ScoresBody />
             </table>
         </main>
     )
 }
+
+function ScoresBody(){
+    const [scores,setScores] = React.useState([])
+
+    React.useEffect(()=>{
+        fetch('/api/scores').then((res)=>{
+            res.json().then((result)=>{setScores(result)})
+        });
+    },[]);
+    const scoreRows = [];
+    for (let i = scores.length-1; i >= 0; i--){
+        let obj = scores[i];
+        scoreRows.push(<tr>
+            <td className="rank">{i+1}</td>
+            <td className="user">{obj.user}</td>
+            <td className="score">{`$${obj.money}`}</td>
+        </tr>)
+    }
+    return (
+        <tbody>
+            {scoreRows}
+        </tbody>
+    )
+}
+
 
