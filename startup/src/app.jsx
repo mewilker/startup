@@ -32,10 +32,10 @@ function HomePageHeader(){
             <h1 className = 'title'>Tourist Tycoon</h1>
             <nav>
                 <menu>
-                    <li className = 'nav'><NavLink className = 'nav' to = ''>Home</NavLink></li>
-                    <li className = 'nav'><NavLink className = 'nav' to = 'login'>Login</NavLink></li>
-                    <li className = 'nav'><NavLink className = 'nav' to = 'register'>Register</NavLink></li>
-                    <li className = 'nav'><NavLink className = 'nav' to = 'leaderboard'>Leaderboard</NavLink></li>
+                    <li><NavLink className = 'nav' to = ''>Home</NavLink></li>
+                    <li><NavLink className = 'nav' to = 'login'>Login</NavLink></li>
+                    <li><NavLink className = 'nav' to = 'register'>Register</NavLink></li>
+                    <li><NavLink className = 'nav' to = 'leaderboard'>Leaderboard</NavLink></li>
                 </menu>
             </nav>        
         </header>)
@@ -44,10 +44,10 @@ function HomePageHeader(){
 function UnAuthedNav(){
     return(
         <menu>
-            <li className = 'nav'><NavLink className = 'nav' to = ''>Home</NavLink></li>
-            <li className = 'nav'><NavLink className = 'nav' to = 'login'>Login</NavLink></li>
-            <li className = 'nav'><NavLink className = 'nav' to = 'register'>Register</NavLink></li>
-            <li className = 'nav'><NavLink className = 'nav' to = 'leaderboard'>Leaderboard</NavLink></li>
+            <li><NavLink className = 'nav' to = ''>Home</NavLink></li>
+            <li><NavLink className = 'nav' to = 'login'>Login</NavLink></li>
+            <li><NavLink className = 'nav' to = 'register'>Register</NavLink></li>
+            <li><NavLink className = 'nav' to = 'leaderboard'>Leaderboard</NavLink></li>
         </menu>
     )
 }

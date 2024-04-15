@@ -1,30 +1,41 @@
 @font-face {
   font-family: 'Protest Guerrilla';
-  src: url(ProtestGuerrilla-Regular.ttf);
+  src: url(src/assets/ProtestGuerrilla-Regular.ttf);
 }
 
 @font-face {
   font-family: 'Alfa Slab One';
-  src: url(AlfaSlabOne-Regular.ttf);
-}
-
-body{
-  font-family: Arial;
-  display:flex;
-  flex-direction:column;
-  height: 100vh;
-  margin:0;
-  color:#094112;
+  src: url(src/assets/AlfaSlabOne-Regular.ttf);
 }
   
 header{
+  width:100vw;
   background-color: #6BA2F5;
   flex: 0 5vmin;
   flex-direction: row-reverse;
   display: flex;
-  color: #290803;
   align-items: center;
   justify-content: end;
+}
+
+body{
+  margin:0;
+}
+
+#root{
+  margin:0;
+  height: 100vh;
+}
+
+.body{
+  margin:0;
+  width: 100vw;
+  height: 100vh;
+  font-family: Arial;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  color:#094112;
 }
 
 .title{
@@ -80,6 +91,8 @@ li{
 }
   
 main{
+  width:100vw;
+  height:max-content;
   flex: 1;
   background-color: #e2eecd;
   display:flex;
@@ -147,6 +160,7 @@ div{
 }
   
 footer{
+  width: 100vw;
   flex: 0 30px;
   background-color: #0C0A7B;
   color: #D1E4F0;

@@ -1,6 +1,12 @@
 import React from "react";
 import './leaderboard.css'
 
+/*const overwriteStyle = {
+    flex-direction: 'column',
+    justify-content: 'start',
+    font-size: '17pt',
+}*/
+
 export function Leaderboard(){
     return (
         <main>
@@ -30,11 +36,13 @@ function ScoresBody(){
     const scoreRows = [];
     for (let i = scores.length-1; i >= 0; i--){
         let obj = scores[i];
-        scoreRows.push(<tr>
-            <td className="rank">{i+1}</td>
-            <td className="user">{obj.user}</td>
-            <td className="score">{`$${obj.money}`}</td>
-        </tr>)
+        scoreRows.push(
+            <tr key={i+1}>
+                <td className="rank">{i+1}</td>
+                <td className="user">{obj.user}</td>
+                <td className="score">{`$${obj.money}`}</td>
+            </tr>
+        )
     }
     return (
         <tbody>
