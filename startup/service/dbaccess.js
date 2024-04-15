@@ -99,7 +99,7 @@ async function updateTycoon(user, tycoon){
 }
 
 async function getScores(){
-  const cursor = tycoons.find({}, {sort:{money:-1},projection:{user:1, money:1, _id:0}});
+  const cursor = tycoons.find({}, {sort:{money:1},projection:{user:1, money:1, _id:0}});
   return await cursor.toArray();
 }
 

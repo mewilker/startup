@@ -7,9 +7,9 @@
     font-family: 'Alfa Slab One';
     src: url(assets/AlfaSlabOne-Regular.ttf);
 }
-  
     
 header{
+    width:100vw;
     background-color: #6BA2F5;
     flex: 0 5vmin;
     flex-direction: row-reverse;
@@ -77,6 +77,7 @@ main.leaderboard{
     flex-direction: column;
     justify-content: start;
     font-size: 17pt;
+    width: 100vw;
 }
     
 h2{
