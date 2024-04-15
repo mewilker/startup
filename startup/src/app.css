@@ -1,11 +1,11 @@
 @font-face {
     font-family: 'Protest Guerrilla';
-    src: url(ProtestGuerrilla-Regular.ttf);
+    src: url(assets/ProtestGuerrilla-Regular.ttf);
   }
   
   @font-face {
     font-family: 'Alfa Slab One';
-    src: url(AlfaSlabOne-Regular.ttf);
+    src: url(assets/AlfaSlabOne-Regular.ttf);
   }
   
   .body{
