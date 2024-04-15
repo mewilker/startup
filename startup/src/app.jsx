@@ -36,7 +36,11 @@ export default function App(){
                 </Routes>
                 <Routes>
                     <Route exact path='/' element={<HomPageMain />} />
-                    <Route path='/login' element={<Login />} />
+                    <Route path='/login' element={<Login authenticate={()=>{
+                        setAuthState(true);
+                    }} updateUser={(username)=>{
+                        changeUser(username)
+                    }}/>} />
                     <Route path='/register' element={<Register />} />
                     <Route path='/leaderboard' element={<Leaderboard />} />
                     <Route path='*' element = {<NotFound />} />

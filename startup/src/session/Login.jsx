@@ -2,7 +2,7 @@ import React from "react";
 import './session.css'
 import { NavLink, useNavigate} from "react-router-dom";
 
-export function Login({isAuthenticated}){
+export function Login({authenticate, updateUser}){
     const[error, errorMsg] = React.useState(undefined);
     const navigate = useNavigate();
 
@@ -37,6 +37,8 @@ export function Login({isAuthenticated}){
             }
         }).then((response) => {
             if (response.ok){
+                updateUser(user.username);
+                authenticate();
                 navigate('/agency');
             }
             else{
