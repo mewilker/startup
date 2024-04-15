@@ -1,9 +1,10 @@
 import React from "react";
 import './app.css';
-import { BrowserRouter, NavLink, Route, Routes, redirectDocument } from 'react-router-dom';
+import { BrowserRouter, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import { Login } from "./session/Login";
 import { Register } from "./session/Register";
 import { Leaderboard } from "./leaderboard/Leaderboard";
+import { Agency } from "./gameplay/Agency";
 
 
 export default function App(){
@@ -36,13 +37,17 @@ export default function App(){
                 </Routes>
                 <Routes>
                     <Route exact path='/' element={<HomPageMain />} />
-                    <Route path='/login' element={<Login authenticate={()=>{
-                        setAuthState(true);
-                    }} updateUser={(username)=>{
-                        changeUser(username)
-                    }}/>} />
-                    <Route path='/register' element={<Register />} />
+                    <Route path='/login' element={<Login authenticate={()=>setAuthState(true)
+                    } updateUser={(username)=>changeUser(username)
+                    }/>} />
+                    <Route path='/register' element={<Register authenticate={()=>setAuthState(true)
+                    } updateUser={(username)=>changeUser(username)
+                    }/>} />
                     <Route path='/leaderboard' element={<Leaderboard />} />
+                    <Route path="/logout" element={<Logout unauth={()=>setAuthState(false)} 
+                        clearUsername={()=>changeUser(undefined)}
+                    />} />
+                    <Route path='/agency' element={<Agency/>} />
                     <Route path='*' element = {<NotFound />} />
                 </Routes>
                 <footer>
@@ -125,7 +130,7 @@ function AuthedNav(){
             <li><NavLink className = 'nav' to = 'agency'>Your Agency</NavLink></li>
             <li><NavLink className = 'nav' to = 'locations'>Locations</NavLink></li>
             <li><NavLink className = 'nav' to = 'leaderboard'>Leaderboard</NavLink></li>
-            <li><NavLink className = 'nav' to = 'login'>Logout</NavLink></li>
+            <li><NavLink className = 'nav' to = 'logout'>Logout</NavLink></li>
         </menu>
     )
 }
@@ -137,7 +142,7 @@ function AuthedNavHome(){
             <li className="home"><NavLink className='navhome' to='agency'>Your Agency</NavLink></li>
             <li className="home"><NavLink className = 'navhome' to = 'locations'>Locations</NavLink></li>
             <li className="home"><NavLink className = 'navhome' to = 'leaderboard'>Leaderboard</NavLink></li>
-            <li className="home"><NavLink className = 'navhome' to = 'login'>Logout</NavLink></li>
+            <li className="home"><NavLink className = 'navhome' to = 'logout'>Logout</NavLink></li>
 
         </menu>
     )
@@ -164,4 +169,23 @@ function NotFound(){
             <h2>Error 404: This page does not exist. How did you get here?</h2>
         </main>
     )
+}
+
+function Logout({unauth, clearUsername}){
+    const navigate = useNavigate()
+
+    React.useEffect(()=>{
+        fetch('/api/session', {method:'DELETE'}).then((res)=>{
+            if (res.ok){
+                localStorage.clear()
+                unauth()
+                clearUsername()
+                navigate('/login')
+            }
+        }).catch(()=>{
+            navigate('login')
+            unauth()
+            clearUsername()
+        })
+    })
 }
