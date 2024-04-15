@@ -3,7 +3,7 @@ import './session.css'
 
 export function Register(){
     return (
-        <main>
+        <main className="session">
             <h2>Register!</h2>
             <form>
                 <input id = 'username' type = "text" name="varText" placeholder="Username*" maxLength="20" required pattern="^[a-zA-Z0-9@!_]*"/>

@@ -90,7 +90,7 @@ li{
   text-decoration: none;
 }
   
-main{
+main.session{
   width:100vw;
   height:max-content;
   flex: 1;

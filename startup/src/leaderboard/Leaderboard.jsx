@@ -9,7 +9,7 @@ import './leaderboard.css'
 
 export function Leaderboard(){
     return (
-        <main>
+        <main className="leaderboard">
             <h2>Leaderboard</h2>
             <table>
                 <thead>

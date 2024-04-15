@@ -70,7 +70,7 @@ li{
     text-decoration: none;
 }
     
-main{
+main.leaderboard{
     flex: 1;
     background-color: #e2eecd;
     display:flex;

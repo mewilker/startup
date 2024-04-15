@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 
 export function Login(){
     return (
-        <main>
+        <main className="session">
             <h2>Welcome back!</h2>
             <form>
                 <input id = 'username' type = "text" name="varText" placeholder="Username" maxLength="20" required pattern="^[a-zA-Z0-9@!_]*"/>
