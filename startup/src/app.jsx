@@ -47,7 +47,7 @@ export default function App(){
                     <Route path="/logout" element={<Logout unauth={()=>setAuthState(false)} 
                         clearUsername={()=>changeUser(undefined)}
                     />} />
-                    <Route path='/agency' element={<Agency/>} />
+                    <Route path='/agency' element={<Agency user={username}/>} />
                     <Route path='*' element = {<NotFound />} />
                 </Routes>
                 <footer>

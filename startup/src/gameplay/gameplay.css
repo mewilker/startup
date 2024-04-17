@@ -138,6 +138,7 @@ li.error{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    height:100%;
 }
 
 ul.wsmsg{
@@ -149,6 +150,7 @@ div.basic{
     flex: 1;
     display:flex;
     flex-wrap: wrap;
+    flex-direction: row;
     width: 50vw;
     justify-content: center;
     margin-inline-start: 75px;
@@ -184,6 +186,7 @@ button.basic {
     flex: 0 300px;
     margin-inline-end: .5em;
     margin: auto 0;
+    align-self: auto;
 }
 
 div.hospitality, div.attraction, div.travel{

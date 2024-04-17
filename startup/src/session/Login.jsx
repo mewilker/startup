@@ -14,7 +14,7 @@ export function Login({authenticate, updateUser}){
                 <input id = 'password' type = "password" name = "varPassword" placeholder="Password" required/>
                 <ErrMsg error={error}/>
                 <div id = 'submit'>
-                    <button type="submit">Login</button>
+                    <button id = 'submit' type="submit">Login</button>
                     <NavLink id= 'reg' to = '../register'>Not registered? Click here!</NavLink>
                 </div>
             </form>

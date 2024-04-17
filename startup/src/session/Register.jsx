@@ -17,7 +17,7 @@ export function Register({updateUser, authenticate}){
             <div id = 'submit'>
                 <p>By clicking this button I allow Tourist Tycoon to store this data.</p>
             </div>
-            <button type="submit">Sign me up!</button>
+            <button id = 'submit' type="submit">Sign me up!</button>
             </form>
         </main>
     )
