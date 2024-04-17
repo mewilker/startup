@@ -7,22 +7,12 @@
     font-family: 'Alfa Slab One';
     src: url(AlfaSlabOne-Regular.ttf);
 }
-  
-body{
-    font-family: Arial;
-    display:flex;
-    flex-direction:column;
-    height: 100vh;
-    margin:0;
-    color:#094112;
-}
     
 header{
     background-color: #6BA2F5;
     flex: 0 5vmin;
     flex-direction: row-reverse;
     display: flex;
-    color: #290803;
     align-items: center;
     justify-content: end;
 }
@@ -83,35 +73,51 @@ a.nav{
     text-decoration: none;
 }
     
-main{
+main.agency{
     flex: 1;
     background-color: #e2eecd;
     display:flex;
     flex-direction: column;
     justify-content: start;
     font-size: 17pt;
-    background-image: url("placeholder.jpg");
+    width:100vw;
+    padding: 0;
+    background-image: url("src/assets/placeholder.jpg");
 }
 
 img.agencyhead{
     display: none;
 }
 
-h2{
+div.agencyhead, div.agencybod, div.wsmsg, div.ui{
+    margin:0;
+}
+
+div.agencyhead{
+    width: 100vw;
+}
+
+#agencytitle{
     padding: 7vmin;
     font-size: 30pt;
     margin: 0;
     background-color: #b3fbb198;
+    box-sizing: border-box;
+    width:100%;
+    text-align: start;
 }
 
 div.agencybod{
     display: flex;
     flex-wrap: wrap-reverse;
-    height: 100%;
+    flex-direction: row;
+    max-height: 100%;
+    margin:0
 }
 
 div.wsmsg{
     flex: 0 300px;
+    height:100%;
     background-color: #e2eecdde;
 }
 
