@@ -4,43 +4,41 @@ import Tycoon from "../../service/public/tycoon.mjs";
 import { Hospitality, Travel, Attraction} from "../../service/public/agency.mjs";
 
 export function Agency({user}){
-    let tycoon = undefined;
     const [location, changeLocation] = React.useState(null);
-    const [imgurl, changeurl] = React.useState(null);
+    const [imgurl, changeurl] = React.useState('src/assets/placehold.jpg');
     const [author, changeauthor] = React.useState(null);
     
     React.useEffect(()=>{
-        fetch('/api/tycoon').then((response)=>{
+        async function fetchData(){
+            const response = await fetch('/api/tycoon');
             if (!response.ok){
-                //go to login
+
             }
-            response.json().then((json)=>{
-                tycoon = new Tycoon({user},json)
-                localStorage.setItem('tycoon', tycoon.tojson())
-                const agency = tycoon.currentAgency();
-                changeLocation(agency.place());
-                const id = agency.location.picsumid()
-                try{
-                    fetch('https://picsum.photos/id/'+id + '/300/300').then((res)=>{
-                        if (res.ok){
-                            changeurl(`url('${res.url}')`)
-                        }
-                    })
-                    fetch('https://picsum.photos/id/'+id+'/info').then((res)=>{
-                        res.json().then((json)=>{
-                            changeauthor(json.author)
-                        })
-                    })
+            const tycoonjson = await response.json();
+            const tycoon = new Tycoon({user},tycoonjson)
+            localStorage.setItem('tycoon', tycoon.tojson())
+            const agency = tycoon.currentAgency();
+            changeLocation(agency.place());
+            const id = agency.location.picsumid()
+            try{
+                const res = await fetch('https://picsum.photos/id/'+id + '/300/300')
+                if (res.ok){
+                    changeurl(res.url)
                 }
-                catch(err){
-                    console.log(err)
-                }
-            })
-        })
+                const authorres = await fetch('https://picsum.photos/id/'+id+'/info')
+                const json = authorres.json()
+                changeauthor(json.author)
+            }
+            catch(err){
+                console.log(err)
+            }
+        }
+        
+        fetchData()
     },[])
 
     return(
-        <main className="agency" style={{backgroundImage:{imgurl}}}>
+        <main className="agency" style={imgurl &&{ backgroundImage: `url(${imgurl})` }}>
             <div className="agencyhead">
                 <h2 id = 'agencytitle'>Welcome to <span id = "user">{user}</span>'s agency in <span id = 'location'>{location}</span>!</h2>
             </div>
