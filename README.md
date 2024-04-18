@@ -238,8 +238,11 @@ Prerequisite: Notes in your startup Git repository README.md file documenting wh
 Prerequisite: At least 10 git commits spread consistently throughout the assignment period.
 
 10% Bundled using Vite that it was
+
 30% Multiple functional react components I give myself a 15 as it is half done. I can see a lower grade as well
+
 30% React router 7/8 of the pages are linked properly which mathing is about 26. Again, I can see an argument for a lower grade
+
 30% React hooks - I use them? I dunno what you're looking for here.
 
 ### With this I finish my project.
