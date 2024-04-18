@@ -1,6 +1,7 @@
 import React from "react";
 import './gameplay.css';
 import Tycoon from "../../service/public/tycoon.mjs";
+import { Hospitality, Travel, Attraction} from "../../service/public/agency.mjs";
 
 export function Agency({user}){
     let tycoon = undefined;
@@ -97,11 +98,11 @@ function UpgradePic({type, upgrade}){
     return <img className={type} alt={upgrade.type()} src={upgrade.imgpath()}/>
 }
 
-function UpgradeButton({name, type, price, clickgain}){
-    return <button className={type}>Buy {name} ${price}</button>
+function UpgradeButton({name, type, price, onClick}){
+    return <button className={type} onClick={onClick}>Buy {name} ${price}</button>
 }
 
-function Travel({upgrade}){
+function TravelComp({upgrade,buy,reset}){
 
     const [purchased, setPurchased] = React.useState(Array(0))
 
@@ -111,64 +112,110 @@ function Travel({upgrade}){
         const agency = tycoon.currentAgency();
         setPurchased(agency.travel)
     },[upgrade])
+
+    async function buyUpgrade(){
+        const before = localStorage.getItem('tycoon')
+        await buy(upgrade);
+        const json = localStorage.getItem('tycoon')
+        if (before !== json){
+            let tycoon = new Tycoon('user', JSON.parse(json));
+            const agency =tycoon.currentAgency();
+            const purchase = new Travel(upgrade.name,upgrade.price,upgrade.clickgain);
+            agency.travel.push(purchase);
+            tycoon.calculateGain();
+            localStorage.setItem('tycoon', tycoon.tojson())
+            reset(undefined);
+        }
+    }
     
-    console.log(purchased);
     return (<div className="travel">
         {purchased.map((travel, index)=>(
-            <UpgradePic type={'travel'} upgrade={travel} />
+            <UpgradePic key={index} type={'travel'} upgrade={travel} />
         ))}
         {upgrade && <UpgradeButton name={upgrade.name} type={'travel'} 
-            price={upgrade.price} clickgain={upgrade.clickgain}/>}
+            price={upgrade.price} onClick={buyUpgrade}/>}
     </div>)
 }
 
-function Hospitality({upgrade}){
+function HospitalityComp({upgrade, buy, reset}){
     
-    let purchased = Array(0);
+    const [purchased, setPurchased] = React.useState(Array(0))
 
     React.useEffect(()=>{
         const json = localStorage.getItem('tycoon')
         let tycoon = new Tycoon('user', JSON.parse(json));
         const agency = tycoon.currentAgency();
-        purchased = agency.hospitality
+        setPurchased(agency.hospitality)
     },[upgrade])
+
+    async function buyUpgrade(){
+        const before = localStorage.getItem('tycoon')
+        await buy(upgrade);
+        const json = localStorage.getItem('tycoon')
+        if (before !== json){
+            let tycoon = new Tycoon('user', JSON.parse(json));
+            const agency =tycoon.currentAgency();
+            const purchase = new Hospitality(upgrade.name,upgrade.price,upgrade.clickgain);
+            agency.hospitality.push(purchase);
+            tycoon.calculateGain();
+            localStorage.setItem('tycoon', tycoon.tojson())
+            reset(undefined)
+        }
+    }
+
 
     return (<div className="hospitality">
-        {purchased.map((hospitality)=>{
-            <UpgradePic type={'hospitality'} upgrade={hospitality} />
-        })}
+        {purchased.map((hospitality, index)=>(
+            <UpgradePic key={index} type={'hospitality'} upgrade={hospitality} />
+        ))}
         {upgrade && <UpgradeButton name={upgrade.name} type={'hospitality'} 
-            price={upgrade.price} clickgain={upgrade.clickgain}/>}
+            price={upgrade.price} onClick={buyUpgrade}/>}
     </div>)
 }
 
-function Attraction({upgrade}){
+function AttractionComp({upgrade,buy,reset}){
 
-    let purchased = Array(0);
+    const [purchased, setPurchased] = React.useState(Array(0))
 
     React.useEffect(()=>{
         const json = localStorage.getItem('tycoon')
         let tycoon = new Tycoon('user', JSON.parse(json));
         const agency = tycoon.currentAgency();
-        purchased = agency.attractions
+        setPurchased(agency.attractions)
     },[upgrade])
+
+    async function buyUpgrade(){
+        const before = localStorage.getItem('tycoon')
+        await buy(upgrade);
+        const json = localStorage.getItem('tycoon')
+        if (before !== json){
+            let tycoon = new Tycoon('user', JSON.parse(json));
+            const agency =tycoon.currentAgency();
+            const purchase = new Attraction(upgrade.name,upgrade.price,upgrade.clickgain);
+            agency.attractions.push(purchase);
+            tycoon.calculateGain();
+            localStorage.setItem('tycoon', tycoon.tojson())
+            reset(undefined)
+        }
+    }
 
 
     return (<div className="attraction">
-        {purchased.map((attraction)=>{
-            <UpgradePic type={'attraction'} upgrade={attraction} />
-        })}
+        {purchased.map((attraction, index)=>(
+            <UpgradePic key={index} type={'attraction'} upgrade={attraction} />
+        ))}
         {upgrade && <UpgradeButton name={upgrade.name} type={'attraction'} 
-            price={upgrade.price} clickgain={upgrade.clickgain}/>}
+            price={upgrade.price} onClick={buyUpgrade}/>}
     </div>)
 
 }
 
 function ButtonHouse(){
 
-    const[travel, changeTravel] = React.useState(undefined);
-    const[hospitality, changeHospitality] = React.useState(undefined);
-    const[attraction, changeAttraction] = React.useState(undefined);
+    const[money, changeMoney] = React.useState(0)
+    const[travelUpgrade, changeTravel] = React.useState(undefined);
+    const[hospitalityUpgrade, changeHospitality] = React.useState(undefined);
+    const[attractionUpgrade, changeAttraction] = React.useState(undefined);
 
     React.useEffect(()=>{
         fetch('/api/available').then((res)=> res.json()).then((json)=>{
@@ -182,13 +229,38 @@ function ButtonHouse(){
                 }
             });
         })
-    },[])
+    },[travelUpgrade, hospitalityUpgrade, attractionUpgrade])
+
+    async function buyUpgrade(upgrade){
+        const json = localStorage.getItem('tycoon')
+        const tycoon = new Tycoon('user', JSON.parse(json));
+        try{
+            tycoon.buy(upgrade.price)
+            await fetch('/api/upgrade',{
+                method:'PUT',
+                headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+                },
+                body: JSON.stringify(upgrade)
+            })
+            localStorage.setItem('tycoon', tycoon.tojson());
+        }
+        catch(error){
+            if (error.message == "Not enough money!"){
+                <ErrorMessage message={error.message}/>
+                //or something like this... but it needs to go in the ws
+            }
+            else{
+                console.log(error);
+            }
+        }
+    }
 
     return(<div className="ui">
         <Money />
-        <Hospitality upgrade={hospitality}/>
-        <Attraction upgrade={attraction}/>
-        <Travel upgrade={travel}/>
+        <HospitalityComp upgrade={hospitalityUpgrade} buy={buyUpgrade} reset={changeHospitality}/>
+        <AttractionComp upgrade={attractionUpgrade} buy={buyUpgrade} reset={changeAttraction}/>
+        <TravelComp upgrade={travelUpgrade} buy={buyUpgrade} reset={changeTravel}/>
 </div>)
 }
 
