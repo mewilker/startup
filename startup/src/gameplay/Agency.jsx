@@ -49,12 +49,7 @@ export function Agency({user}){
                         Websocket goes here
                     </ul>
                 </div>
-            <div className="ui">
-                <Money tycoon={tycoon}/>
-                <div className="hospitality"></div>
-                <div className="attraction"></div>
-                <div className="travel"></div>
-            </div>
+                <ButtonHouse/>
             </div>
         </main>
     )
@@ -98,22 +93,102 @@ function Money(){
     )
 }
 
-function UpgradePic({type}){
-    
+function UpgradePic({type, upgrade}){
+    return <img className={type} alt={upgrade.type()} src={upgrade.imgpath()}/>
 }
 
 function UpgradeButton({name, type, price, clickgain}){
     return <button className={type}>Buy {name} ${price}</button>
 }
 
-function Travel(){
+function Travel({upgrade}){
+
+    const [purchased, setPurchased] = React.useState(Array(0))
+
+    React.useEffect(()=>{
+        const json = localStorage.getItem('tycoon')
+        let tycoon = new Tycoon('user', JSON.parse(json));
+        const agency = tycoon.currentAgency();
+        setPurchased(agency.travel)
+    },[upgrade])
+    
+    console.log(purchased);
+    return (<div className="travel">
+        {purchased.map((travel, index)=>(
+            <UpgradePic type={'travel'} upgrade={travel} />
+        ))}
+        {upgrade && <UpgradeButton name={upgrade.name} type={'travel'} 
+            price={upgrade.price} clickgain={upgrade.clickgain}/>}
+    </div>)
+}
+
+function Hospitality({upgrade}){
+    
+    let purchased = Array(0);
+
+    React.useEffect(()=>{
+        const json = localStorage.getItem('tycoon')
+        let tycoon = new Tycoon('user', JSON.parse(json));
+        const agency = tycoon.currentAgency();
+        purchased = agency.hospitality
+    },[upgrade])
+
+    return (<div className="hospitality">
+        {purchased.map((hospitality)=>{
+            <UpgradePic type={'hospitality'} upgrade={hospitality} />
+        })}
+        {upgrade && <UpgradeButton name={upgrade.name} type={'hospitality'} 
+            price={upgrade.price} clickgain={upgrade.clickgain}/>}
+    </div>)
+}
+
+function Attraction({upgrade}){
+
+    let purchased = Array(0);
+
+    React.useEffect(()=>{
+        const json = localStorage.getItem('tycoon')
+        let tycoon = new Tycoon('user', JSON.parse(json));
+        const agency = tycoon.currentAgency();
+        purchased = agency.attractions
+    },[upgrade])
+
+
+    return (<div className="attraction">
+        {purchased.map((attraction)=>{
+            <UpgradePic type={'attraction'} upgrade={attraction} />
+        })}
+        {upgrade && <UpgradeButton name={upgrade.name} type={'attraction'} 
+            price={upgrade.price} clickgain={upgrade.clickgain}/>}
+    </div>)
 
 }
 
-function Hospitality(){
+function ButtonHouse(){
 
+    const[travel, changeTravel] = React.useState(undefined);
+    const[hospitality, changeHospitality] = React.useState(undefined);
+    const[attraction, changeAttraction] = React.useState(undefined);
+
+    React.useEffect(()=>{
+        fetch('/api/available').then((res)=> res.json()).then((json)=>{
+            json.forEach(upgrade => {
+                if (upgrade.type == 'travel'){
+                    changeTravel(upgrade);
+                } else if(upgrade.type == 'attraction'){
+                    changeAttraction(upgrade);
+                } else if(upgrade.type == 'hospitality'){
+                    changeHospitality(upgrade)
+                }
+            });
+        })
+    },[])
+
+    return(<div className="ui">
+        <Money />
+        <Hospitality upgrade={hospitality}/>
+        <Attraction upgrade={attraction}/>
+        <Travel upgrade={travel}/>
+</div>)
 }
 
-function Attraction(){
-
-}

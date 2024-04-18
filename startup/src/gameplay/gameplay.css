@@ -137,7 +137,9 @@ li.error{
     flex:1;
     display: flex;
     flex-direction: column;
+    flex-wrap: nowrap;
     justify-content: center;
+    align-items: start;
     height:100%;
 }
 
@@ -192,6 +194,7 @@ button.basic {
 div.hospitality, div.attraction, div.travel{
     flex: 1;
     display:flex;
+    flex-direction: row;
     flex-wrap: wrap;
     width: 50vw;
     justify-content: center;
@@ -208,7 +211,7 @@ img.hospitality, img.travel, img.attraction{
 button.hospitality, button.attraction, button.travel{
     flex: 0 300px;
     margin-inline-end: .5em;
-    margin: auto 0 
+    margin: auto 0;
 }
 
 div.travelhead{
