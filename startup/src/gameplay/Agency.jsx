@@ -7,6 +7,8 @@ export function Agency({user}){
     const [location, changeLocation] = React.useState(null);
     const [imgurl, changeurl] = React.useState('src/assets/placehold.jpg');
     const [author, changeauthor] = React.useState(null);
+    const [clicks, changeClicks] = React.useState(0);
+    const [money, changeMoney] = React.useState(0);
     
     React.useEffect(()=>{
         async function fetchData(){
@@ -20,6 +22,7 @@ export function Agency({user}){
             const agency = tycoon.currentAgency();
             changeLocation(agency.place());
             const id = agency.location.picsumid()
+            changeMoney(tycoon.money())
             try{
                 const res = await fetch('https://picsum.photos/id/'+id + '/300/300')
                 if (res.ok){
@@ -37,6 +40,14 @@ export function Agency({user}){
         fetchData()
     },[])
 
+    function resetClicks(){
+        changeClicks(0)
+    }
+
+    function incrementClicks(){
+        changeClicks(clicks+1)
+    }
+
     return(
         <main className="agency" style={imgurl &&{ backgroundImage: `url(${imgurl})` }}>
             <div className="agencyhead">
@@ -44,14 +55,63 @@ export function Agency({user}){
             </div>
             <div className="agencybod">
                 <div className="wsmsg">
-                    <ul className="wsmsg">
-                        Websocket goes here
-                    </ul>
+                    <WebsocketFacade clicks={clicks} reset={resetClicks}/>
                 </div>
-                <ButtonHouse/>
+                <ButtonHouse money={money} changeMoney={changeMoney} click={incrementClicks}/>
             </div>
         </main>
     )
+}
+
+function WebsocketFacade({clicks, reset}){
+    const [messages, addMessages] = React.useState(Array(0))
+    const [socket, changeSocket] = React.useState(undefined);
+
+    React.useEffect(()=>{
+        
+        const protocol = window.location.protocol === 'http:' ? 'ws': 'wss';
+        const ws = new WebSocket(`${protocol}://${window.location.host}/ws`)
+
+        ws.onopen = ()=>{
+            console.log('connected to websocket')
+        }
+
+        ws.onclose = () =>{
+            console.log('disconnected from websocket')
+        }
+
+        ws.onmessage = async (event) =>{
+            const wsmsg = JSON.parse(event.data);
+            messages.push(wsmsg)
+        }
+
+        changeSocket(ws)
+
+        return()=>{ws.close()}
+
+
+    },[])
+
+    function sendMessage(message){
+        if (socket && socket.readyState != WebSocket.CLOSED){
+            socket.send(message)
+        }
+    }
+
+    setInterval(()=>{
+        try {
+            sendMessage(`{"type":"clicks", "clicks":${clicks}}`)
+            reset();
+        } catch (error) {
+            messages.push({type:'error', message:"Problem! Money was not saved!"})
+        }
+    },10000)
+
+    return (<ul className="wsmsg">
+        {messages.map((wsmsg, index)=>(
+            wsmsg.type=='error' ? <ErrorMessage message={wsmsg.message}/> : <Message message={wsmsg.message}/>
+        ))}
+    </ul>)
 }
 
 function Message({message}){
@@ -62,7 +122,7 @@ function ErrorMessage({message}){
     return <li className="error">{message}</li>
 }
 
-function Money(){
+function Money({money, changeMoney, click}){
     const [amount, changeAmount] = React.useState(0.01)
     const [clicks, changeclicks] = React.useState(0)
     
@@ -72,22 +132,14 @@ function Money(){
         if (clicks > 0){
             tycoon.bookTours()
         }
-        changeAmount(tycoon.money())
+        changeMoney(tycoon.money())
         localStorage.setItem('tycoon', tycoon.tojson())
-    },[clicks])
-
-    function BookTours(){
-        changeclicks(clicks+1)
-    }
-
-    setInterval(()=>{
-        //sendClicks()
-    },10000)
+    },[money])
 
     return (
         <div className="basic">
-            <h3 className="basic">$<span id = 'money'>{amount.toFixed(2)}</span></h3>
-            <button className="basic" onClick={BookTours}>Book Tours</button>
+            <h3 className="basic">$<span id = 'money'>{money.toFixed(2)}</span></h3>
+            <button className="basic" onClick={click}>Book Tours</button>
         </div>
     )
 }
@@ -208,9 +260,8 @@ function AttractionComp({upgrade,buy,reset}){
 
 }
 
-function ButtonHouse(){
+function ButtonHouse({money, changeMoney, click}){
 
-    const[money, changeMoney] = React.useState(0)
     const[travelUpgrade, changeTravel] = React.useState(undefined);
     const[hospitalityUpgrade, changeHospitality] = React.useState(undefined);
     const[attractionUpgrade, changeAttraction] = React.useState(undefined);
@@ -255,7 +306,7 @@ function ButtonHouse(){
     }
 
     return(<div className="ui">
-        <Money />
+        <Money money={money} changeMoney={changeMoney} click={click}/>
         <HospitalityComp upgrade={hospitalityUpgrade} buy={buyUpgrade} reset={changeHospitality}/>
         <AttractionComp upgrade={attractionUpgrade} buy={buyUpgrade} reset={changeAttraction}/>
         <TravelComp upgrade={travelUpgrade} buy={buyUpgrade} reset={changeTravel}/>
