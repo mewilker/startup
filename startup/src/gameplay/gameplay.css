@@ -125,12 +125,14 @@ li.wsmsg{
     font-size: 12pt;
     padding: .5 em;
     background-color: #e2eecd00;
+    font-family:Arial;
 }
 li.error{
     font-size:12pt;
     padding: .5 em;
     background-color: #e2eecd00;
-    color: #f12424
+    color: #f12424;
+    font-family: Arial;
 }
 
 .ui{
