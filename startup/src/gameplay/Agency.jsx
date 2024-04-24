@@ -2,19 +2,22 @@ import React from "react";
 import './gameplay.css';
 import Tycoon from "../../service/public/tycoon.mjs";
 import { Hospitality, Travel, Attraction} from "../../service/public/agency.mjs";
+import { useNavigate } from "react-router-dom";
 
 export function Agency({user}){
     const [location, changeLocation] = React.useState(null);
-    const [imgurl, changeurl] = React.useState('src/assets/placehold.jpg');
+    const [imgurl, changeurl] = React.useState('src/assets/placeholder.jpg');
     const [author, changeauthor] = React.useState(null);
     const [clicks, changeClicks] = React.useState(0);
     const [money, changeMoney] = React.useState(0);
+
+    const navigate = useNavigate;
     
     React.useEffect(()=>{
         async function fetchData(){
             const response = await fetch('/api/tycoon');
             if (!response.ok){
-
+                navigate('/login')
             }
             const tycoonjson = await response.json();
             const tycoon = new Tycoon({user},tycoonjson)
@@ -66,6 +69,7 @@ export function Agency({user}){
 function WebsocketFacade({clicks, reset}){
     const [messages, addMessages] = React.useState(Array(0))
     const [socket, changeSocket] = React.useState(undefined);
+    const [count, changeCount] = React.useState(clicks)
 
     React.useEffect(()=>{
         
@@ -87,25 +91,27 @@ function WebsocketFacade({clicks, reset}){
 
         changeSocket(ws)
 
-        return()=>{ws.close()}
-
+        const sendClicks = setInterval(()=>{
+            try {
+                if (ws && ws.readyState != WebSocket.CLOSED){
+                    ws.send(`{"type":"clicks", "clicks":${count}}`)
+                }
+                reset();
+            } catch (error) {
+                messages.push({type:'error', message:"Problem! Money was not saved!"})
+            }
+        },30000)
+        
+        return()=>{
+            ws.close()
+            clearInterval(sendClicks)
+        }
 
     },[])
 
-    function sendMessage(message){
-        if (socket && socket.readyState != WebSocket.CLOSED){
-            socket.send(message)
-        }
-    }
-
-    setInterval(()=>{
-        try {
-            sendMessage(`{"type":"clicks", "clicks":${clicks}}`)
-            reset();
-        } catch (error) {
-            messages.push({type:'error', message:"Problem! Money was not saved!"})
-        }
-    },10000)
+    React.useEffect(()=>{
+        changeCount(clicks)
+    },[{clicks}])
 
     return (<ul className="wsmsg">
         {messages.map((wsmsg, index)=>(
@@ -129,17 +135,22 @@ function Money({money, changeMoney, click}){
     React.useEffect(()=>{
         const json = localStorage.getItem('tycoon')
         let tycoon = new Tycoon('user', JSON.parse(json));
-        if (clicks > 0){
-            tycoon.bookTours()
-        }
+        changeMoney(tycoon.money())
+    },[money])
+
+    function onClick(){
+        click();
+        const json = localStorage.getItem('tycoon')
+        let tycoon = new Tycoon('user', JSON.parse(json));
+        tycoon.bookTours()
         changeMoney(tycoon.money())
         localStorage.setItem('tycoon', tycoon.tojson())
-    },[money])
+    }
 
     return (
         <div className="basic">
             <h3 className="basic">$<span id = 'money'>{money.toFixed(2)}</span></h3>
-            <button className="basic" onClick={click}>Book Tours</button>
+            <button className="basic" onClick={onClick}>Book Tours</button>
         </div>
     )
 }
