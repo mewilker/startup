@@ -8,7 +8,6 @@ export function Agency({user}){
     const [location, changeLocation] = React.useState(null);
     const [imgurl, changeurl] = React.useState('src/assets/placeholder.jpg');
     const [author, changeauthor] = React.useState(null);
-    const [clicks, changeClicks] = React.useState(0);
     const [money, changeMoney] = React.useState(0);
 
     const navigate = useNavigate;
@@ -40,16 +39,9 @@ export function Agency({user}){
             }
         }
         
+        localStorage.setItem('clicks',0)
         fetchData()
     },[])
-
-    function resetClicks(){
-        changeClicks(0)
-    }
-
-    function incrementClicks(){
-        changeClicks(clicks+1)
-    }
 
     return(
         <main className="agency" style={imgurl &&{ backgroundImage: `url(${imgurl})` }}>
@@ -58,18 +50,17 @@ export function Agency({user}){
             </div>
             <div className="agencybod">
                 <div className="wsmsg">
-                    <WebsocketFacade clicks={clicks} reset={resetClicks}/>
+                    <WebsocketFacade />
                 </div>
-                <ButtonHouse money={money} changeMoney={changeMoney} click={incrementClicks}/>
+                <ButtonHouse money={money} changeMoney={changeMoney}/>
             </div>
         </main>
     )
 }
 
-function WebsocketFacade({clicks, reset}){
+function WebsocketFacade(){
     const [messages, addMessages] = React.useState(Array(0))
     const [socket, changeSocket] = React.useState(undefined);
-    const [count, changeCount] = React.useState(clicks)
 
     React.useEffect(()=>{
         
@@ -94,13 +85,13 @@ function WebsocketFacade({clicks, reset}){
         const sendClicks = setInterval(()=>{
             try {
                 if (ws && ws.readyState != WebSocket.CLOSED){
-                    ws.send(`{"type":"clicks", "clicks":${count}}`)
+                    ws.send(`{"type":"clicks", "clicks":${localStorage.getItem('clicks')}}`)
                 }
-                reset();
+                localStorage.setItem('clicks', 0);
             } catch (error) {
                 messages.push({type:'error', message:"Problem! Money was not saved!"})
             }
-        },30000)
+        },10000)
         
         return()=>{
             ws.close()
@@ -109,13 +100,9 @@ function WebsocketFacade({clicks, reset}){
 
     },[])
 
-    React.useEffect(()=>{
-        changeCount(clicks)
-    },[{clicks}])
-
     return (<ul className="wsmsg">
         {messages.map((wsmsg, index)=>(
-            wsmsg.type=='error' ? <ErrorMessage message={wsmsg.message}/> : <Message message={wsmsg.message}/>
+            wsmsg.type=='error' ? <ErrorMessage key={index} message={wsmsg.message}/> : <Message key={index} message={wsmsg.message}/>
         ))}
     </ul>)
 }
@@ -130,7 +117,6 @@ function ErrorMessage({message}){
 
 function Money({money, changeMoney, click}){
     const [amount, changeAmount] = React.useState(0.01)
-    const [clicks, changeclicks] = React.useState(0)
     
     React.useEffect(()=>{
         const json = localStorage.getItem('tycoon')
@@ -139,7 +125,7 @@ function Money({money, changeMoney, click}){
     },[money])
 
     function onClick(){
-        click();
+        localStorage.setItem('clicks',parseInt(localStorage.getItem('clicks'))+1)
         const json = localStorage.getItem('tycoon')
         let tycoon = new Tycoon('user', JSON.parse(json));
         tycoon.bookTours()
