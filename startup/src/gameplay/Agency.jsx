@@ -3,6 +3,7 @@ import './gameplay.css';
 import Tycoon from "../../service/public/tycoon.mjs";
 import { Hospitality, Travel, Attraction} from "../../service/public/agency.mjs";
 import { useNavigate } from "react-router-dom";
+import { sendClicks, messages } from "./WebSocketManager";
 
 export function Agency({user}){
     const [location, changeLocation] = React.useState(null);
@@ -59,49 +60,14 @@ export function Agency({user}){
 }
 
 function WebsocketFacade(){
-    const [messages, addMessages] = React.useState(Array(0))
-    const [socket, changeSocket] = React.useState(undefined);
+    const [messageItems, updateMessages] = React.useState(messages)
 
     React.useEffect(()=>{
-        
-        const protocol = window.location.protocol === 'http:' ? 'ws': 'wss';
-        const ws = new WebSocket(`${protocol}://${window.location.host}/ws`)
-
-        ws.onopen = ()=>{
-            console.log('connected to websocket')
-        }
-
-        ws.onclose = () =>{
-            console.log('disconnected from websocket')
-        }
-
-        ws.onmessage = async (event) =>{
-            const wsmsg = JSON.parse(event.data);
-            messages.push(wsmsg)
-        }
-
-        changeSocket(ws)
-
-        const sendClicks = setInterval(()=>{
-            try {
-                if (ws && ws.readyState != WebSocket.CLOSED){
-                    ws.send(`{"type":"clicks", "clicks":${localStorage.getItem('clicks')}}`)
-                }
-                localStorage.setItem('clicks', 0);
-            } catch (error) {
-                messages.push({type:'error', message:"Problem! Money was not saved!"})
-            }
-        },10000)
-        
-        return()=>{
-            ws.close()
-            clearInterval(sendClicks)
-        }
-
-    },[])
+        updateMessages(messages)
+    },[messages])
 
     return (<ul className="wsmsg">
-        {messages.map((wsmsg, index)=>(
+        {messageItems.map((wsmsg, index)=>(
             wsmsg.type=='error' ? <ErrorMessage key={index} message={wsmsg.message}/> : <Message key={index} message={wsmsg.message}/>
         ))}
     </ul>)
