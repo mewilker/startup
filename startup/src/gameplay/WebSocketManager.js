@@ -1,6 +1,6 @@
 const protocol = window.location.protocol === 'http:' ? 'ws': 'wss';
 const ws = new WebSocket(`${protocol}://${window.location.host}/ws`)
-export const messages = []
+export const notifications = []
 
 ws.onopen = ()=>{
     console.log('connected to websocket')
@@ -13,7 +13,7 @@ ws.onclose = () =>{
 
 ws.onmessage = async (event) =>{
     const wsmsg = JSON.parse(event.data);
-    messages.push(wsmsg)
+    notifications.push(wsmsg)
 }
 
 export function sendClicks(){

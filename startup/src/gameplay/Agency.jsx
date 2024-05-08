@@ -3,7 +3,7 @@ import './gameplay.css';
 import Tycoon from "../../service/public/tycoon.mjs";
 import { Hospitality, Travel, Attraction} from "../../service/public/agency.mjs";
 import { useNavigate } from "react-router-dom";
-import { sendClicks, messages } from "./WebSocketManager";
+import { sendClicks, notifications } from "./WebSocketManager";
 
 export function Agency({user}){
     const [location, changeLocation] = React.useState(null);
@@ -60,11 +60,11 @@ export function Agency({user}){
 }
 
 function WebsocketFacade(){
-    const [messageItems, updateMessages] = React.useState(messages)
+    const [messageItems, updateMessages] = React.useState(notifications)
 
     React.useEffect(()=>{
-        updateMessages(messages)
-    },[messages])
+        updateMessages(notifications)
+    },[notifications])
 
     return (<ul className="wsmsg">
         {messageItems.map((wsmsg, index)=>(
@@ -246,6 +246,7 @@ function ButtonHouse({money, changeMoney, click}){
     async function buyUpgrade(upgrade){
         const json = localStorage.getItem('tycoon')
         const tycoon = new Tycoon('user', JSON.parse(json));
+        sendClicks();
         try{
             tycoon.buy(upgrade.price)
             await fetch('/api/upgrade',{
