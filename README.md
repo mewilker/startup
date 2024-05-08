@@ -224,3 +224,27 @@ Prerequisite: At least 10 git commits spread consistently throughout the assignm
 **30% - Data sent over WebSocket connection** - errors, locations and clicks
 
 **30% - WebSocket data displayed in the application interface** - sidebar will now display websocket notification and errors
+
+## React Deliverable
+
+*Note: I was crunched for time on the react. Pregame looks good but in-game is a hot mess.*
+
+Prerequisite: Simon React deployed to your production environment
+
+Prerequisite: A link to your GitHub startup repository prominently displayed on your application's home page
+
+Prerequisite: Notes in your startup Git repository README.md file documenting what you modified and added with this deliverable. The TAs will only grade things that have been clearly described as being completed. Review the voter app as an example.
+
+Prerequisite: At least 10 git commits spread consistently throughout the assignment period.
+
+10% Bundled using Vite that it was
+
+30% Multiple functional react components I give myself a 15 as it is half done. I can see a lower grade as well
+
+30% React router 7/8 of the pages are linked properly which mathing is about 26. Again, I can see an argument for a lower grade
+
+30% React hooks - I use them? I dunno what you're looking for here.
+
+### With this I finish my project.
+
+I will work on this through the night, but I understand you may or may not want to accept work after midnight. So I accept any final decsion you would like to make about this project. Either way, please enjoy the thrill of watching the money rise as you click book tours (you may need to register on startup.makenna.click and buy some upgrades to see the interaction)

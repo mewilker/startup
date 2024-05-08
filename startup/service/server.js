@@ -50,7 +50,7 @@ server.get("/login", async function(req, res, next){
 })
     
 //Register User
-server.post('/user', async function(req, res, next){
+server.post('/api/user', async function(req, res, next){
     try{
         const user = req.body;
         if (user.username == undefined || user.password == undefined || user.username.length > 20){
@@ -77,7 +77,7 @@ server.post('/user', async function(req, res, next){
 })
     
 //Login User
-server.post('/session', async function (req, res, next){
+server.post('/api/session', async function (req, res, next){
     try{    
         const user = req.body;
         if (user.username == undefined || user.password == undefined || user.username.length > 20){
@@ -143,7 +143,7 @@ async function validateAuth(authToken, res){
 }
     
 //Get User
-server.get('/session', async function (req, res, next){
+server.get('/api/session', async function (req, res, next){
     try{
         const cookies = req.cookies
         let foundarray = await validateAuth(cookies.authToken, res);
@@ -156,7 +156,7 @@ server.get('/session', async function (req, res, next){
 })
 
 //Logout User
-server.delete('/session', async function (req, res, next){
+server.delete('/api/session', async function (req, res, next){
     try{
         const cookies = req.cookies
         let foundarray = await validateAuth(cookies.authToken, res);
@@ -174,7 +174,7 @@ server.delete('/session', async function (req, res, next){
 })
     
 //Get tycoon or agency
-server.get('/tycoon', async function (req, res, next){
+server.get('/api/tycoon', async function (req, res, next){
     try{
         const cookies = req.cookies
         let foundarray = await validateAuth(cookies.authToken, res);
@@ -186,7 +186,7 @@ server.get('/tycoon', async function (req, res, next){
 })
 
 //Get scores
-server.get('/scores', async function (req, res, next){
+server.get('/api/scores', async function (req, res, next){
     try{
         res.send(await db.getScores());
     }
@@ -265,7 +265,7 @@ function parseCSV(csv, agency){
     return upgrades;
 }
 
-server.get('/available', async function(req, res, next){
+server.get('/api/available', async function(req, res, next){
     try{
         const cookies = req.cookies;
         let foundarray = await validateAuth(cookies.authToken, res);
@@ -285,7 +285,7 @@ server.get('/available', async function(req, res, next){
     }
 })
 
-server.put('/upgrade', async function (req, res, next){
+server.put('/api/upgrade', async function (req, res, next){
     try{
         const cookies = req.cookies;
         let foundarray = await validateAuth(cookies.authToken, res);
@@ -336,7 +336,7 @@ server.put('/upgrade', async function (req, res, next){
     }
 })
 
-server.put('/move', async function (req, res, next){
+server.put('/api/move', async function (req, res, next){
     try{
         const cookies = req.cookies;
         let foundarray = await validateAuth(cookies.authToken, res);
