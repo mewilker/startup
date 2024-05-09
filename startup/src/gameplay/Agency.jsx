@@ -3,7 +3,7 @@ import './gameplay.css';
 import Tycoon from "../../service/public/tycoon.mjs";
 import { Hospitality, Travel, Attraction} from "../../service/public/agency.mjs";
 import { useNavigate } from "react-router-dom";
-import { sendClicks, messages } from "./WebSocketManager";
+import { sendClicks, notifications, addError } from "./WebSocketManager";
 
 export function Agency({user}){
     const [location, changeLocation] = React.useState(null);
@@ -60,11 +60,11 @@ export function Agency({user}){
 }
 
 function WebsocketFacade(){
-    const [messageItems, updateMessages] = React.useState(messages)
+    const [messageItems, updateMessages] = React.useState(notifications)
 
     React.useEffect(()=>{
-        updateMessages(messages)
-    },[messages])
+        updateMessages(notifications)
+    },[notifications])
 
     return (<ul className="wsmsg">
         {messageItems.map((wsmsg, index)=>(
@@ -81,9 +81,7 @@ function ErrorMessage({message}){
     return <li className="error">{message}</li>
 }
 
-function Money({money, changeMoney, click}){
-    const [amount, changeAmount] = React.useState(0.01)
-    
+function Money({money, changeMoney}){    
     React.useEffect(()=>{
         const json = localStorage.getItem('tycoon')
         let tycoon = new Tycoon('user', JSON.parse(json));
@@ -223,7 +221,7 @@ function AttractionComp({upgrade,buy,reset}){
 
 }
 
-function ButtonHouse({money, changeMoney, click}){
+function ButtonHouse({money, changeMoney}){
 
     const[travelUpgrade, changeTravel] = React.useState(undefined);
     const[hospitalityUpgrade, changeHospitality] = React.useState(undefined);
@@ -232,12 +230,24 @@ function ButtonHouse({money, changeMoney, click}){
     React.useEffect(()=>{
         fetch('/api/available').then((res)=> res.json()).then((json)=>{
             json.forEach(upgrade => {
-                if (upgrade.type == 'travel'){
-                    changeTravel(upgrade);
-                } else if(upgrade.type == 'attraction'){
-                    changeAttraction(upgrade);
-                } else if(upgrade.type == 'hospitality'){
-                    changeHospitality(upgrade)
+                switch (upgrade.type) {
+                    case 'travel':
+                        if (JSON.stringify(upgrade)===JSON.stringify(travelUpgrade)){
+                            break;
+                        }
+                        changeTravel(upgrade)
+                        break;
+                    case 'attraction':
+                        if (JSON.stringify(upgrade)===JSON.stringify(attractionUpgrade)){
+                            break;
+                        }
+                        changeAttraction(upgrade)
+                        break;
+                    case 'hospitality':
+                        if (JSON.stringify(upgrade)===JSON.stringify(hospitalityUpgrade)){
+                            break;
+                        }
+                        changeHospitality(upgrade)
                 }
             });
         })
@@ -246,21 +256,22 @@ function ButtonHouse({money, changeMoney, click}){
     async function buyUpgrade(upgrade){
         const json = localStorage.getItem('tycoon')
         const tycoon = new Tycoon('user', JSON.parse(json));
+        sendClicks();
         try{
             tycoon.buy(upgrade.price)
             await fetch('/api/upgrade',{
                 method:'PUT',
                 headers: {
-                'Content-type': 'application/json; charset=UTF-8'
+                    'Content-type': 'application/json; charset=UTF-8'
                 },
                 body: JSON.stringify(upgrade)
             })
             localStorage.setItem('tycoon', tycoon.tojson());
+            changeMoney(money-upgrade.price);
         }
         catch(error){
             if (error.message == "Not enough money!"){
-                <ErrorMessage message={error.message}/>
-                //or something like this... but it needs to go in the ws
+                addError(error.message)
             }
             else{
                 console.log(error);
@@ -269,7 +280,7 @@ function ButtonHouse({money, changeMoney, click}){
     }
 
     return(<div className="ui">
-        <Money money={money} changeMoney={changeMoney} click={click}/>
+        <Money money={money} changeMoney={changeMoney}/>
         <HospitalityComp upgrade={hospitalityUpgrade} buy={buyUpgrade} reset={changeHospitality}/>
         <AttractionComp upgrade={attractionUpgrade} buy={buyUpgrade} reset={changeAttraction}/>
         <TravelComp upgrade={travelUpgrade} buy={buyUpgrade} reset={changeTravel}/>
