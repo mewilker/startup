@@ -23,6 +23,14 @@ export function sendClicks(){
     localStorage.setItem('clicks', 0);
 }
 
+export function addError(message){
+    let notification = {
+        type: 'error',
+        message:message
+    }
+    notifications.push(notification)
+}
+
 const sendClicks10Sec = setInterval(()=>{
     try {
         sendClicks()

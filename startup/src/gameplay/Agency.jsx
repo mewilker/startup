@@ -3,7 +3,7 @@ import './gameplay.css';
 import Tycoon from "../../service/public/tycoon.mjs";
 import { Hospitality, Travel, Attraction} from "../../service/public/agency.mjs";
 import { useNavigate } from "react-router-dom";
-import { sendClicks, notifications } from "./WebSocketManager";
+import { sendClicks, notifications, addError } from "./WebSocketManager";
 
 export function Agency({user}){
     const [location, changeLocation] = React.useState(null);
@@ -271,8 +271,7 @@ function ButtonHouse({money, changeMoney}){
         }
         catch(error){
             if (error.message == "Not enough money!"){
-                <ErrorMessage message={error.message}/>
-                //or something like this... but it needs to go in the ws
+                addError(error.message)
             }
             else{
                 console.log(error);
