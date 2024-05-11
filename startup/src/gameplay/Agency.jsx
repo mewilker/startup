@@ -236,6 +236,10 @@ function ButtonHouse({money, changeMoney, socket}){
                             break;
                         }
                         changeHospitality(upgrade)
+                    case 'location':
+                        if (socket){
+                            socket.addNotification(`A new location is available in ${upgrade.name}!`)
+                        }
                 }
             });
         })
