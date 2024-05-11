@@ -17,7 +17,7 @@ export class WebSocketManager{
         
         this.ws.onmessage = async (event) =>{
             const wsmsg = JSON.parse(event.data);
-            this.handler(message)
+            this.handler(wsmsg)
         }
 
         const sendClicks10Sec = setInterval(()=>{
