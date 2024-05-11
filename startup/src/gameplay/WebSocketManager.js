@@ -1,40 +1,68 @@
-const protocol = window.location.protocol === 'http:' ? 'ws': 'wss';
-const ws = new WebSocket(`${protocol}://${window.location.host}/ws`)
-export const notifications = []
+export class WebSocketManager{
 
-ws.onopen = ()=>{
-    console.log('connected to websocket')
-}
 
-ws.onclose = () =>{
-    console.log('disconnected from websocket')
-    clearInterval(sendClicks10Sec)
-}
+    constructor(){
 
-ws.onmessage = async (event) =>{
-    const wsmsg = JSON.parse(event.data);
-    notifications.push(wsmsg)
-}
+        const protocol = window.location.protocol === 'http:' ? 'ws': 'wss';
+        this.ws = new WebSocket(`${protocol}://${window.location.host}/ws`)
+        
+        this.ws.onopen = ()=>{
+            console.log('connected to websocket')
+        }
+        
+        this.ws.onclose = () =>{
+            console.log('disconnected from websocket')
+            clearInterval(sendClicks10Sec)
+        }
+        
+        this.ws.onmessage = async (event) =>{
+            const wsmsg = JSON.parse(event.data);
+            this.handler(message)
+        }
 
-export function sendClicks(){
-    if (ws && ws.readyState != WebSocket.CLOSED){
-        ws.send(`{"type":"clicks", "clicks":${localStorage.getItem('clicks')}}`)
+        const sendClicks10Sec = setInterval(()=>{
+            try {
+                this.sendClicks()
+            } catch (error) {
+                throw new Error("Problem! Money was not saved!")
+            }
+        },10000)
     }
-    localStorage.setItem('clicks', 0);
-}
-
-export function addError(message){
-    let notification = {
-        type: 'error',
-        message:message
+    
+    sendClicks(){
+        if (this.ws && this.ws.readyState != WebSocket.CLOSED){
+            this.ws.send(`{"type":"clicks", "clicks":${localStorage.getItem('clicks')}}`)
+        }
+        localStorage.setItem('clicks', 0);
     }
-    notifications.push(notification)
-}
-
-const sendClicks10Sec = setInterval(()=>{
-    try {
-        sendClicks()
-    } catch (error) {
-        throw new Error("Problem! Money was not saved!")
+    
+    addError(message){
+        let notification = {
+            type: 'error',
+            message:message
+        }
+        this.handler(notification)
     }
-},10000)
+
+    handler = (message)=>{
+        console.log(message);
+    }
+
+    addNotification(message){
+        let notification = {
+            type:'notification',
+            message:message
+        }
+        this.handler(notification)
+    }
+
+    registerHandler(handler){
+        this.handler = handler
+    }
+
+    stopWebsocket(){
+        this.ws.close()
+    }
+    
+}
+    

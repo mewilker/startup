@@ -3,17 +3,20 @@ import './gameplay.css';
 import Tycoon from "../../service/public/tycoon.mjs";
 import { Hospitality, Travel, Attraction} from "../../service/public/agency.mjs";
 import { useNavigate } from "react-router-dom";
-import { sendClicks, notifications, addError } from "./WebSocketManager";
+import { WebSocketManager } from "./WebSocketManager";
+import { MessageHandler } from "./MessageHandler";
 
 export function Agency({user}){
     const [location, changeLocation] = React.useState(null);
     const [imgurl, changeurl] = React.useState('src/assets/placeholder.jpg');
     const [author, changeauthor] = React.useState(null);
     const [money, changeMoney] = React.useState(0);
+    const [socket, changeSocket] = React.useState()
 
-    const navigate = useNavigate;
+    const navigate = useNavigate();
     
     React.useEffect(()=>{
+        changeSocket(new WebSocketManager)
         async function fetchData(){
             const response = await fetch('/api/tycoon');
             if (!response.ok){
@@ -42,7 +45,14 @@ export function Agency({user}){
         
         localStorage.setItem('clicks',0)
         fetchData()
+
+        return()=>{
+            if (socket){
+                socket.stopWebsocket()
+            }
+        }
     },[])
+
 
     return(
         <main className="agency" style={imgurl &&{ backgroundImage: `url(${imgurl})` }}>
@@ -51,34 +61,12 @@ export function Agency({user}){
             </div>
             <div className="agencybod">
                 <div className="wsmsg">
-                    <WebsocketFacade />
+                    <MessageHandler ws={socket}/>
                 </div>
-                <ButtonHouse money={money} changeMoney={changeMoney}/>
+                <ButtonHouse money={money} changeMoney={changeMoney} socket = {socket}/>
             </div>
         </main>
     )
-}
-
-function WebsocketFacade(){
-    const [messageItems, updateMessages] = React.useState(notifications)
-
-    React.useEffect(()=>{
-        updateMessages(notifications)
-    },[notifications])
-
-    return (<ul className="wsmsg">
-        {messageItems.map((wsmsg, index)=>(
-            wsmsg.type=='error' ? <ErrorMessage key={index} message={wsmsg.message}/> : <Message key={index} message={wsmsg.message}/>
-        ))}
-    </ul>)
-}
-
-function Message({message}){
-    return <li className="wsmsg">{message}</li>
-}
-
-function ErrorMessage({message}){
-    return <li className="error">{message}</li>
 }
 
 function Money({money, changeMoney}){    
@@ -221,7 +209,7 @@ function AttractionComp({upgrade,buy,reset}){
 
 }
 
-function ButtonHouse({money, changeMoney}){
+function ButtonHouse({money, changeMoney, socket}){
 
     const[travelUpgrade, changeTravel] = React.useState(undefined);
     const[hospitalityUpgrade, changeHospitality] = React.useState(undefined);
@@ -256,7 +244,9 @@ function ButtonHouse({money, changeMoney}){
     async function buyUpgrade(upgrade){
         const json = localStorage.getItem('tycoon')
         const tycoon = new Tycoon('user', JSON.parse(json));
-        sendClicks();
+        if (socket){
+            socket.sendClicks();
+        }
         try{
             tycoon.buy(upgrade.price)
             await fetch('/api/upgrade',{
@@ -271,7 +261,12 @@ function ButtonHouse({money, changeMoney}){
         }
         catch(error){
             if (error.message == "Not enough money!"){
-                addError(error.message)
+                if (socket){
+                    socket.addError(error.message)
+                }
+                else{
+                    console.log(error)
+                }
             }
             else{
                 console.log(error);
