@@ -133,6 +133,7 @@ li.error{
     background-color: #e2eecd00;
     color: #f12424;
     font-family: Arial;
+    text-align: start;
 }
 
 .ui{
@@ -148,6 +149,8 @@ li.error{
 ul.wsmsg{
     list-style-type: none;
     padding: 1em;
+    width:100%;
+    box-sizing: border-box;
 }
 
 div.basic{
