@@ -5,6 +5,7 @@ import { Login } from "./session/Login";
 import { Register } from "./session/Register";
 import { Leaderboard } from "./leaderboard/Leaderboard";
 import { Agency } from "./gameplay/Agency";
+import { LocationPage } from "./gameplay/Locations";
 
 
 export default function App(){
@@ -48,6 +49,7 @@ export default function App(){
                         clearUsername={()=>changeUser(undefined)}
                     />} />
                     <Route path='/agency' element={<Agency user={username}/>} />
+                    <Route path="/locations" element = {<LocationPage />} />
                     <Route path='*' element = {<NotFound />} />
                 </Routes>
                 <footer>
