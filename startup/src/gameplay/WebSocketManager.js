@@ -12,7 +12,7 @@ export class WebSocketManager{
         
         this.ws.onclose = () =>{
             console.log('disconnected from websocket')
-            clearInterval(sendClicks10Sec)
+            clearInterval(this.sendClicks10Sec)
         }
         
         this.ws.onmessage = async (event) =>{
@@ -20,7 +20,7 @@ export class WebSocketManager{
             this.handler(wsmsg)
         }
 
-        const sendClicks10Sec = setInterval(()=>{
+        this.sendClicks10Sec = setInterval(()=>{
             try {
                 this.sendClicks()
             } catch (error) {
@@ -62,6 +62,8 @@ export class WebSocketManager{
 
     stopWebsocket(){
         this.ws.close()
+        clearInterval(this.sendClicks10Sec);
+        console.log('disconnected from websocket')
     }
     
 }

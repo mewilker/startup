@@ -48,6 +48,7 @@ export function Agency({user}){
 
         return()=>{
             if (socket){
+                socket.sendClicks();
                 socket.stopWebsocket()
             }
         }

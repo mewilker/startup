@@ -7,6 +7,13 @@ export function MessageHandler({ws}){
         if (ws){
             ws.registerHandler(handleMessage)
         }
+
+        return()=>{
+            if (ws){
+                ws.sendClicks()
+                ws.stopWebsocket()
+            }
+        }
     },[ws])
 
     function handleMessage(message){
