@@ -34,8 +34,8 @@ export function MessageHandler({ws}){
     }
 
     return (<ul className="wsmsg">
-    {createMessageArray()}
-</ul>)
+        {createMessageArray()}
+    </ul>)
 }
 
 function Message({message}){
