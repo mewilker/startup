@@ -89,8 +89,9 @@ img.agencyhead{
     display: none;
 }
 
-div.agencyhead, div.agencybod, div.wsmsg, div.ui{
+div.agencyhead, div.agencybod, div.wsmsg, div.ui, div.travelhead{
     margin:0;
+    height:auto;
 }
 
 div.agencyhead{
@@ -111,13 +112,13 @@ div.agencybod{
     display: flex;
     flex-wrap: wrap-reverse;
     flex-direction: row;
-    max-height: 100%;
+    height: 100%;
     margin:0
 }
 
 div.wsmsg{
     flex: 0 300px;
-    height:100%;
+    height:100vmin;
     background-color: #e2eecdde;
 }
 
@@ -224,6 +225,8 @@ div.travelhead{
     align-items: center;
     justify-content: start;
     flex-wrap: wrap;
+    flex-direction: row;
+    height:100%;
 }
 
 div.stats{
@@ -232,6 +235,7 @@ div.stats{
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
+    max-width: 300px;
 }
 
 div.confirm{
@@ -282,4 +286,9 @@ p{
     text-decoration: underline;
     padding: 0 10px;
     width: auto;
+}
+
+div{
+    align-items: start;
+    flex-direction: row;
 }
