@@ -25,7 +25,7 @@ export function MessageHandler({ws}){
         setMessage(copyArray)
     }
 
-        function createMessageArray(){
+    function createMessageArray(){
         const messageArray = []
         for (const[i,message] of messages.entries()){
             messageArray.push(message.type=='error' ? <ErrorMessage key={i} message={message.message}/> : <Message key={i} message={message.message}/>)
