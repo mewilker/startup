@@ -49,7 +49,7 @@ export default function App(){
                         clearUsername={()=>changeUser(undefined)}
                     />} />
                     <Route path='/agency' element={<Agency user={username}/>} />
-                    <Route path="/locations" element = {<LocationPage />} />
+                    <Route path="/locations" element = {<LocationPage user={username}/>} />
                     <Route path='*' element = {<NotFound />} />
                 </Routes>
                 <footer>
