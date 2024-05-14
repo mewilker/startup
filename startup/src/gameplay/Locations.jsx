@@ -1,14 +1,34 @@
 import React from "react";
-import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import './gameplay.css';
 import 'leaflet/dist/leaflet.css';
 import Tycoon from "../../service/public/tycoon.mjs";
 import { useNavigate } from "react-router-dom";
 
+
 export function LocationPage({user}){
+    const navigate = useNavigate()
     const [tycoon, setTycoon] = React.useState(
         new Tycoon({user}, JSON.parse(localStorage.getItem('tycoon')))
     )
+
+    function createBuyPinArray(){
+        const buyPins = []
+        tycoon.getPossibleLocations().forEach(location=>{
+            buyPins.push(<BuyPin location={location} tycoon={tycoon}></BuyPin>)
+        })
+        return buyPins
+    }
+
+    function createMovePinArray(){
+        const movePins=[]
+        tycoon.getPurchasedLocations().forEach(location=>{
+            const pin = location.name()==tycoon.currentAgency().location.name() ? 
+                <HerePin location={location}></HerePin> : <MovePin location={location} tycoon={tycoon}></MovePin>
+            movePins.push(pin)
+        })
+        return movePins
+    }
 
     React.useEffect(()=>{
         async function fetchData(){
@@ -39,7 +59,8 @@ export function LocationPage({user}){
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
-                    <MovePin location = {tycoon.currentAgency().location} tycoon ={tycoon}></MovePin>
+                    {createBuyPinArray()}
+                    {createMovePinArray()}
                 </MapContainer>
             </div>
         </main>
@@ -82,28 +103,43 @@ function MovePopup(props){
 
 function BuyPin(props){
     return <Marker position={props.location.coordinates()}>
-        <BuyPopup location={props.location}></BuyPopup>
+        <BuyPopup location={props.location} tycoon={props.tycoon}></BuyPopup>
     </Marker>
 }
 
 function BuyPopup(props){
+
+    const navigate = useNavigate();
+    const [prompt, setPrompt] = React.useState( `Expand to ${props.location.name()} for $${props.location.price()}?`)
+    
+    React.useEffect(()=>{},[prompt])
+
+    function tenSecondMessage(message){
+        if (message != prompt){    
+            const tempPrompt = prompt
+            setPrompt(message)
+            setTimeout(()=>{setPrompt(tempPrompt)}, 3000)
+        }
+    }
     
     async function onClick(){
         try{
             props.tycoon.buyLocation(props.location);
             let tosend =  {name: props.location.name(), type: 'location', price: props.location.price(), clickgain: props.location.price(), notified:true}
-            await fetch('/upgrade', {
+            const res = await fetch('/api/upgrade', {
                 method:'PUT',
                 headers: {
                   'Content-type': 'application/json; charset=UTF-8'
                 },
                 body: JSON.stringify(tosend)
-            })        
-            window.location.href = "/agency";
+            })
+            if (res.ok) {
+                navigate('/agency')
+            }       
         }
         catch (error){
             if (error.message == "Not enough money!"){
-                //TODO: tell the user they don't have enough money
+                tenSecondMessage(error.message)
             }
             else{
                 console.log(error);
@@ -113,16 +149,18 @@ function BuyPopup(props){
 
     return <Popup>
             <div style={{justifyContent:'center', fontSize:'17pt', flexDirection:'column'}}>
-            <p className="confirm">Expand to {props.location.name()} for ${props.location.price()}?</p>
-            <button style={{width:'auto'}}>Expand!</button>
+                <p className="confirm">{prompt}</p>
+                <button style={{width:'auto'}} onClick={onClick}>Expand!</button>
             </div>
-            </Popup>
+        </Popup>
 }
 
 function HerePin(props){
     return <Marker position={props.location.coordinates()}>
         <Popup>
-            You are here!
+            <div style={{justifyContent:'center', fontSize:'17pt', flexDirection:'column'}}>
+                <p className="confirm">You are here!</p>
+            </div>
         </Popup>
     </Marker>
 }
