@@ -14,17 +14,17 @@ export function LocationPage({user}){
 
     function createBuyPinArray(){
         const buyPins = []
-        tycoon.getPossibleLocations().forEach(location=>{
-            buyPins.push(<BuyPin location={location} tycoon={tycoon}></BuyPin>)
+        tycoon.getPossibleLocations().forEach((location, i)=>{
+            buyPins.push(<BuyPin key={i} location={location} tycoon={tycoon}></BuyPin>)
         })
         return buyPins
     }
 
     function createMovePinArray(){
         const movePins=[]
-        tycoon.getPurchasedLocations().forEach(location=>{
+        tycoon.getPurchasedLocations().forEach((location, i)=>{
             const pin = location.name()==tycoon.currentAgency().location.name() ? 
-                <HerePin location={location}></HerePin> : <MovePin location={location} tycoon={tycoon}></MovePin>
+                <HerePin key={i}location={location}></HerePin> : <MovePin key={i}location={location} tycoon={tycoon}></MovePin>
             movePins.push(pin)
         })
         return movePins
