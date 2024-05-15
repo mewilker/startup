@@ -2,5 +2,6 @@ jsconfig.json
 startup/node_modules
 startup/service/dbconfig.json
 startup/service/node_modules
+startup/dist
 .vscode
 
