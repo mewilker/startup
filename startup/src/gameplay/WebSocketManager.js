@@ -1,5 +1,5 @@
 export class WebSocketManager{
-
+    notifications = []
 
     constructor(){
 
@@ -17,7 +17,8 @@ export class WebSocketManager{
         
         this.ws.onmessage = async (event) =>{
             const wsmsg = JSON.parse(event.data);
-            this.handler(wsmsg)
+            this.notifications.push(wsmsg)
+            this.handleAll()
         }
 
         this.sendClicks10Sec = setInterval(()=>{
@@ -41,7 +42,8 @@ export class WebSocketManager{
             type: 'error',
             message:message
         }
-        this.handler(notification)
+        this.notifications.push(notification)
+        this.handleAll()
     }
 
     handler = (message)=>{
@@ -53,18 +55,24 @@ export class WebSocketManager{
             type:'notification',
             message:message
         }
-        this.handler(notification)
+        this.notifications.push(notification)
+        this.handleAll()
     }
 
     registerHandler(handler){
         this.handler = handler
     }
 
+    handleAll(){
+        this.notifications.forEach(notification=>{
+            this.handler(notification)
+        })
+    }
+
     stopWebsocket(){
         this.ws.close()
         clearInterval(this.sendClicks10Sec);
         console.log('disconnected from websocket')
-    }
-    
+    }   
 }
     

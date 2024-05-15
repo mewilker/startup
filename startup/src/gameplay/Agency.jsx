@@ -4,7 +4,7 @@ import Tycoon from "../../service/public/tycoon.mjs";
 import { Hospitality, Travel, Attraction} from "../../service/public/agency.mjs";
 import { useNavigate } from "react-router-dom";
 import { WebSocketManager } from "./WebSocketManager";
-import { MessageHandler } from "./MessageHandler";
+import { MessageDisplay } from "./MessageDisplay";
 
 export function Agency({user}){
     const [location, changeLocation] = React.useState(null);
@@ -16,7 +16,6 @@ export function Agency({user}){
     const navigate = useNavigate();
     
     React.useEffect(()=>{
-        changeSocket(new WebSocketManager)
         async function fetchData(){
             const response = await fetch('/api/tycoon');
             if (!response.ok){
@@ -43,6 +42,7 @@ export function Agency({user}){
             }
         }
         
+        changeSocket(new WebSocketManager)
         localStorage.setItem('clicks',0)
         fetchData()
 
@@ -54,7 +54,6 @@ export function Agency({user}){
         }
     },[])
 
-
     return(
         <main className="agency" style={imgurl &&{ backgroundImage: `url(${imgurl})` }}>
             <div className="agencyhead">
@@ -62,7 +61,7 @@ export function Agency({user}){
             </div>
             <div className="agencybod">
                 <div className="wsmsg">
-                    <MessageHandler ws={socket}/>
+                    <MessageDisplay ws={socket}/>
                 </div>
                 <ButtonHouse money={money} changeMoney={changeMoney} socket = {socket}/>
             </div>
@@ -237,6 +236,7 @@ function ButtonHouse({money, changeMoney, socket}){
                             break;
                         }
                         changeHospitality(upgrade)
+                        break;
                     case 'location':
                         if (socket){
                             socket.addNotification(`A new location is available in ${upgrade.name}!`)

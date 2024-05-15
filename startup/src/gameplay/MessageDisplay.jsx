@@ -1,11 +1,12 @@
 import React from "react"
 
-export function MessageHandler({ws}){
+export function MessageDisplay({ws}){
     const [messages, setMessage] = React.useState([])
 
     React.useEffect(()=>{
         if (ws){
             ws.registerHandler(handleMessage)
+            setMessage(ws.notifications)
         }
 
         return()=>{
@@ -16,19 +17,24 @@ export function MessageHandler({ws}){
         }
     },[ws])
 
+    React.useEffect(()=>{
+        if (ws){
+            setMessage(ws.notifications)
+        }
+    })
+
     function handleMessage(message){
-        const copyArray = []
-        messages.forEach(element => {
-            copyArray.push(element)
-        });
-        copyArray.push(message)
-        setMessage(copyArray)
+        setMessage(messages.concat(message))
+    }
+
+    function handleMessageArray(messageArray){
+        setMessage(messageArray)
     }
 
     function createMessageArray(){
         const messageArray = []
         for (const[i,message] of messages.entries()){
-            messageArray.push(message.type=='error' ? <ErrorMessage key={i} message={message.message}/> : <Message key={i} message={message.message}/>)
+            messageArray.push(<Message key={i} message={message}/>)
         }
         return messageArray
     }
@@ -39,9 +45,8 @@ export function MessageHandler({ws}){
 }
 
 function Message({message}){
-    return <li className="wsmsg">{message}</li>
-}
-
-function ErrorMessage({message}){
-    return <li className="error">{message}</li>
+    if (message.type == 'error'){
+        return <li className="error">{message.message}</li>
+    }
+    return <li className="wsmsg">{message.message}</li>
 }
