@@ -1,13 +1,4 @@
-@font-face {
-  font-family: 'Protest Guerrilla';
-  src: url(src/assets/ProtestGuerrilla-Regular.ttf);
-}
-
-@font-face {
-  font-family: 'Alfa Slab One';
-  src: url(src/assets/AlfaSlabOne-Regular.ttf);
-}
-  
+ 
 header{
   width:100vw;
   background-color: #6BA2F5;

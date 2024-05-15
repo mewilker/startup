@@ -1,13 +1,4 @@
-@font-face {
-    font-family: 'Protest Guerrilla';
-    src: url(ProtestGuerrilla-Regular.ttf);
-}
-  
-@font-face {
-    font-family: 'Alfa Slab One';
-    src: url(AlfaSlabOne-Regular.ttf);
-}
-    
+ 
 header{
     background-color: #6BA2F5;
     flex: 0 5vmin;
@@ -82,7 +73,7 @@ main.agency{
     font-size: 17pt;
     width:100vw;
     padding: 0;
-    background-image: url("src/assets/placeholder.jpg");
+    background-image: url("/assets/placeholder.jpg");
 }
 
 img.agencyhead{
