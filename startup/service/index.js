@@ -11,7 +11,7 @@ finally{
 }
 
 async function run (){
-   const server = app.server.listen(6001);
+   const server = app.server.listen(5999);
 
     server.on('upgrade', (request, socket, head) => {
         const cookies = request.headers.cookie;
@@ -38,5 +38,5 @@ async function run (){
             console.log(error.message)
         }
     });
-    console.log(`Listening on port 6001`);
+    console.log(`Listening on port 5999`);
 }
