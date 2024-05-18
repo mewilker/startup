@@ -33,21 +33,6 @@ server.use((req, res, next)=>{
   //TODO more logging
   next();
 })
-
-server.get("/agency", async function(req, res, next){
-    try{
-        const cookies = req.cookies;
-        await validateAuth(cookies.authToken, res);
-        res.sendFile(path.join(__dirname, '/public/agency.html'))
-    }
-    catch(err){
-        next(err);
-    }
-})
-
-server.get("/login", async function(req, res, next){
-    res.sendFile(path.join(__dirname, 'public/login.html'))
-})
     
 //Register User
 server.post('/api/user', async function(req, res, next){
