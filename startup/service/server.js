@@ -207,6 +207,14 @@ function findCSV (name){
             return csv.Cabo;
         case 'Hawaii':
             return csv.Hawaii;
+        case 'the British Virgin Isles':
+            return csv.BVI;
+        case 'Australia':
+            return csv.Australia;
+        case 'London':
+            return csv.London;
+        case 'Japan':
+            return csv.Japan;
         default:
             throw new Error('bad request');
     }

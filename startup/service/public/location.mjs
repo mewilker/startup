@@ -52,21 +52,21 @@ export default class Location{
                 break;
             case "Australia":
                 this.#attraction = "Great Barrier Reef Snorkeling";
-                this.#price = 0;
+                this.#price = 121891000;
                 this.#latitude = -16.9203;
                 this.#longitude = 145.771;
                 this.#picsumid = 615;
                 break;
             case "London":
                 this.#attraction = "Crown Jewel Tour";
-                this.#price = 0;
+                this.#price = 241341000;
                 this.#latitude = 51.5072;
                 this.#longitude = 0.1276;
                 this.#picsumid = 618;
                 break;
             case "Japan":
                 this.#attraction = "Shrine and Temple";
-                this.#price = 0;
+                this.#price = 356665000;
                 this.#latitude = 35.0116
                 this.#longitude = 135.7681
                 this.#picsumid = 371
