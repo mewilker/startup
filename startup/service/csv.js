@@ -76,7 +76,7 @@ Bed and Breakfast,hospitality,1,1,0,14300000,462
 Inn,hospitality,1,2,0,16200000,473
 Dining Experience,attraction,1,0,0,21000000,484
 Cruise Ship,travel,1,3,1,20000000,497
- the British Vigin Isles,location,1,3,1,83200000,83200000
+the British Vigin Isles,location,1,3,1,83200000,83200000
 Motel,hospitality,1,3,1,24200000,500
 Hotel,hospitality,2,4,1,30000000,513
 Tour Guide,attraction,1,3,1,35400000,525
